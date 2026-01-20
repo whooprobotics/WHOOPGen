@@ -31,7 +31,14 @@ export function cleanupBoomerangSegment() {
     stop = null;
 }
 
-export function boomerangSegment(robot: Robot, dt: number, x: number, y: number, angle: number, constants: ReveilLibConstants) : boolean {                                                
+export function boomerangSegment(
+    robot: Robot,
+    dt: number,
+    x: number,
+    y: number,
+    angle: number,
+    constants: ReveilLibConstants,
+): boolean {
     const dropEarly = constants.dropEarly ?? 0;
     const speed = constants.maxSpeed ?? 0;
     const lead = constants.lead ?? 0;
@@ -40,23 +47,35 @@ export function boomerangSegment(robot: Robot, dt: number, x: number, y: number,
     x = revTargetPos.x;
     y = revTargetPos.y;
     const revRobotPos = toRevCoordinate(robot.getX(), robot.getY());
-    
+
     // Initialize values
     if (stop === null || correction === null) {
-        stop = new SimpleStop(constants.stopHarshThreshold ?? 0, constants.stopCoastThreshold ?? 0, constants.stopCoastPower ?? 0, constants.stopTimeout);
-        correction = new PilonsCorrection(constants.kCorrection ?? 0, constants.maxError ?? 0);
+        stop = new SimpleStop(
+            constants.stopHarshThreshold ?? 0,
+            constants.stopCoastThreshold ?? 0,
+            constants.stopCoastPower ?? 0,
+            constants.stopTimeout,
+        );
+        correction = new PilonsCorrection(
+            constants.kCorrection ?? 0,
+            constants.maxError ?? 0,
+        );
     }
 
     if (boomerangStartPoint === null) {
-        boomerangStartPoint = { x: robot.getX(), y: robot.getY(), angle: robot.getAngle() };
+        boomerangStartPoint = {
+            x: robot.getX(),
+            y: robot.getY(),
+            angle: robot.getAngle(),
+        };
 
         const theta0 = toRad(boomerangStartPoint.angle ?? 0);
         const xi_facing = Math.cos(theta0);
         const yi_facing = Math.sin(theta0);
 
         const initialLongitudinal =
-        xi_facing * (x - (boomerangStartPoint.x ?? 0)) +
-        yi_facing * (y - (boomerangStartPoint.y ?? 0));
+            xi_facing * (x - (boomerangStartPoint.x ?? 0)) +
+            yi_facing * (y - (boomerangStartPoint.y ?? 0));
 
         if (initialLongitudinal < 0) boomerangDirection = -1;
     }
@@ -71,33 +90,48 @@ export function boomerangSegment(robot: Robot, dt: number, x: number, y: number,
         yVel: robot.getYVelocity(),
     };
 
-    const currentPose: Pose = { x: revRobotPos.x, y: revRobotPos.y, angle: robot.getAngle() };
+    const currentPose: Pose = {
+        x: revRobotPos.x,
+        y: revRobotPos.y,
+        angle: robot.getAngle(),
+    };
     const targetPoint: Pose = { x, y, angle };
 
     const currentD = dist(currentPose.x ?? 0, currentPose.y ?? 0, x, y);
 
     let newState: StopState;
+    let carrotPoint: Pose;
     if (boomerangClose) {
-            newState = stop.getStopState(
+        newState = stop.getStopState(
             currentState,
             targetPoint,
             boomerangFrozenCarrot ?? currentPose,
             dropEarly,
-            dt
+            dt,
         );
+
+        carrotPoint = { ...targetPoint };
     } else {
         newState = "GO";
         if (Math.abs(currentD) < 7.5) {
-        boomerangClose = true;
-        boomerangFrozenCarrot = { ...currentPose };
+            boomerangClose = true;
+            boomerangFrozenCarrot = { ...currentPose };
         }
-    }
-    
 
-    const th = toRad(angle);
-    const carrotX = x - boomerangDirection * lead * currentD * Math.cos(th);
-    const carrotY = y - boomerangDirection * lead * currentD * Math.sin(th);
-    const carrotPoint: Pose = { x: carrotX, y: carrotY, angle: 0 };
+        const th = toRad(angle);
+        const carrotX =
+            x - boomerangDirection * (lead * currentD * Math.cos(th) + 1);
+        const carrotY =
+            y - boomerangDirection * (lead * currentD * Math.sin(th) + 1);
+        carrotPoint = { x: carrotX, y: carrotY, angle: 0 };
+    }
+
+    // console.log(`Carrot Point: (${carrotX}, ${carrotY})`);
+    // console.log(`Current Distance: ${currentD}`);
+    // console.log(`Boomerang direction: ${boomerangDirection}`);
+    // console.log(
+    //   `Robot position: (${currentPose.x}, ${currentPose.y}, ${currentPose.angle})`,
+    // );
 
     if (boomerangLastStatus == "EXIT" || newState == "EXIT") {
         robot.tankDrive(0, 0, dt);
@@ -112,7 +146,7 @@ export function boomerangSegment(robot: Robot, dt: number, x: number, y: number,
         robot.tankDrive(0, 0, dt);
         boomerangLastStatus = "BRAKE";
 
-        if ((brakeElapsed * 1000) >= (constants.brakeTime ?? 0)) {
+        if (brakeElapsed * 1000 >= (constants.brakeTime ?? 0)) {
             cleanupBoomerangSegment();
             brakeElapsed = null;
             return true;
@@ -120,7 +154,11 @@ export function boomerangSegment(robot: Robot, dt: number, x: number, y: number,
         return false;
     }
 
-    const pows: [number, number] = getConstantMotionPower(speed, startPoint, carrotPoint);
+    const pows: [number, number] = getConstantMotionPower(
+        speed,
+        currentPose,
+        carrotPoint,
+    );
 
     if (newState == "COAST") {
         let power = stop.getCoastPower();
@@ -134,7 +172,12 @@ export function boomerangSegment(robot: Robot, dt: number, x: number, y: number,
         return false;
     }
 
-    const correctedPows = correction.applyCorrection(currentState, carrotPoint, startPoint, pows);
+    const correctedPows = correction.applyCorrection(
+        currentState,
+        carrotPoint,
+        startPoint,
+        pows,
+    );
 
     boomerangLastStatus = "DRIVE";
     robot.tankDrive(correctedPows[0], correctedPows[1], dt);
