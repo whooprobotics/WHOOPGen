@@ -69,7 +69,7 @@ export function driveToPoint(robot: Robot, dt: number, x: number, y: number, dri
     drive_output = clamp(drive_output, -Math.abs(heading_scale_factor) * drivePID.maxSpeed, Math.abs(heading_scale_factor) * drivePID.maxSpeed);
     heading_output = clamp(heading_output, -headingPID.maxSpeed, headingPID.maxSpeed);
     
-    drive_output = !close ? slew_scaling(drive_output, prevDriveOutput ?? 0, drivePID.slew * (dt / 0.01)) : drive_output; // normalizes dt from 16ms to 10ms to match mikLib
+    drive_output = slew_scaling(drive_output, prevDriveOutput ?? 0, drivePID.slew * (dt / 0.01), !close); // normalizes dt from 16ms to 10ms to match mikLib
     heading_output = slew_scaling(heading_output, prevHeadingOutput ?? 0, headingPID.slew * (dt / 0.01));
     
     drive_output = clamp_min_voltage(drive_output, drivePID.minSpeed);

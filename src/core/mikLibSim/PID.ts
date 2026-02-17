@@ -9,6 +9,7 @@ export class PID {
     public starti: number;
 
     public slew: number;
+    public drift: number;   
     public settleTime: number;
     public settleError: number;
     public timeout: number;
@@ -33,6 +34,7 @@ export class PID {
         this.kd = kPID.kd ? kPID.kd : 0;
         this.starti = kPID.starti ? kPID.starti : 0;
         this.slew = kPID.slew ? kPID.slew : 0;
+        this.drift = kPID.drift ? kPID.drift : 0;
         
         this.settleTime = kPID.settleTime ? kPID.settleTime : 0;
         this.settleError = kPID.settleError ? kPID.settleError : 0;
@@ -55,6 +57,7 @@ export class PID {
         this.kd = kPID.kd ? kPID.kd : 0;
         this.starti = kPID.starti ? kPID.starti : 0;
         this.slew = kPID.slew ? kPID.slew : 0;
+        this.drift = kPID.drift ? kPID.drift : 0;
         
         this.settleTime = kPID.settleTime ? kPID.settleTime : 0;
         this.settleError = kPID.settleError ? kPID.settleError : 0;

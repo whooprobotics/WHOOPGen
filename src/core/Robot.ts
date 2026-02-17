@@ -5,14 +5,16 @@ export type RobotConstants = {
     width: number,
     height: number,
     speed: number,
-    accel: number
+    accel: number,
+    lateralFriction: number
 }
 
 export const defaultRobotConstants: RobotConstants = {
     width: 14,
     height: 14,
     speed: 6,
-    accel: 15
+    accel: 15,
+    lateralFriction: 10
 }
 
 export const robotConstantsStore = createObjectStore<RobotConstants>(defaultRobotConstants);
@@ -23,16 +25,19 @@ export class Robot {
     public maxSpeed: number;
     public trackWidth: number;
 
-    private x: number = 0; 
+    private x: number = 0;
     private y: number = 0;
     private angle: number = 0;
 
     private vL: number = 0;
     private vR: number = 0;
+    private velX: number = 0;
+    private velY: number = 0;
     public maxAccel: number;
     public maxDecel: number;
+    public lateralFriction: number;
 
-    constructor(startX: number, startY: number, startAngle: number, width: number, height: number, maxSpeed: number, trackWidth: number, maxAccel: number, maxDecel: number) {
+    constructor(startX: number, startY: number, startAngle: number, width: number, height: number, maxSpeed: number, trackWidth: number, maxAccel: number, maxDecel: number, lateralFriction: number = 10) {
         this.x = startX;
         this.y = startY;
         this.angle = startAngle;
@@ -42,6 +47,7 @@ export class Robot {
         this.trackWidth = trackWidth;
         this.maxAccel = maxAccel;
         this.maxDecel = maxDecel;
+        this.lateralFriction = lateralFriction;
     }
 
     private setX(x: number) { 
@@ -60,30 +66,14 @@ export class Robot {
     getY() { return this.y; }
     getAngle() { return this.angle; }
 
-    // Returns Velocity in in/s
+    // Returns Velocity in in/s (includes lateral drift)
     public getXVelocity(): number {
-        const vL_in = this.vL * 12;
-        const vR_in = this.vR * 12;
-        
-        const v_in = (vR_in + vL_in) / 2;
-        
-        const θ = toRad(this.getAngle());
-        const forwardX = Math.sin(θ);
-        
-        return v_in * forwardX;
+        return this.velX;
     }
-    
-    // Returns Velocity in in/s
+
+    // Returns Velocity in in/s (includes lateral drift)
     public getYVelocity(): number {
-        const vL_in = this.vL * 12;
-        const vR_in = this.vR * 12;
-
-        const v_in = (vR_in + vL_in) / 2;
-
-        const θ = toRad(this.getAngle());
-        const forwardY = Math.cos(θ);
-
-        return v_in * forwardY;
+        return this.velY;
     }
 
     private moveTowards(current: number, target: number, dt: number): number {
@@ -132,46 +122,59 @@ export class Robot {
         const vL_in = this.vL * 12;
         const vR_in = this.vR * 12;
 
-        // Calculate linear velocity
+        // Calculate linear velocity (in/s)
         const v_in = (vR_in + vL_in) / 2;
 
         // Calculate angular velocity using differential drive kinematic equation
         const ω = (vL_in - vR_in) / b_in;
 
-        // Get current heading
-        const θdeg = this.getAngle();
-        const θ = toRad(θdeg);
-
-        // Calculate unit vector in forward direction
-        // For our coordinate system: forward is (sin θ, cos θ)
-        const forwardX = Math.sin(θ);
-        const forwardY = Math.cos(θ);
-
-        // Update position using Euler integration
-        const xNew = this.getX() + v_in * forwardX * dt;
-        const yNew = this.getY() + v_in * forwardY * dt;
-
-        // Update heading
+        // Update heading first
+        const θ = toRad(this.getAngle());
         const θNew = θ + ω * dt;
         let θdegNew = toDeg(θNew);
         θdegNew = normalizeDeg(θdegNew);
-
-        // Update pose
-        this.setX(xNew);
-        this.setY(yNew);
         this.setAngle(θdegNew);
+
+        // Forward and lateral unit vectors in the NEW heading direction
+        const θUpdated = toRad(this.getAngle());
+        const forwardX = Math.sin(θUpdated);
+        const forwardY = Math.cos(θUpdated);
+        const lateralX = Math.cos(θUpdated);    // perpendicular right
+        const lateralY = -Math.sin(θUpdated);   // perpendicular right
+
+        // Decompose current velocity into longitudinal and lateral components
+        const longComponent = this.velX * forwardX + this.velY * forwardY;
+        const latComponent  = this.velX * lateralX + this.velY * lateralY;
+
+        // Longitudinal: set directly from wheel speeds (tires grip in drive direction)
+        const newLong = v_in;
+
+        // Lateral: decay with friction (simulates tire slip during turns)
+        const newLat = latComponent * Math.max(0, 1 - this.lateralFriction * dt);
+
+        // Reconstruct actual velocity vector
+        this.velX = newLong * forwardX + newLat * lateralX;
+        this.velY = newLong * forwardY + newLat * lateralY;
+
+        // Update position using actual velocity
+        this.setX(this.getX() + this.velX * dt);
+        this.setY(this.getY() + this.velY * dt);
     }
 
     public stop() {
         this.vL = 0;
         this.vR = 0;
+        this.velX = 0;
+        this.velY = 0;
     }
 
     public setPose(x: number, y: number, angle: number) {
         this.x = x;
         this.y = y;
         this.angle = angle;
-        
+        this.velX = 0;
+        this.velY = 0;
+
         return true;
     }
 }

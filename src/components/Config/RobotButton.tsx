@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState, useSyncExternalStore } from "react";
+import { useEffect, useRef, useState } from "react";
 import Checkbox from "../Util/Checkbox";
 import NumberInput from "../Util/NumberInput";
 import { robotConstantsStore } from "../../core/Robot";
@@ -8,8 +8,17 @@ export default function RobotButton() {
     const [ isOpen, setOpen ] = useState(false);
     const menuRef = useRef<HTMLDivElement>(null);
     
-    const robot =  useSyncExternalStore(robotConstantsStore.subscribe, robotConstantsStore.getState);
+    const robot =  robotConstantsStore.useStore();
     const [ holonomic, setHolonomic ] = useState(false);
+    const [ allOmnis, setAllOmnis ] = useState(false);
+
+    useEffect(() => {
+        if (allOmnis) {
+            robotConstantsStore.merge({ lateralFriction: 10 });
+        } else {
+            robotConstantsStore.merge({ lateralFriction: 50 });
+        }
+    }, [allOmnis])
 
     const updateWidth = (width: number | null) => {
         if (width !== null) {
@@ -74,7 +83,7 @@ export default function RobotButton() {
             {isOpen && (
                 <div className="absolute shadow-xs mt-1 shadow-black left-0 top-full w-40 z-40
                     rounded-sm bg-medgray_hover min-h-2">
-                    <div className="flex flex-col mt-3 pl-3 pr-3 mb-3 gap-3">
+                    <div className="flex flex-col mt-3 pl-3 pr-3 mb-1 gap-3">
                         <div className="flex flex-col gap-2">
                             <div className="flex flex-row items-center justify-between">
                             <span className="text-[16px]">Width</span>
@@ -140,14 +149,19 @@ export default function RobotButton() {
                                     />
                             </div>
 
-                            <div className="mt-0.5 pt-2 border-t border-gray-500/40 flex flex-row items-center justify-between h-[35px]">
-                            <span className="text-[16px] line-through">Holonomic</span>
-
-                            <div className="w-25 flex items-center justify-end">
-                                <label className="flex items-center gap-2 cursor-pointer select-none">
-                                <Checkbox checked={holonomic} setChecked={setHolonomic} />
-                                </label>
-                            </div>
+                            <div className="mt-0.5 pt-2 border-t border-gray-500/40 flex flex-col gap-0">
+                                <div className="flex flex-row items-center justify-between h-[35px]">
+                                    <span className="text-[16px]">All Omnis</span>
+                                    <label className="flex items-center gap-2 cursor-pointer select-none">
+                                        <Checkbox checked={allOmnis} setChecked={setAllOmnis} />
+                                    </label>
+                                </div>
+                                <div className="flex flex-row items-center justify-between h-[35px]">
+                                    <span className="text-[16px] line-through">Holonomic</span>
+                                    <label className="flex items-center gap-2 cursor-pointer select-none">
+                                        <Checkbox checked={holonomic} setChecked={setHolonomic} />
+                                    </label>
+                                </div>
                             </div>
 
                         </div>

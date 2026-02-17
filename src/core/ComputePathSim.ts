@@ -71,7 +71,7 @@ export function precomputePath(
         }
 
         if (autoIdx >= auton.length) {
-            if ((robot.getXVelocity() === 0 && robot.getYVelocity() === 0)) break;
+            if (Math.abs(robot.getXVelocity()) < 0.01 && Math.abs(robot.getYVelocity()) < 0.01) break;
             robot.tankDrive(0, 0, dt);
         }
 

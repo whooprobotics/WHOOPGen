@@ -2,14 +2,16 @@ import type { Robot } from "../../Robot";
 import { clamp } from "../../Util";
 import { kMikLibSpeed } from "../MikConstants";
 import type { PID } from "../PID";
-import { angle_error, clamp_min_voltage } from "../Util";
+import { angle_error, clamp_min_voltage, slew_scaling } from "../Util";
 
 let crossed: boolean = false;
 let prevError: number | null = null; 
 let prevRawError: number | null = null;
+let prevOutput: number | null = null;
 
 function resetSwingToAngle(swingPID: PID) {
     crossed = false;
+    prevOutput = null;
     prevError = null;
     prevRawError = null;
     swingPID.reset();
@@ -49,7 +51,9 @@ export function swingToAngle(robot: Robot, dt: number, angle: number, swingPID: 
     }
 
     output = clamp(output, -swingPID.maxSpeed, swingPID.maxSpeed);
+    output = slew_scaling(output, prevOutput ?? 0, swingPID.slew * (dt / 0.01), Math.abs(error) > swingPID.starti);
     output = clamp_min_voltage(output, swingPID.minSpeed);
+    prevOutput = output;
 
     if (swingPID.swingDirection === "left") {
         robot.tankDrive(output / kMikLibSpeed, 0, dt);

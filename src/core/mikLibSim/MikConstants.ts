@@ -9,6 +9,7 @@ export interface PIDConstants {
     ki: number | null, 
     kd: number | null, 
     starti: number | null,  
+    drift: number | null,
     slew: number | null,
     settleTime: number | null, 
     settleError: number | null, 
@@ -43,6 +44,8 @@ export const PIDConstantsEqual = (a: PIDConstants, b: PIDConstants): boolean => 
         a.ki === b.ki &&
         a.kd === b.kd &&
         a.starti === b.starti &&
+        a.slew === b.slew &&
+        a.drift === b.drift &&
         a.settleTime === b.settleTime &&
         a.settleError === b.settleError &&
         a.timeout === b.timeout &&
@@ -66,6 +69,8 @@ export function getUnequalPIDConstants(correctPIDConstants: PIDConstants, differ
     if (a.ki !== b.ki) out.ki = b.ki;
     if (a.kd !== b.kd) out.kd = b.kd;
     if (a.starti !== b.starti) out.starti = b.starti;
+    if (a.slew !== b.slew) out.slew = b.slew;
+    if (a.drift !== b.drift) out.drift = b.drift;
 
     if (a.settleTime !== b.settleTime) out.settleTime = b.settleTime;
     if (a.settleError !== b.settleError) out.settleError = b.settleError;
@@ -91,6 +96,7 @@ export function createPIDConstants(values: Partial<PIDConstants> = {}): PIDConst
         ki: values.ki ?? null,
         kd: values.kd ?? null,
         starti: values.starti ?? null,
+        drift: values.drift ?? null,
         slew: values.slew ?? null,
         settleTime: values.settleTime ?? null,
         settleError: values.settleError ?? null,
@@ -112,7 +118,8 @@ export const kMikAngleTurn: PIDConstants = createPIDConstants({
     starti: 15,
     settleTime: 300,
     settleError: 1,
-    timeout: 3000
+    timeout: 3000,
+    slew: 0
 });
 
 export const kMikPointTurn: PIDConstants = createPIDConstants({
@@ -124,7 +131,8 @@ export const kMikPointTurn: PIDConstants = createPIDConstants({
     starti: 15,
     settleTime: 300,
     settleError: 1,
-    timeout: 3000
+    timeout: 3000,
+    slew: 0
 });
 
 export const kMikPointDrive: PIDConstants = createPIDConstants({
@@ -150,6 +158,7 @@ export const kMikDistanceDrive: PIDConstants = createPIDConstants({
     settleTime: 300,
     settleError: 1,
     timeout: 5000,
+    slew: 0
 });
 
 export const kMikPointDriveHeading: PIDConstants = createPIDConstants({
@@ -167,6 +176,7 @@ export const kMikDistanceDriveHeading: PIDConstants = createPIDConstants({
     ki: 0,
     kd: 1,
     starti: 0,
+    slew: 0
 });
 
 export const kMikBoomerang: PIDConstants = createPIDConstants({
@@ -181,6 +191,8 @@ export const kMikBoomerang: PIDConstants = createPIDConstants({
     timeout: 5000,
     lead: 0.5,
     setback: 1,
+    drift: 2,
+    slew: 0
 });
 
 export const kMikBoomerangHeading: PIDConstants = createPIDConstants({
@@ -189,6 +201,7 @@ export const kMikBoomerangHeading: PIDConstants = createPIDConstants({
     ki: 0,
     kd: 3,
     starti: 0,
+    slew: 0
 });
 
 export const kMikAngleSwing: PIDConstants = createPIDConstants({
@@ -201,7 +214,8 @@ export const kMikAngleSwing: PIDConstants = createPIDConstants({
     settleError: 1,
     settleTime: 300,
     timeout: 3000,
-    swingDirection: "left"
+    swingDirection: "left",
+    slew: 0
 })
 
 export const kMikPointSwing: PIDConstants = createPIDConstants({
@@ -214,5 +228,6 @@ export const kMikPointSwing: PIDConstants = createPIDConstants({
     settleError: 1,
     settleTime: 300,
     timeout: 3000,
-    swingDirection: "left"
+    swingDirection: "left",
+    slew: 0
 })

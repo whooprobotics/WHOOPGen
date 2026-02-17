@@ -1,4 +1,4 @@
-import { toRad } from "../Util";
+import { clamp, toRad } from "../Util";
 import type { TurnDirection } from "./MikConstants";
 
 export function angle_error(error: number, direction: TurnDirection | null) {
@@ -32,13 +32,41 @@ export function is_line_settled(desired_X: number, desired_Y: number, desired_an
     return (desired_Y - current_Y) * Math.cos(toRad(desired_angle_deg)) <= -(desired_X - current_X) * Math.sin(toRad(desired_angle_deg));
 }
 
-export function slew_scaling(drive_output: number, prev_drive_output: number, slew: number) {
-    console.log(drive_output, prev_drive_output, slew);
+export function slew_scaling(drive_output: number, prev_drive_output: number, slew: number, scale: boolean = true) {
     let change = drive_output - prev_drive_output;
-    if (slew === 0) return drive_output;
+    if (slew === 0 || !scale) return drive_output;
     if (change > slew) change = slew;
     else if (change < -slew) change = -slew;
     return prev_drive_output + change;
+}
+
+export function clamp_max_slip(drive_output: number,current_X: number, current_Y: number, current_angle_deg: number,
+    desired_X: number, desired_Y: number, drift: number): number {
+    const heading = toRad(current_angle_deg);
+
+    const side = Math.sign(Math.sin(heading) * (desired_X - current_X) - Math.cos(heading) * (desired_Y - current_Y));
+
+    const a = -Math.tan(heading);
+    const c = Math.tan(heading) * current_X - current_Y;
+    const perpDist = Math.abs(a * desired_X + desired_Y + c) / Math.sqrt(a * a + 1);
+    const dist = Math.hypot(desired_X - current_X, desired_Y - current_Y);
+    
+    const curvature = side * ((2 * perpDist) / (dist * dist));
+    const radius = 1.0 / Math.abs(curvature);
+    const max_slip = Math.sqrt(drift * radius * 9.8);
+    return clamp(drive_output, -max_slip, max_slip);
+}
+
+export function overturn_scaling(drive_output: number, heading_output: number, max_speed: number) {
+    const overturn = Math.abs(heading_output) + Math.abs(drive_output) - max_speed;
+    if (overturn > 0) {
+        if (drive_output > 0) {
+            return drive_output - overturn;
+        } else {
+            return drive_output + overturn;
+        }
+    }
+    return drive_output;
 }
 
 export function left_voltage_scaling(drive_output: number, heading_output: number) {
