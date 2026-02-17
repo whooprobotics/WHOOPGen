@@ -16,7 +16,8 @@ export function getConstantMotionPower(
 
   const initialLongitudinalDistance = xFacing * dx + yFacing * dy;
 
-  const opower = initialLongitudinalDistance < 0 ? -Math.abs(power) : Math.abs(power);
+  const opower =
+    initialLongitudinalDistance < 0 ? -Math.abs(power) : Math.abs(power);
 
   return [opower, opower];
 }
