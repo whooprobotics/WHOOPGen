@@ -18735,10 +18735,10 @@ function FileRenamePopup({
     }
   ) });
 }
-const pushbackVEXUMatchField = "/whoopgen/assets/pushback-match-BE3uYq7F.png";
-const pushbackSkillsField = "/whoopgen/assets/pushback-skills-Efz9rFPV.png";
-const pushbackV5MatchField = "/whoopgen/assets/pushback-matchv5-DmG8OjtY.png";
-const emptyField = "/whoopgen/assets/empty-field-DoV3rtqm.png";
+const pushbackVEXUMatchField = "/WHOOPGen/assets/pushback-match-BE3uYq7F.png";
+const pushbackSkillsField = "/WHOOPGen/assets/pushback-skills-Efz9rFPV.png";
+const pushbackV5MatchField = "/WHOOPGen/assets/pushback-matchv5-DmG8OjtY.png";
+const emptyField = "/WHOOPGen/assets/empty-field-DoV3rtqm.png";
 const useField = createSharedState(VALIDATED_APP_STATE.field);
 const fieldMap = [
   { key: "v5-match", src: pushbackV5MatchField, name: "V5 Match Field" },
@@ -20541,4 +20541,4 @@ function App() {
 clientExports.createRoot(document.getElementById("root")).render(
   /* @__PURE__ */ jsxRuntimeExports.jsx(reactExports.StrictMode, { children: /* @__PURE__ */ jsxRuntimeExports.jsx(App, {}) })
 );
-//# sourceMappingURL=index-A2MTV2LJ.js.map
+//# sourceMappingURL=index-BueL1mkp.js.map
