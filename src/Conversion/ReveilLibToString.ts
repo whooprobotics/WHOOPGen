@@ -1,4 +1,6 @@
-import type { ReveilLibConstants } from "../core/ReveiLibSim/RevConstants";
+import type { ReveilLibConstants, revTurnConstants, revDriveConstants } from "../core/ReveiLibSim/RevConstants";
+import { getUnequalRevConstants } from "../core/ReveiLibSim/RevConstants";
+import { getDefaultConstants } from "../core/DefaultConstants";
 import { toRevCoordinate } from "../core/ReveiLibSim/Util";
 import type { Coordinate } from "../core/Types/Coordinate";
 import { getBackwardsSnapPose, getForwardSnapPose, type Path } from "../core/Types/Path";
@@ -133,9 +135,6 @@ export function reveilLibToString(path: Path, selected: boolean = false) {
     return pathString;
 }
 
-const MOVE_DEFAULTS = { speed: 0.75, min: 0.25, correction: 2, error: 0.5, coast: 300, harsh: 80 };
-const TURN_DEFAULTS = { speed: 0.75, min: 0.25, coast: 300, harsh: 80, time: 200 };
-
 export function revToString(path: Path, selected: boolean = false) {
     let pathString: string = '';
 
@@ -157,18 +156,20 @@ export function revToString(path: Path, selected: boolean = false) {
 
         if (kind === "angleTurn") {
             const k = control.constants.turn as ReveilLibConstants;
+            const defaults = (getDefaultConstants("ReveilLib", "angleTurn") as revTurnConstants).turn;
+            const diff = getUnequalRevConstants(defaults, k);
             const params: string[] = [];
-            
-            if (k.maxSpeed !== null && k.maxSpeed !== TURN_DEFAULTS.speed)
-                params.push(`.speed = ${roundOff(k.maxSpeed, 2)}`);
-            if (k.stopCoastPower !== null && k.stopCoastPower !== TURN_DEFAULTS.min)
-                params.push(`.min = ${roundOff(k.stopCoastPower, 2)}`);
-            if (k.stopCoastThreshold !== null && k.stopCoastThreshold !== TURN_DEFAULTS.coast)
-                params.push(`.coast = ${roundOff(k.stopCoastThreshold, 0)}`);
-            if (k.stopHarshThreshold !== null && k.stopHarshThreshold !== TURN_DEFAULTS.harsh)
-                params.push(`.harsh = ${roundOff(k.stopHarshThreshold, 0)}`);
-            if (k.brakeTime !== null && k.brakeTime !== TURN_DEFAULTS.time)
-                params.push(`.time = ${roundOff(k.brakeTime, 0)}`);
+
+            if (diff.maxSpeed != null)
+                params.push(`.speed = ${roundOff(diff.maxSpeed, 2)}`);
+            if (diff.stopCoastPower != null)
+                params.push(`.min = ${roundOff(diff.stopCoastPower, 2)}`);
+            if (diff.stopCoastThreshold != null)
+                params.push(`.coast = ${roundOff(diff.stopCoastThreshold, 0)}`);
+            if (diff.stopHarshThreshold != null)
+                params.push(`.harsh = ${roundOff(diff.stopHarshThreshold, 0)}`);
+            if (diff.brakeTime != null)
+                params.push(`.time = ${roundOff(diff.brakeTime, 0)}`);
 
             pathString += params.length === 0
                 ? `\n  turn(${angle});`
@@ -179,6 +180,8 @@ export function revToString(path: Path, selected: boolean = false) {
 
         if (kind === "pointTurn") {
             const k = control.constants.turn as ReveilLibConstants;
+            const defaults = (getDefaultConstants("ReveilLib", "pointTurn") as revTurnConstants).turn;
+            const diff = getUnequalRevConstants(defaults, k);
             const params: string[] = [];
 
             const previousPos = getBackwardsSnapPose(path, idx - 1);
@@ -190,24 +193,24 @@ export function revToString(path: Path, selected: boolean = false) {
                 : previousPos
                 ? { x: previousPos.x ?? 0, y: (previousPos.y ?? 0) + 5 }
                 : { x: 0, y: 5 };
-            
+
             const revCoords = toRevCoordinate(turnToPos?.x ?? 0, turnToPos?.y ?? 0);
 
             const turnX = roundOff(revCoords.x, 2);
             const turnY = roundOff(revCoords.y, 2);
 
-            if (angle !== null)
+            if (angle !== null && Number(angle) !== 0)
                 params.push(`.offset = ${angle}`)
-            if (k.maxSpeed !== null && k.maxSpeed !== TURN_DEFAULTS.speed)
-                params.push(`.speed = ${roundOff(k.maxSpeed, 2)}`);
-            if (k.stopCoastPower !== null && k.stopCoastPower !== TURN_DEFAULTS.min)
-                params.push(`.min = ${roundOff(k.stopCoastPower, 2)}`);
-            if (k.stopCoastThreshold !== null && k.stopCoastThreshold !== TURN_DEFAULTS.coast)
-                params.push(`.coast = ${roundOff(k.stopCoastThreshold, 0)}`);
-            if (k.stopHarshThreshold !== null && k.stopHarshThreshold !== TURN_DEFAULTS.harsh)
-                params.push(`.harsh = ${roundOff(k.stopHarshThreshold, 0)}`);
-            if (k.brakeTime !== null && k.brakeTime !== TURN_DEFAULTS.time)
-                params.push(`.time = ${roundOff(k.brakeTime, 0)}`);
+            if (diff.maxSpeed != null)
+                params.push(`.speed = ${roundOff(diff.maxSpeed, 2)}`);
+            if (diff.stopCoastPower != null)
+                params.push(`.min = ${roundOff(diff.stopCoastPower, 2)}`);
+            if (diff.stopCoastThreshold != null)
+                params.push(`.coast = ${roundOff(diff.stopCoastThreshold, 0)}`);
+            if (diff.stopHarshThreshold != null)
+                params.push(`.harsh = ${roundOff(diff.stopHarshThreshold, 0)}`);
+            if (diff.brakeTime != null)
+                params.push(`.time = ${roundOff(diff.brakeTime, 0)}`);
 
             pathString += params.length === 0
                 ? `\n  look(${turnX}, ${turnY});`
@@ -218,20 +221,22 @@ export function revToString(path: Path, selected: boolean = false) {
 
         if (kind === "pointDrive") {
             const k = control.constants.drive as ReveilLibConstants;
+            const defaults = (getDefaultConstants("ReveilLib", "pointDrive") as revDriveConstants).drive;
+            const diff = getUnequalRevConstants(defaults, k);
             const params: string[] = [];
 
-            if (k.maxSpeed !== null && k.maxSpeed !== MOVE_DEFAULTS.speed)
-                params.push(`.speed = ${roundOff(k.maxSpeed, 2)}`);
-            if (k.stopCoastPower !== null && k.stopCoastPower !== MOVE_DEFAULTS.min)
-                params.push(`.min = ${roundOff(k.stopCoastPower, 2)}`);
-            if (k.kCorrection !== null && k.kCorrection !== MOVE_DEFAULTS.correction)
-                params.push(`.correction = ${roundOff(k.kCorrection, 1)}`);
-            if (k.maxError !== null && k.maxError !== MOVE_DEFAULTS.error)
-                params.push(`.error = ${roundOff(k.maxError, 2)}`);
-            if (k.stopCoastThreshold !== null && k.stopCoastThreshold !== MOVE_DEFAULTS.coast)
-                params.push(`.coast = ${roundOff(k.stopCoastThreshold, 0)}`);
-            if (k.stopHarshThreshold !== null && k.stopHarshThreshold !== MOVE_DEFAULTS.harsh)
-                params.push(`.harsh = ${roundOff(k.stopHarshThreshold, 0)}`);
+            if (diff.maxSpeed != null)
+                params.push(`.speed = ${roundOff(diff.maxSpeed, 2)}`);
+            if (diff.stopCoastPower != null)
+                params.push(`.min = ${roundOff(diff.stopCoastPower, 2)}`);
+            if (diff.kCorrection != null)
+                params.push(`.correction = ${roundOff(diff.kCorrection, 1)}`);
+            if (diff.maxError != null)
+                params.push(`.error = ${roundOff(diff.maxError, 2)}`);
+            if (diff.stopCoastThreshold != null)
+                params.push(`.coast = ${roundOff(diff.stopCoastThreshold, 0)}`);
+            if (diff.stopHarshThreshold != null)
+                params.push(`.harsh = ${roundOff(diff.stopHarshThreshold, 0)}`);
 
             pathString += params.length === 0
                 ? `\n  move(${x}, ${y});`

@@ -4,7 +4,7 @@ import react from '@vitejs/plugin-react-swc'
 
 export default defineConfig(({ command }) => ({
   plugins: [react(), tailwindcss()],
-  base: command === 'serve' ? '/' : '/mikGen/',
+  base: command === 'serve' ? '/' : '/WHOOPGen/',
   build: {
     minify: false,
     sourcemap: true,

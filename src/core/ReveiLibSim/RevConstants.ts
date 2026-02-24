@@ -25,6 +25,21 @@ export type revTurnConstants = {
 
 export const cloneKRev = (c: ReveilLibConstants): ReveilLibConstants => ({ ...c });
 
+export function getUnequalRevConstants(defaults: ReveilLibConstants, actual: ReveilLibConstants): Partial<ReveilLibConstants> {
+    const out: Partial<ReveilLibConstants> = {};
+    if (defaults.maxSpeed !== actual.maxSpeed) out.maxSpeed = actual.maxSpeed;
+    if (defaults.kCorrection !== actual.kCorrection) out.kCorrection = actual.kCorrection;
+    if (defaults.maxError !== actual.maxError) out.maxError = actual.maxError;
+    if (defaults.stopHarshThreshold !== actual.stopHarshThreshold) out.stopHarshThreshold = actual.stopHarshThreshold;
+    if (defaults.stopCoastThreshold !== actual.stopCoastThreshold) out.stopCoastThreshold = actual.stopCoastThreshold;
+    if (defaults.stopCoastPower !== actual.stopCoastPower) out.stopCoastPower = actual.stopCoastPower;
+    if (defaults.stopTimeout !== actual.stopTimeout) out.stopTimeout = actual.stopTimeout;
+    if (defaults.brakeTime !== actual.brakeTime) out.brakeTime = actual.brakeTime;
+    if (defaults.dropEarly !== actual.dropEarly) out.dropEarly = actual.dropEarly;
+    if (defaults.lead !== actual.lead) out.lead = actual.lead;
+    return out;
+}
+
 function createRevConstants(values: Partial<ReveilLibConstants> = {}): ReveilLibConstants {
     return {
         maxSpeed: values.maxSpeed ?? null,
