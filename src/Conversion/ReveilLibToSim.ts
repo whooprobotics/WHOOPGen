@@ -76,6 +76,10 @@ export function reveilLibToSim(path: Path) {
         return turnSegment(robot, dt, angle, kTurn);
       });
     }
+
+    // if (control.kind === "angleSwing") {
+    //   const kSwing 
+    // }
   }
 
   return auton;
