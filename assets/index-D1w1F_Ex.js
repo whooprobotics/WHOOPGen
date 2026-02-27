@@ -12896,7 +12896,7 @@ function getDefaultConstants(format, kind) {
   };
   return deepClone(constant);
 }
-const FIELD_REAL_DIMENSIONS = { x: -72, y: 72, w: 145.2756, h: 145.2756 };
+const FIELD_REAL_DIMENSIONS = { x: -72.6378, y: 72.6378, w: 145.2756, h: 145.2756 };
 const FIELD_IMG_DIMENSIONS = { x: 0, y: 0, w: 575, h: 575 };
 function vector2Subtract(a, b) {
   return {
@@ -20559,4 +20559,4 @@ function App() {
 clientExports.createRoot(document.getElementById("root")).render(
   /* @__PURE__ */ jsxRuntimeExports.jsx(reactExports.StrictMode, { children: /* @__PURE__ */ jsxRuntimeExports.jsx(App, {}) })
 );
-//# sourceMappingURL=index-isTy6mMG.js.map
+//# sourceMappingURL=index-D1w1F_Ex.js.map
