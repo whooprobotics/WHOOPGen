@@ -590,12 +590,12 @@ function requireScheduler_production() {
     }
     var taskQueue = [], timerQueue = [], taskIdCounter = 1, currentTask = null, currentPriorityLevel = 3, isPerformingWork = false, isHostCallbackScheduled = false, isHostTimeoutScheduled = false, needsPaint = false, localSetTimeout = "function" === typeof setTimeout ? setTimeout : null, localClearTimeout = "function" === typeof clearTimeout ? clearTimeout : null, localSetImmediate = "undefined" !== typeof setImmediate ? setImmediate : null;
     function advanceTimers(currentTime) {
-      for (var timer = peek(timerQueue); null !== timer; ) {
-        if (null === timer.callback) pop(timerQueue);
-        else if (timer.startTime <= currentTime)
-          pop(timerQueue), timer.sortIndex = timer.expirationTime, push(taskQueue, timer);
+      for (var timer2 = peek(timerQueue); null !== timer2; ) {
+        if (null === timer2.callback) pop(timerQueue);
+        else if (timer2.startTime <= currentTime)
+          pop(timerQueue), timer2.sortIndex = timer2.expirationTime, push(taskQueue, timer2);
         else break;
-        timer = peek(timerQueue);
+        timer2 = peek(timerQueue);
       }
     }
     function handleTimeout(currentTime) {
@@ -2041,14 +2041,14 @@ function requireReactDomClient_production() {
     return 3 === nativeEvent.nodeType ? nativeEvent.parentNode : nativeEvent;
   }
   var restoreTarget = null, restoreQueue = null;
-  function restoreStateOfTarget(target) {
-    var internalInstance = getInstanceFromNode(target);
-    if (internalInstance && (target = internalInstance.stateNode)) {
-      var props = target[internalPropsKey] || null;
-      a: switch (target = internalInstance.stateNode, internalInstance.type) {
+  function restoreStateOfTarget(target2) {
+    var internalInstance = getInstanceFromNode(target2);
+    if (internalInstance && (target2 = internalInstance.stateNode)) {
+      var props = target2[internalPropsKey] || null;
+      a: switch (target2 = internalInstance.stateNode, internalInstance.type) {
         case "input":
           updateInput(
-            target,
+            target2,
             props.value,
             props.defaultValue,
             props.defaultValue,
@@ -2059,7 +2059,7 @@ function requireReactDomClient_production() {
           );
           internalInstance = props.name;
           if ("radio" === props.type && null != internalInstance) {
-            for (props = target; props.parentNode; ) props = props.parentNode;
+            for (props = target2; props.parentNode; ) props = props.parentNode;
             props = props.querySelectorAll(
               'input[name="' + escapeSelectorAttributeValueInsideDoubleQuotes(
                 "" + internalInstance
@@ -2067,7 +2067,7 @@ function requireReactDomClient_production() {
             );
             for (internalInstance = 0; internalInstance < props.length; internalInstance++) {
               var otherNode = props[internalInstance];
-              if (otherNode !== target && otherNode.form === target.form) {
+              if (otherNode !== target2 && otherNode.form === target2.form) {
                 var otherProps = otherNode[internalPropsKey] || null;
                 if (!otherProps) throw Error(formatProdErrorMessage(90));
                 updateInput(
@@ -2083,14 +2083,14 @@ function requireReactDomClient_production() {
               }
             }
             for (internalInstance = 0; internalInstance < props.length; internalInstance++)
-              otherNode = props[internalInstance], otherNode.form === target.form && updateValueIfChanged(otherNode);
+              otherNode = props[internalInstance], otherNode.form === target2.form && updateValueIfChanged(otherNode);
           }
           break a;
         case "textarea":
-          updateTextarea(target, props.value, props.defaultValue);
+          updateTextarea(target2, props.value, props.defaultValue);
           break a;
         case "select":
-          internalInstance = props.value, null != internalInstance && updateOptions(target, !!props.multiple, internalInstance, false);
+          internalInstance = props.value, null != internalInstance && updateOptions(target2, !!props.multiple, internalInstance, false);
       }
     }
   }
@@ -2156,11 +2156,11 @@ function requireReactDomClient_production() {
   var root = null, startText = null, fallbackText = null;
   function getData() {
     if (fallbackText) return fallbackText;
-    var start, startValue = startText, startLength = startValue.length, end, endValue = "value" in root ? root.value : root.textContent, endLength = endValue.length;
-    for (start = 0; start < startLength && startValue[start] === endValue[start]; start++) ;
-    var minEnd = startLength - start;
+    var start2, startValue = startText, startLength = startValue.length, end, endValue = "value" in root ? root.value : root.textContent, endLength = endValue.length;
+    for (start2 = 0; start2 < startLength && startValue[start2] === endValue[start2]; start2++) ;
+    var minEnd = startLength - start2;
     for (end = 1; end <= minEnd && startValue[startLength - end] === endValue[endLength - end]; end++) ;
-    return fallbackText = endValue.slice(start, 1 < end ? 1 - end : void 0);
+    return fallbackText = endValue.slice(start2, 1 < end ? 1 - end : void 0);
   }
   function getEventCharCode(nativeEvent) {
     var keyCode = nativeEvent.keyCode;
@@ -2447,15 +2447,15 @@ function requireReactDomClient_production() {
     var nodeName = elem && elem.nodeName && elem.nodeName.toLowerCase();
     return "input" === nodeName ? !!supportedInputTypes[elem.type] : "textarea" === nodeName ? true : false;
   }
-  function createAndAccumulateChangeEvent(dispatchQueue, inst, nativeEvent, target) {
-    restoreTarget ? restoreQueue ? restoreQueue.push(target) : restoreQueue = [target] : restoreTarget = target;
+  function createAndAccumulateChangeEvent(dispatchQueue, inst, nativeEvent, target2) {
+    restoreTarget ? restoreQueue ? restoreQueue.push(target2) : restoreQueue = [target2] : restoreTarget = target2;
     inst = accumulateTwoPhaseListeners(inst, "onChange");
     0 < inst.length && (nativeEvent = new SyntheticEvent(
       "onChange",
       "change",
       null,
       nativeEvent,
-      target
+      target2
     ), dispatchQueue.push({ event: nativeEvent, listeners: inst }));
   }
   var activeElement$1 = null, activeElementInst$1 = null;
@@ -2498,8 +2498,8 @@ function requireReactDomClient_production() {
       batchedUpdates$1(runEventInBatch, dispatchQueue);
     }
   }
-  function handleEventsForInputEventPolyfill(domEventName, target, targetInst) {
-    "focusin" === domEventName ? (stopWatchingForValueChange(), activeElement$1 = target, activeElementInst$1 = targetInst, activeElement$1.attachEvent("onpropertychange", handlePropertyChange)) : "focusout" === domEventName && stopWatchingForValueChange();
+  function handleEventsForInputEventPolyfill(domEventName, target2, targetInst) {
+    "focusin" === domEventName ? (stopWatchingForValueChange(), activeElement$1 = target2, activeElementInst$1 = targetInst, activeElement$1.attachEvent("onpropertychange", handlePropertyChange)) : "focusout" === domEventName && stopWatchingForValueChange();
   }
   function getTargetInstForInputEventPolyfill(domEventName) {
     if ("selectionchange" === domEventName || "keyup" === domEventName || "keydown" === domEventName)
@@ -5181,10 +5181,10 @@ function requireReactDomClient_production() {
       );
     },
     useTransition: function() {
-      var booleanOrThenable = updateReducer(basicStateReducer)[0], start = updateWorkInProgressHook().memoizedState;
+      var booleanOrThenable = updateReducer(basicStateReducer)[0], start2 = updateWorkInProgressHook().memoizedState;
       return [
         "boolean" === typeof booleanOrThenable ? booleanOrThenable : useThenable(booleanOrThenable),
-        start
+        start2
       ];
     },
     useSyncExternalStore: updateSyncExternalStore,
@@ -5226,10 +5226,10 @@ function requireReactDomClient_production() {
       );
     },
     useTransition: function() {
-      var booleanOrThenable = rerenderReducer(basicStateReducer)[0], start = updateWorkInProgressHook().memoizedState;
+      var booleanOrThenable = rerenderReducer(basicStateReducer)[0], start2 = updateWorkInProgressHook().memoizedState;
       return [
         "boolean" === typeof booleanOrThenable ? booleanOrThenable : useThenable(booleanOrThenable),
-        start
+        start2
       ];
     },
     useSyncExternalStore: updateSyncExternalStore,
@@ -7225,10 +7225,10 @@ function requireReactDomClient_production() {
               JSCompiler_temp = null;
               break a;
             }
-            var length = 0, start = -1, end = -1, indexWithinAnchor = 0, indexWithinFocus = 0, node = root2, parentNode = null;
+            var length = 0, start2 = -1, end = -1, indexWithinAnchor = 0, indexWithinFocus = 0, node = root2, parentNode = null;
             b: for (; ; ) {
               for (var next; ; ) {
-                node !== JSCompiler_temp || 0 !== anchorOffset && 3 !== node.nodeType || (start = length + anchorOffset);
+                node !== JSCompiler_temp || 0 !== anchorOffset && 3 !== node.nodeType || (start2 = length + anchorOffset);
                 node !== focusNode || 0 !== selection && 3 !== node.nodeType || (end = length + selection);
                 3 === node.nodeType && (length += node.nodeValue.length);
                 if (null === (next = node.firstChild)) break;
@@ -7237,7 +7237,7 @@ function requireReactDomClient_production() {
               }
               for (; ; ) {
                 if (node === root2) break b;
-                parentNode === JSCompiler_temp && ++indexWithinAnchor === anchorOffset && (start = length);
+                parentNode === JSCompiler_temp && ++indexWithinAnchor === anchorOffset && (start2 = length);
                 parentNode === focusNode && ++indexWithinFocus === selection && (end = length);
                 if (null !== (next = node.nextSibling)) break;
                 node = parentNode;
@@ -7245,7 +7245,7 @@ function requireReactDomClient_production() {
               }
               node = next;
             }
-            JSCompiler_temp = -1 === start || -1 === end ? null : { start, end };
+            JSCompiler_temp = -1 === start2 || -1 === end ? null : { start: start2, end };
           } else JSCompiler_temp = null;
         }
       JSCompiler_temp = JSCompiler_temp || { start: 0, end: 0 };
@@ -9252,10 +9252,10 @@ function requireReactDomClient_production() {
             priorFocusedElem
           )) {
             if (null !== priorSelectionRange && hasSelectionCapabilities(priorFocusedElem)) {
-              var start = priorSelectionRange.start, end = priorSelectionRange.end;
-              void 0 === end && (end = start);
+              var start2 = priorSelectionRange.start, end = priorSelectionRange.end;
+              void 0 === end && (end = start2);
               if ("selectionStart" in priorFocusedElem)
-                priorFocusedElem.selectionStart = start, priorFocusedElem.selectionEnd = Math.min(
+                priorFocusedElem.selectionStart = start2, priorFocusedElem.selectionEnd = Math.min(
                   end,
                   priorFocusedElem.value.length
                 );
@@ -9807,11 +9807,11 @@ function requireReactDomClient_production() {
     var listenerSetKey = domEventName + "__bubble";
     JSCompiler_inline_result.has(listenerSetKey) || (addTrappedEventListener(targetElement, domEventName, 2, false), JSCompiler_inline_result.add(listenerSetKey));
   }
-  function listenToNativeEvent(domEventName, isCapturePhaseListener, target) {
+  function listenToNativeEvent(domEventName, isCapturePhaseListener, target2) {
     var eventSystemFlags = 0;
     isCapturePhaseListener && (eventSystemFlags |= 4);
     addTrappedEventListener(
-      target,
+      target2,
       domEventName,
       eventSystemFlags,
       isCapturePhaseListener
@@ -10198,17 +10198,17 @@ function requireReactDomClient_production() {
     while (inst && 5 !== inst.tag && 27 !== inst.tag);
     return inst ? inst : null;
   }
-  function accumulateEnterLeaveListenersForEvent(dispatchQueue, event, target, common, inCapturePhase) {
-    for (var registrationName = event._reactName, listeners = []; null !== target && target !== common; ) {
-      var _instance3 = target, alternate = _instance3.alternate, stateNode = _instance3.stateNode;
+  function accumulateEnterLeaveListenersForEvent(dispatchQueue, event, target2, common, inCapturePhase) {
+    for (var registrationName = event._reactName, listeners = []; null !== target2 && target2 !== common; ) {
+      var _instance3 = target2, alternate = _instance3.alternate, stateNode = _instance3.stateNode;
       _instance3 = _instance3.tag;
       if (null !== alternate && alternate === common) break;
-      5 !== _instance3 && 26 !== _instance3 && 27 !== _instance3 || null === stateNode || (alternate = stateNode, inCapturePhase ? (stateNode = getListener(target, registrationName), null != stateNode && listeners.unshift(
-        createDispatchListener(target, stateNode, alternate)
-      )) : inCapturePhase || (stateNode = getListener(target, registrationName), null != stateNode && listeners.push(
-        createDispatchListener(target, stateNode, alternate)
+      5 !== _instance3 && 26 !== _instance3 && 27 !== _instance3 || null === stateNode || (alternate = stateNode, inCapturePhase ? (stateNode = getListener(target2, registrationName), null != stateNode && listeners.unshift(
+        createDispatchListener(target2, stateNode, alternate)
+      )) : inCapturePhase || (stateNode = getListener(target2, registrationName), null != stateNode && listeners.push(
+        createDispatchListener(target2, stateNode, alternate)
       )));
-      target = target.return;
+      target2 = target2.return;
     }
     0 !== listeners.length && dispatchQueue.push({ event, listeners });
   }
@@ -12400,13 +12400,13 @@ function requireReactDomClient_production() {
   function ReactDOMHydrationRoot(internalRoot) {
     this._internalRoot = internalRoot;
   }
-  ReactDOMHydrationRoot.prototype.unstable_scheduleHydration = function(target) {
-    if (target) {
+  ReactDOMHydrationRoot.prototype.unstable_scheduleHydration = function(target2) {
+    if (target2) {
       var updatePriority = resolveUpdatePriority();
-      target = { blockedOn: null, target, priority: updatePriority };
+      target2 = { blockedOn: null, target: target2, priority: updatePriority };
       for (var i = 0; i < queuedExplicitHydrationTargets.length && 0 !== updatePriority && updatePriority < queuedExplicitHydrationTargets[i].priority; i++) ;
-      queuedExplicitHydrationTargets.splice(i, 0, target);
-      0 === i && attemptExplicitHydrationTarget(target);
+      queuedExplicitHydrationTargets.splice(i, 0, target2);
+      0 === i && attemptExplicitHydrationTarget(target2);
     }
   };
   var isomorphicReactPackageVersion$jscomp$inline_1840 = React2.version;
@@ -12557,20 +12557,6 @@ function createSharedState(initialValue) {
   return useSharedState;
 }
 const cloneKRev = (c) => ({ ...c });
-function getUnequalRevConstants(defaults, actual) {
-  const out = {};
-  if (defaults.maxSpeed !== actual.maxSpeed) out.maxSpeed = actual.maxSpeed;
-  if (defaults.kCorrection !== actual.kCorrection) out.kCorrection = actual.kCorrection;
-  if (defaults.maxError !== actual.maxError) out.maxError = actual.maxError;
-  if (defaults.stopHarshThreshold !== actual.stopHarshThreshold) out.stopHarshThreshold = actual.stopHarshThreshold;
-  if (defaults.stopCoastThreshold !== actual.stopCoastThreshold) out.stopCoastThreshold = actual.stopCoastThreshold;
-  if (defaults.stopCoastPower !== actual.stopCoastPower) out.stopCoastPower = actual.stopCoastPower;
-  if (defaults.stopTimeout !== actual.stopTimeout) out.stopTimeout = actual.stopTimeout;
-  if (defaults.brakeTime !== actual.brakeTime) out.brakeTime = actual.brakeTime;
-  if (defaults.dropEarly !== actual.dropEarly) out.dropEarly = actual.dropEarly;
-  if (defaults.lead !== actual.lead) out.lead = actual.lead;
-  return out;
-}
 function createRevConstants(values = {}) {
   return {
     maxSpeed: values.maxSpeed ?? null,
@@ -12623,162 +12609,100 @@ const kBoomerang = createRevConstants({
   lead: 0.4
 });
 const kMikLibSpeed = 12;
-function getUnequalPIDConstants(correctPIDConstants, differentPIDConstants) {
+function getUnequalmikConstants(correctmikConstants, differentmikConstants) {
   const out = {};
-  const a = correctPIDConstants;
-  const b = differentPIDConstants;
+  const a = correctmikConstants;
+  const b = differentmikConstants;
   if (a.maxSpeed !== b.maxSpeed) out.maxSpeed = b.maxSpeed;
-  if (a.minSpeed !== b.minSpeed) out.minSpeed = b.minSpeed;
+  if (a.min_voltage !== b.min_voltage) out.min_voltage = b.min_voltage;
   if (a.kp !== b.kp) out.kp = b.kp;
   if (a.ki !== b.ki) out.ki = b.ki;
   if (a.kd !== b.kd) out.kd = b.kd;
   if (a.starti !== b.starti) out.starti = b.starti;
   if (a.slew !== b.slew) out.slew = b.slew;
   if (a.drift !== b.drift) out.drift = b.drift;
-  if (a.settleTime !== b.settleTime) out.settleTime = b.settleTime;
-  if (a.settleError !== b.settleError) out.settleError = b.settleError;
+  if (a.settle_time !== b.settle_time) out.settle_time = b.settle_time;
+  if (a.settle_error !== b.settle_error) out.settle_error = b.settle_error;
   if (a.timeout !== b.timeout) out.timeout = b.timeout;
   if (a.lead !== b.lead) out.lead = b.lead;
-  if (a.setback !== b.setback) out.setback = b.setback;
-  if (a.swingDirection !== b.swingDirection) out.swingDirection = b.swingDirection;
-  if (a.turnDirection !== b.turnDirection) out.turnDirection = b.turnDirection;
-  if (a.driveDirection !== b.driveDirection) out.driveDirection = b.driveDirection;
+  if (a.swing_direction !== b.swing_direction) out.swing_direction = b.swing_direction;
+  if (a.turn_direction !== b.turn_direction) out.turn_direction = b.turn_direction;
+  if (a.opposite_voltage !== b.opposite_voltage) out.opposite_voltage = b.opposite_voltage;
+  if (a.exit_error !== b.exit_error) out.exit_error = b.exit_error;
   return out;
 }
-const clonePID = (c) => ({ ...c });
-function createPIDConstants(values = {}) {
-  return {
-    maxSpeed: values.maxSpeed ?? null,
-    minSpeed: values.minSpeed ?? null,
-    kp: values.kp ?? null,
-    ki: values.ki ?? null,
-    kd: values.kd ?? null,
-    starti: values.starti ?? null,
-    drift: values.drift ?? null,
-    slew: values.slew ?? null,
-    settleTime: values.settleTime ?? null,
-    settleError: values.settleError ?? null,
-    timeout: values.timeout ?? null,
-    lead: values.lead ?? null,
-    setback: values.setback ?? null,
-    swingDirection: values.swingDirection ?? null,
-    turnDirection: values.turnDirection ?? null,
-    driveDirection: values.driveDirection ?? null
-  };
-}
-const kMikAngleTurn = createPIDConstants({
+const kMikTurn = {
   maxSpeed: 12,
-  minSpeed: 0,
   kp: 0.4,
   ki: 0.03,
   kd: 3,
   starti: 15,
-  settleTime: 300,
-  settleError: 1,
+  slew: 0,
+  settle_error: 1,
+  settle_time: 200,
   timeout: 3e3,
-  slew: 0
-});
-const kMikPointTurn = createPIDConstants({
-  maxSpeed: 12,
-  minSpeed: 0,
-  kp: 0.4,
-  ki: 0.03,
-  kd: 3,
-  starti: 15,
-  settleTime: 300,
-  settleError: 1,
-  timeout: 3e3,
-  slew: 0
-});
-const kMikPointDrive = createPIDConstants({
-  maxSpeed: 8,
-  minSpeed: 0,
-  kp: 1.5,
-  ki: 0,
-  kd: 10,
-  starti: 0,
-  settleTime: 300,
-  settleError: 3,
-  timeout: 5e3,
-  slew: 0
-});
-const kMikDistanceDrive = createPIDConstants({
+  min_voltage: 0,
+  exit_error: 0,
+  drift: 2,
+  lead: 0.5,
+  opposite_voltage: 0,
+  turn_direction: null,
+  swing_direction: null
+};
+const kMikHeading = {
   maxSpeed: 10,
-  minSpeed: 0,
-  kp: 1.5,
-  ki: 0,
-  kd: 10,
-  starti: 0,
-  settleTime: 300,
-  settleError: 1,
-  timeout: 5e3,
-  slew: 0
-});
-const kMikPointDriveHeading = createPIDConstants({
-  maxSpeed: 10,
-  kp: 0.4,
-  ki: 0,
-  kd: 3,
-  starti: 0,
-  slew: 0
-});
-const kMikDistanceDriveHeading = createPIDConstants({
-  maxSpeed: 8,
   kp: 0.4,
   ki: 0,
   kd: 1,
   starti: 0,
-  slew: 0
-});
-const kMikBoomerang = createPIDConstants({
+  slew: 0,
+  settle_error: 0,
+  settle_time: 0,
+  timeout: 0,
+  min_voltage: 0,
+  exit_error: 0,
+  drift: 2,
+  lead: 0.5,
+  opposite_voltage: 0,
+  turn_direction: null,
+  swing_direction: null
+};
+const kMikSwing = {
+  maxSpeed: 12,
+  kp: 0.4,
+  ki: 0.01,
+  kd: 2,
+  starti: 15,
+  slew: 0,
+  settle_error: 1,
+  settle_time: 200,
+  timeout: 3e3,
+  min_voltage: 0,
+  exit_error: 0,
+  drift: 2,
+  lead: 0.5,
+  opposite_voltage: 0,
+  turn_direction: null,
+  swing_direction: null
+};
+const kMikDrive = {
   maxSpeed: 8,
-  minSpeed: 0,
   kp: 1.5,
   ki: 0,
   kd: 10,
   starti: 0,
-  settleTime: 300,
-  settleError: 3,
+  slew: 2,
+  settle_error: 1.5,
+  settle_time: 200,
   timeout: 5e3,
-  lead: 0.5,
-  setback: 1,
+  min_voltage: 0,
+  exit_error: 0,
   drift: 2,
-  slew: 0
-});
-const kMikBoomerangHeading = createPIDConstants({
-  maxSpeed: 10,
-  kp: 0.4,
-  ki: 0,
-  kd: 3,
-  starti: 0,
-  slew: 0
-});
-const kMikAngleSwing = createPIDConstants({
-  maxSpeed: 12,
-  minSpeed: 0,
-  kp: 0.3,
-  ki: 1e-3,
-  kd: 2,
-  starti: 15,
-  settleError: 1,
-  settleTime: 300,
-  timeout: 3e3,
-  swingDirection: "left",
-  slew: 0
-});
-const kMikPointSwing = createPIDConstants({
-  maxSpeed: 12,
-  minSpeed: 0,
-  kp: 0.3,
-  ki: 1e-3,
-  kd: 2,
-  starti: 15,
-  settleError: 1,
-  settleTime: 300,
-  timeout: 3e3,
-  swingDirection: "left",
-  slew: 0
-});
+  lead: 0.5,
+  opposite_voltage: 0,
+  turn_direction: null,
+  swing_direction: null
+};
 function createStore(initial) {
   let state = initial;
   const listeners = /* @__PURE__ */ new Set();
@@ -12819,82 +12743,173 @@ function createObjectStore(initial) {
   };
   return { ...store, merge };
 }
-const INITIAL_DEFAULTS = {
-  mikLib: {
-    distanceDrive: { drive: clonePID(kMikDistanceDrive), heading: clonePID(kMikDistanceDriveHeading) },
-    pointDrive: { drive: clonePID(kMikPointDrive), heading: clonePID(kMikPointDriveHeading) },
-    poseDrive: { drive: clonePID(kMikBoomerang), heading: clonePID(kMikBoomerangHeading) },
-    pointTurn: { turn: clonePID(kMikPointTurn) },
-    angleTurn: { turn: clonePID(kMikAngleTurn) },
-    angleSwing: { swing: clonePID(kMikAngleSwing) },
-    pointSwing: { swing: clonePID(kMikPointSwing) },
-    group: "",
-    start: void 0
-  },
-  ReveilLib: {
-    distanceDrive: { drive: cloneKRev(kPilon) },
-    pointDrive: { drive: cloneKRev(kPilon) },
-    poseDrive: { drive: cloneKRev(kBoomerang) },
-    pointTurn: { turn: cloneKRev(kLootAt) },
-    angleTurn: { turn: cloneKRev(kTurn) },
-    angleSwing: { turn: cloneKRev(kTurn) },
-    pointSwing: { turn: cloneKRev(kTurn) },
-    group: "",
-    start: void 0
-  },
-  "JAR-Template": {
-    distanceDrive: { drive: clonePID(kMikPointDrive), heading: clonePID(kMikPointDriveHeading) },
-    pointDrive: { drive: clonePID(kMikPointDrive), heading: clonePID(kMikPointDriveHeading) },
-    poseDrive: { drive: clonePID(kMikBoomerang), heading: clonePID(kMikBoomerangHeading) },
-    pointTurn: { turn: clonePID(kMikPointTurn) },
-    angleTurn: { turn: clonePID(kMikAngleTurn) },
-    angleSwing: { swing: clonePID(kMikAngleSwing) },
-    pointSwing: { swing: clonePID(kMikPointSwing) },
-    group: "",
-    start: void 0
-  },
-  LemLib: {
-    distanceDrive: { drive: clonePID(kMikPointDrive), heading: clonePID(kMikPointDriveHeading) },
-    pointDrive: { drive: clonePID(kMikPointDrive), heading: clonePID(kMikPointDriveHeading) },
-    poseDrive: { drive: clonePID(kMikBoomerang), heading: clonePID(kMikBoomerangHeading) },
-    pointTurn: { turn: clonePID(kMikPointTurn) },
-    angleTurn: { turn: clonePID(kMikAngleTurn) },
-    angleSwing: { swing: clonePID(kMikAngleSwing) },
-    pointSwing: { swing: clonePID(kMikPointSwing) },
-    group: "",
-    start: void 0
-  },
-  "RW-Template": {
-    distanceDrive: { drive: clonePID(kMikPointDrive), heading: clonePID(kMikPointDriveHeading) },
-    pointDrive: { drive: clonePID(kMikPointDrive), heading: clonePID(kMikPointDriveHeading) },
-    poseDrive: { drive: clonePID(kMikBoomerang), heading: clonePID(kMikBoomerangHeading) },
-    pointTurn: { turn: clonePID(kMikPointTurn) },
-    angleTurn: { turn: clonePID(kMikAngleTurn) },
-    angleSwing: { swing: clonePID(kMikAngleSwing) },
-    pointSwing: { swing: clonePID(kMikPointSwing) },
-    group: "",
-    start: void 0
-  }
+const kLemLibSpeed = 127;
+function getUnequalLemConstants(correct, different) {
+  const out = {};
+  const a = correct;
+  const b = different;
+  if (a === void 0 || b === void 0) return out;
+  if (a.horizontalDrift !== b.horizontalDrift) out.horizontalDrift = b.horizontalDrift;
+  if (a.kp !== b.kp) out.kp = b.kp;
+  if (a.ki !== b.ki) out.ki = b.ki;
+  if (a.kd !== b.kd) out.kd = b.kd;
+  if (a.antiWindup !== b.antiWindup) out.antiWindup = b.antiWindup;
+  if (a.smallError !== b.smallError) out.smallError = b.smallError;
+  if (a.smallErrorTimeout !== b.smallErrorTimeout) out.smallErrorTimeout = b.smallErrorTimeout;
+  if (a.largeError !== b.largeError) out.largeError = b.largeError;
+  if (a.largeErrorTimeout !== b.largeErrorTimeout) out.largeErrorTimeout = b.largeErrorTimeout;
+  if (a.slew !== b.slew) out.slew = b.slew;
+  if (a.timeout !== b.timeout) out.timeout = b.timeout;
+  if (a.maxSpeed !== b.maxSpeed) out.maxSpeed = b.maxSpeed;
+  if (a.minSpeed !== b.minSpeed) out.minSpeed = b.minSpeed;
+  if (a.lead !== b.lead) out.lead = b.lead;
+  if (a.earlyExitRange !== b.earlyExitRange) out.earlyExitRange = b.earlyExitRange;
+  if (a.forwards !== b.forwards) out.forwards = b.forwards;
+  if (a.direction !== b.direction) out.direction = b.direction;
+  if (a.lockedSide !== b.lockedSide) out.lockedSide = b.lockedSide;
+  return out;
+}
+const kLemLinear = {
+  maxSpeed: 127,
+  minSpeed: 0,
+  lead: 0.6,
+  forwards: "forward",
+  direction: null,
+  lockedSide: "left",
+  earlyExitRange: 0,
+  timeout: 5e3,
+  horizontalDrift: 2,
+  kp: 10,
+  ki: 0,
+  kd: 3,
+  antiWindup: 3,
+  smallError: 1,
+  smallErrorTimeout: 100,
+  largeError: 5,
+  largeErrorTimeout: 500,
+  slew: 20
 };
-const globalDefaultsStore = createObjectStore(INITIAL_DEFAULTS);
-function getDefaultConstants(format, kind) {
-  const state = globalDefaultsStore.getState() ?? INITIAL_DEFAULTS;
-  const constant = state?.[format]?.[kind] ?? INITIAL_DEFAULTS[format][kind];
-  if (!constant) return constant;
-  const deepClone = (obj) => {
-    const o = obj;
-    if ("drive" in o && "heading" in o) {
-      return { drive: clonePID(o.drive), heading: clonePID(o.heading) };
+const kLemAngular = {
+  maxSpeed: 127,
+  minSpeed: 0,
+  lead: 0.6,
+  forwards: "forward",
+  direction: null,
+  lockedSide: "left",
+  earlyExitRange: 0,
+  timeout: 5e3,
+  horizontalDrift: 2,
+  kp: 2,
+  ki: 0,
+  kd: 10,
+  antiWindup: 3,
+  smallError: 1,
+  smallErrorTimeout: 100,
+  largeError: 5,
+  largeErrorTimeout: 500,
+  slew: 0
+};
+function getUnequalRevMecanumConstants(correctRevMecanumConstants, differentRevMecanumConstants) {
+  const out = {};
+  const a = correctRevMecanumConstants;
+  const b = differentRevMecanumConstants;
+  if (a.maxSpeed !== b.maxSpeed) out.maxSpeed = b.maxSpeed;
+  if (a.min_voltage !== b.min_voltage) out.min_voltage = b.min_voltage;
+  if (a.kp !== b.kp) out.kp = b.kp;
+  if (a.ki !== b.ki) out.ki = b.ki;
+  if (a.kd !== b.kd) out.kd = b.kd;
+  if (a.starti !== b.starti) out.starti = b.starti;
+  if (a.slew !== b.slew) out.slew = b.slew;
+  if (a.drift !== b.drift) out.drift = b.drift;
+  if (a.settle_time !== b.settle_time) out.settle_time = b.settle_time;
+  if (a.settle_error !== b.settle_error) out.settle_error = b.settle_error;
+  if (a.timeout !== b.timeout) out.timeout = b.timeout;
+  if (a.start_turn !== b.start_turn) out.start_turn = b.start_turn;
+  if (a.swing_direction !== b.swing_direction) out.swing_direction = b.swing_direction;
+  if (a.turn_direction !== b.turn_direction) out.turn_direction = b.turn_direction;
+  if (a.exit_error !== b.exit_error) out.exit_error = b.exit_error;
+  return out;
+}
+const kMecanumTurn = {
+  maxSpeed: 12,
+  kp: 0.4,
+  ki: 0,
+  kd: 3,
+  starti: 0,
+  slew: 0,
+  settle_error: 1,
+  settle_time: 200,
+  timeout: 3e3,
+  min_voltage: 0,
+  exit_error: 0,
+  drift: 2,
+  start_turn: 0,
+  turn_direction: null,
+  swing_direction: null
+};
+const kMecanumSwing = {
+  maxSpeed: 12,
+  kp: 0.4,
+  ki: 0.01,
+  kd: 2,
+  starti: 15,
+  slew: 0,
+  settle_error: 1,
+  settle_time: 200,
+  timeout: 3e3,
+  min_voltage: 0,
+  exit_error: 0,
+  drift: 2,
+  start_turn: 0,
+  turn_direction: null,
+  swing_direction: null
+};
+const kMecanumDrive = {
+  maxSpeed: 8,
+  kp: 1.5,
+  ki: 0,
+  kd: 10,
+  starti: 0,
+  slew: 2,
+  settle_error: 1.5,
+  settle_time: 200,
+  timeout: 5e3,
+  min_voltage: 0,
+  exit_error: 0,
+  drift: 2,
+  start_turn: 0,
+  turn_direction: null,
+  swing_direction: null
+};
+const getBackwardsSnapPose = (path, idx) => {
+  const controls = path.segments;
+  for (let i = idx; i >= 0; i--) {
+    const c = controls[i];
+    if (c.pose.x !== null && c.pose.y !== null) {
+      return c.pose;
     }
-    if ("turn" in o) {
-      return { turn: clonePID(o.turn) };
+  }
+  return null;
+};
+const getBackwardsSnapIdx = (path, idx) => {
+  const controls = path.segments;
+  for (let i = idx; i >= 0; i--) {
+    const c = controls[i];
+    if (c.pose.x !== null && c.pose.y !== null) {
+      return i;
     }
-    if ("swing" in o) {
-      return { swing: clonePID(o.swing) };
+  }
+  return null;
+};
+function getForwardSnapPose(path, idx) {
+  const controls = path.segments;
+  for (let i = idx; i < controls.length; i++) {
+    const c = controls[i];
+    if (c.pose.x !== null && c.pose.y !== null) {
+      return c.pose;
     }
-    return { ...o };
-  };
-  return deepClone(constant);
+  }
+  return null;
 }
 const FIELD_REAL_DIMENSIONS = { x: -72.6378, y: 72.6378, w: 145.2756, h: 145.2756 };
 const FIELD_IMG_DIMENSIONS = { x: 0, y: 0, w: 575, h: 575 };
@@ -12923,6 +12938,13 @@ function normalizeDeg(angle) {
 function clamp(value, min, max) {
   return Math.min(Math.max(value, min), max);
 }
+function cloneConstants(obj) {
+  const result = {};
+  for (const [key, val] of Object.entries(obj)) {
+    result[key] = typeof val === "object" && val !== null && !Array.isArray(val) ? { ...val } : val;
+  }
+  return result;
+}
 function toRad(degrees) {
   return degrees * Math.PI / 180;
 }
@@ -12943,6 +12965,23 @@ function toPX(position, field, img) {
   const dy = -img.y + sy * (position.y - field.y);
   return { x: dx, y: -dy };
 }
+function findPointToFace(path, idx) {
+  const previousPos = getBackwardsSnapPose(path, idx - 1);
+  const turnToPos = getForwardSnapPose(path, idx);
+  const pos = turnToPos ? { x: turnToPos.x ?? 0, y: turnToPos.y ?? 0 } : previousPos ? { x: previousPos.x ?? 0, y: (previousPos.y ?? 0) + 5 } : { x: 0, y: 5 };
+  return pos;
+}
+function toRGBA(hex, alpha) {
+  if (hex.at(0) !== "#" || hex.length !== 7) return "";
+  const r = parseInt(hex.slice(1, 3), 16);
+  const g = parseInt(hex.slice(3, 5), 16);
+  const b = parseInt(hex.slice(5, 7), 16);
+  return `rgba(${r}, ${g}, ${b}, ${alpha})`;
+}
+function roundNum(num) {
+  const numStr = String(num.toFixed(0));
+  return num.toFixed(Math.max(0, 3 - numStr.length));
+}
 function makeId(length) {
   let result = "";
   const characters = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
@@ -12956,21 +12995,6 @@ function makeId(length) {
 }
 function trimZeros(s) {
   return s.replace(/\.0+$/u, "").replace(/(\.\d*?[1-9])0+$/u, "$1");
-}
-function interpolatePoses(currentPose, previousPose, percent) {
-  const x1 = previousPose.x;
-  const x2 = currentPose.x;
-  const y1 = previousPose.y;
-  const y2 = currentPose.y;
-  if (x1 === null || x2 === null || y1 === null || y2 === null) return null;
-  if (percent < 0 && percent > 1) return null;
-  if (x1 === x2) {
-    return { x: x1, y: y1 + (y2 - y1) * percent };
-  }
-  const x = x1 + (x2 - x1) * percent;
-  const slope = (y2 - y1) / (x2 - x1);
-  const y = y1 + (x - x1) * slope;
-  return { x, y };
 }
 const isPlainObject = (v) => v && typeof v === "object" && !Array.isArray(v);
 function mergeDeep(base, patch) {
@@ -13053,58 +13077,148 @@ function deepEqual(a, b) {
   };
   return eq(a, b);
 }
+const INITIAL_DEFAULTS = {
+  mikLib: {
+    distanceDrive: cloneConstants({ drive: kMikDrive, heading: kMikHeading }),
+    pointDrive: cloneConstants({ drive: kMikDrive, heading: kMikHeading }),
+    poseDrive: cloneConstants({ drive: kMikDrive, heading: kMikHeading }),
+    pointTurn: cloneConstants({ turn: kMikTurn }),
+    angleTurn: cloneConstants({ turn: kMikTurn }),
+    angleSwing: cloneConstants({ swing: kMikSwing }),
+    pointSwing: cloneConstants({ swing: kMikSwing }),
+    group: "",
+    start: void 0
+  },
+  ReveilLib: {
+    distanceDrive: cloneConstants({ drive: kPilon }),
+    pointDrive: cloneConstants({ drive: kPilon }),
+    poseDrive: cloneConstants({ drive: kBoomerang }),
+    pointTurn: cloneConstants({ turn: kLootAt }),
+    angleTurn: cloneConstants({ turn: kTurn }),
+    angleSwing: cloneConstants({ turn: kTurn }),
+    pointSwing: cloneConstants({ turn: kTurn }),
+    group: "",
+    start: void 0
+  },
+  RevMecanum: {
+    distanceDrive: cloneConstants({ drive: kMecanumDrive, turn: kMecanumTurn }),
+    pointDrive: cloneConstants({ drive: kMecanumDrive, turn: kMecanumTurn }),
+    poseDrive: cloneConstants({ drive: kMecanumDrive, turn: kMecanumTurn }),
+    pointTurn: cloneConstants({ turn: kMecanumTurn }),
+    angleTurn: cloneConstants({ turn: kMecanumTurn }),
+    angleSwing: cloneConstants({ swing: kMecanumSwing }),
+    pointSwing: cloneConstants({ swing: kMecanumSwing }),
+    group: "",
+    start: void 0
+  },
+  "JAR-Template": {
+    distanceDrive: cloneConstants({ drive: kMikDrive, heading: kMikHeading }),
+    pointDrive: cloneConstants({ drive: kMikDrive, heading: kMikHeading }),
+    poseDrive: cloneConstants({ drive: kMikDrive, heading: kMikHeading }),
+    pointTurn: cloneConstants({ turn: kMikTurn }),
+    angleTurn: cloneConstants({ turn: kMikTurn }),
+    angleSwing: cloneConstants({ swing: kMikSwing }),
+    pointSwing: cloneConstants({ swing: kMikSwing }),
+    group: "",
+    start: void 0
+  },
+  LemLib: {
+    distanceDrive: cloneConstants({ lateral: kLemLinear, angular: kLemAngular }),
+    pointDrive: cloneConstants({ lateral: kLemLinear, angular: kLemAngular }),
+    poseDrive: cloneConstants({ lateral: kLemLinear, angular: kLemAngular }),
+    pointTurn: cloneConstants({ angular: kLemAngular }),
+    angleTurn: cloneConstants({ angular: kLemAngular }),
+    angleSwing: cloneConstants({ angular: kLemAngular }),
+    pointSwing: cloneConstants({ angular: kLemAngular }),
+    group: "",
+    start: void 0
+  },
+  "RW-Template": {
+    distanceDrive: cloneConstants({ drive: kMikDrive, heading: kMikHeading }),
+    pointDrive: cloneConstants({ drive: kMikDrive, heading: kMikHeading }),
+    poseDrive: cloneConstants({ drive: kMikDrive, heading: kMikHeading }),
+    pointTurn: cloneConstants({ turn: kMikTurn }),
+    angleTurn: cloneConstants({ turn: kMikTurn }),
+    angleSwing: cloneConstants({ swing: kMikSwing }),
+    pointSwing: cloneConstants({ swing: kMikSwing }),
+    group: "",
+    start: void 0
+  }
+};
+const globalDefaultsStore = createObjectStore(INITIAL_DEFAULTS);
+function getDefaultConstants(format, kind) {
+  const state = globalDefaultsStore.getState() ?? INITIAL_DEFAULTS;
+  const constant = state?.[format]?.[kind] ?? INITIAL_DEFAULTS[format][kind];
+  if (!constant || typeof constant !== "object") return constant;
+  return cloneConstants(constant);
+}
 const defaultRobotConstants = {
   width: 14,
   height: 14,
   speed: 6,
-  accel: 15,
-  lateralFriction: 10
+  lateralTau: 0.2,
+  angularTau: 0.1,
+  cogOffsetX: 0,
+  cogOffsetY: 0,
+  expansionFront: 0,
+  expansionLeft: 0,
+  expansionRight: 0,
+  expansionRear: 0,
+  isOmni: false
 };
 const robotConstantsStore = createObjectStore(defaultRobotConstants);
 class Robot {
-  width;
-  height;
-  maxSpeed;
-  trackWidth;
-  x = 0;
-  y = 0;
-  angle = 0;
+  constructor(x, y, angle, width, height, maxSpeed, cogOffsetX = 0, cogOffsetY = 0, expansionFront = 0, expansionLeft = 0, expansionRight = 0, expansionRear = 0, isOmnis = false, lateralTau, angularTau) {
+    this.x = x;
+    this.y = y;
+    this.angle = angle;
+    this.width = width;
+    this.height = height;
+    this.maxSpeed = maxSpeed;
+    this.cogOffsetX = cogOffsetX;
+    this.cogOffsetY = cogOffsetY;
+    this.expansionFront = expansionFront;
+    this.expansionLeft = expansionLeft;
+    this.expansionRight = expansionRight;
+    this.expansionRear = expansionRear;
+    this.isOmnis = isOmnis;
+    this.lateralTau = lateralTau;
+    this.angularTau = angularTau;
+    if (isOmnis) {
+      this.lateralFriction = 10;
+    } else {
+      this.lateralFriction = 50;
+    }
+  }
+  // Tank drive robot
   vL = 0;
   vR = 0;
   velX = 0;
   velY = 0;
-  maxAccel;
-  maxDecel;
-  lateralFriction;
-  constructor(startX, startY, startAngle, width, height, maxSpeed, trackWidth, maxAccel, maxDecel, lateralFriction = 10) {
-    this.x = startX;
-    this.y = startY;
-    this.angle = startAngle;
-    this.width = width;
-    this.height = height;
-    this.maxSpeed = maxSpeed;
-    this.trackWidth = trackWidth;
-    this.maxAccel = maxAccel;
-    this.maxDecel = maxDecel;
-    this.lateralFriction = lateralFriction;
-  }
-  setX(x) {
-    this.x = x;
-  }
-  setY(y) {
-    this.y = y;
-  }
+  vFL = 0;
+  vFR = 0;
+  vCL = 0;
+  vCR = 0;
+  vRL = 0;
+  vRR = 0;
+  lateralFriction = 0;
   setAngle(angle) {
     this.angle = normalizeDeg(angle);
   }
+  // Returns the world-frame position of the CoG offset point
   getX() {
-    return this.x;
+    const theta = toRad(this.angle);
+    return this.x + this.cogOffsetX * Math.cos(theta) + this.cogOffsetY * Math.sin(theta);
   }
   getY() {
-    return this.y;
+    const theta = toRad(this.angle);
+    return this.y - this.cogOffsetX * Math.sin(theta) + this.cogOffsetY * Math.cos(theta);
   }
   getAngle() {
     return this.angle;
+  }
+  getPose() {
+    return { x: this.x, y: this.y, angle: this.angle };
   }
   // Returns Velocity in in/s (includes lateral drift)
   getXVelocity() {
@@ -13114,109 +13228,162 @@ class Robot {
   getYVelocity() {
     return this.velY;
   }
-  moveTowards(current, target, dt) {
-    const diff = target - current;
-    const signFlip = current !== 0 && target !== 0 && Math.sign(current) !== Math.sign(target);
-    const isAccel = !signFlip && Math.abs(target) > Math.abs(current);
-    const maxDelta = (isAccel ? this.maxAccel : this.maxDecel) * dt;
-    if (Math.abs(diff) <= maxDelta) return target;
-    return current + Math.sign(diff) * maxDelta;
-  }
   // Returns angular velocity in degrees per second
   getAngularVelocity() {
     const vL_in = this.vL * 12;
     const vR_in = this.vR * 12;
-    const b_in = this.trackWidth;
+    const b_in = this.width - 2;
     if (b_in === 0) return 0;
     const omegaRad = (vR_in - vL_in) / b_in;
     return toDeg(omegaRad);
   }
   tankDrive(leftCmd, rightCmd, dt) {
-    const b_in = this.trackWidth;
-    const v_max_ft = this.maxSpeed;
+    const b_in = this.width - 2;
     const left = clamp(leftCmd, -1, 1);
     const right = clamp(rightCmd, -1, 1);
-    const targetVL_ft = left * v_max_ft;
-    const targetVR_ft = right * v_max_ft;
-    this.vL = this.moveTowards(this.vL, targetVL_ft, dt);
-    this.vR = this.moveTowards(this.vR, targetVR_ft, dt);
+    const targetVL_ft = left * this.maxSpeed;
+    const targetVR_ft = right * this.maxSpeed;
+    const targetLinear = (targetVL_ft + targetVR_ft) / 2;
+    const targetAngular = (targetVR_ft - targetVL_ft) / 2;
+    const currentLinear = (this.vL + this.vR) / 2;
+    const currentAngular = (this.vR - this.vL) / 2;
+    const kLat = 1 - Math.exp(-dt / this.lateralTau);
+    const kAng = 1 - Math.exp(-dt / this.angularTau);
+    const newLinear = currentLinear + (targetLinear - currentLinear) * kLat;
+    const newAngular = currentAngular + (targetAngular - currentAngular) * kAng;
+    this.vL = newLinear - newAngular;
+    this.vR = newLinear + newAngular;
     const vL_in = this.vL * 12;
     const vR_in = this.vR * 12;
-    const v_in = (vR_in + vL_in) / 2;
-    const ω = (vL_in - vR_in) / b_in;
-    const θ = toRad(this.getAngle());
-    const θNew = θ + ω * dt;
-    let θdegNew = toDeg(θNew);
-    θdegNew = normalizeDeg(θdegNew);
-    this.setAngle(θdegNew);
-    const θUpdated = toRad(this.getAngle());
-    const forwardX = Math.sin(θUpdated);
-    const forwardY = Math.cos(θUpdated);
-    const lateralX = Math.cos(θUpdated);
-    const lateralY = -Math.sin(θUpdated);
-    this.velX * forwardX + this.velY * forwardY;
-    const latComponent = this.velX * lateralX + this.velY * lateralY;
-    const newLong = v_in;
-    const newLat = latComponent * Math.max(0, 1 - this.lateralFriction * dt);
-    this.velX = newLong * forwardX + newLat * lateralX;
-    this.velY = newLong * forwardY + newLat * lateralY;
-    this.setX(this.getX() + this.velX * dt);
-    this.setY(this.getY() + this.velY * dt);
+    const fwd_speed = (vL_in + vR_in) / 2;
+    const orientation_delta_rad = (vL_in - vR_in) / b_in * dt;
+    const new_orientation_rad = toRad(this.angle) + orientation_delta_rad;
+    const rightX = Math.cos(new_orientation_rad);
+    const rightY = -Math.sin(new_orientation_rad);
+    const lat_speed = (this.velX * rightX + this.velY * rightY) * Math.max(0, 1 - this.lateralFriction * dt);
+    this.odometryUpdate(fwd_speed * dt, 0, orientation_delta_rad, fwd_speed, lat_speed);
+  }
+  mecanumDrive(flCmd, frCmd, rlCmd, rrCmd, dt) {
+    const fl = clamp(flCmd, -1, 1);
+    const fr = clamp(frCmd, -1, 1);
+    const rl = clamp(rlCmd, -1, 1);
+    const rr = clamp(rrCmd, -1, 1);
+    const tFL = fl * this.maxSpeed;
+    const tFR = fr * this.maxSpeed;
+    const tRL = rl * this.maxSpeed;
+    const tRR = rr * this.maxSpeed;
+    const r = (this.height + (this.width - 2)) / 2;
+    const targetFwd = (tFL + tFR + tRL + tRR) / 4;
+    const targetLat = (tFL - tFR - tRL + tRR) / 4;
+    const targetOmega = (tFL - tFR + tRL - tRR) / (4 * r);
+    const curFwd = (this.vFL + this.vFR + this.vRL + this.vRR) / 4;
+    const curLat = (this.vFL - this.vFR - this.vRL + this.vRR) / 4;
+    const curOmega = (this.vFL - this.vFR + this.vRL - this.vRR) / (4 * r);
+    const kLat = 1 - Math.exp(-dt / this.lateralTau);
+    const kAng = 1 - Math.exp(-dt / this.angularTau);
+    const newFwd = curFwd + (targetFwd - curFwd) * kLat;
+    const newLat = curLat + (targetLat - curLat) * kLat;
+    const newOmega = curOmega + (targetOmega - curOmega) * kAng;
+    this.vFL = newFwd + newLat + newOmega * r;
+    this.vFR = newFwd - newLat - newOmega * r;
+    this.vRL = newFwd - newLat + newOmega * r;
+    this.vRR = newFwd + newLat - newOmega * r;
+    const fwd_in = newFwd * 12;
+    const lat_in = newLat * 12;
+    const omega_in = newOmega * 12;
+    this.odometryUpdate(fwd_in * dt, lat_in * dt, omega_in * dt, fwd_in, lat_in);
+  }
+  // 4 mecanum corner wheels + 2 center omni wheels (asterisk layout)
+  asteriskDrive(flCmd, frCmd, clCmd, crCmd, rlCmd, rrCmd, dt) {
+    const fl = clamp(flCmd, -1, 1);
+    const fr = clamp(frCmd, -1, 1);
+    const cl = clamp(clCmd, -1, 1);
+    const cr = clamp(crCmd, -1, 1);
+    const rl = clamp(rlCmd, -1, 1);
+    const rr = clamp(rrCmd, -1, 1);
+    const r_m = (this.height + (this.width - 2)) / 2;
+    const b = this.width - 2;
+    const tFL = fl * this.maxSpeed;
+    const tFR = fr * this.maxSpeed;
+    const tCL = cl * this.maxSpeed;
+    const tCR = cr * this.maxSpeed;
+    const tRL = rl * this.maxSpeed;
+    const tRR = rr * this.maxSpeed;
+    const targetFwd = (tFL + tFR + tCL + tCR + tRL + tRR) / 6;
+    const targetLat = (tFL - tFR - tRL + tRR) / 4;
+    const targetOmega = ((tFL - tFR + tRL - tRR) / r_m + 2 * (tCL - tCR) / b) / 6;
+    const curFwd = (this.vFL + this.vFR + this.vCL + this.vCR + this.vRL + this.vRR) / 6;
+    const curLat = (this.vFL - this.vFR - this.vRL + this.vRR) / 4;
+    const curOmega = ((this.vFL - this.vFR + this.vRL - this.vRR) / r_m + 2 * (this.vCL - this.vCR) / b) / 6;
+    const kLat = 1 - Math.exp(-dt / this.lateralTau);
+    const kAng = 1 - Math.exp(-dt / this.angularTau);
+    const newFwd = curFwd + (targetFwd - curFwd) * kLat;
+    const newLat = curLat + (targetLat - curLat) * kLat;
+    const newOmega = curOmega + (targetOmega - curOmega) * kAng;
+    this.vFL = newFwd + newLat + newOmega * r_m;
+    this.vFR = newFwd - newLat - newOmega * r_m;
+    this.vCL = newFwd + newOmega * (b / 2);
+    this.vCR = newFwd - newOmega * (b / 2);
+    this.vRL = newFwd - newLat + newOmega * r_m;
+    this.vRR = newFwd + newLat - newOmega * r_m;
+    const fwd_in = newFwd * 12;
+    const lat_in = newLat * 12;
+    const omega_in = newOmega * 12;
+    this.odometryUpdate(fwd_in * dt, lat_in * dt, omega_in * dt, fwd_in, lat_in);
+  }
+  // Arc odometry (5225A tracking document style) + world-frame velocity update
+  odometryUpdate(forward_delta, sideways_delta, orientation_delta_rad, fwd_speed, lat_speed) {
+    const prev_orientation_rad = toRad(this.angle);
+    const orientation_rad = prev_orientation_rad + orientation_delta_rad;
+    this.setAngle(toDeg(orientation_rad));
+    let local_X_position;
+    let local_Y_position;
+    if (Math.abs(orientation_delta_rad) < 1e-7) {
+      local_X_position = sideways_delta;
+      local_Y_position = forward_delta;
+    } else {
+      const c = 2 * Math.sin(orientation_delta_rad / 2);
+      local_X_position = c * (sideways_delta / orientation_delta_rad);
+      local_Y_position = c * (forward_delta / orientation_delta_rad);
+    }
+    const local_polar_length = Math.sqrt(local_X_position ** 2 + local_Y_position ** 2);
+    if (local_polar_length > 0) {
+      const global_polar_angle = Math.atan2(local_Y_position, local_X_position) - prev_orientation_rad - orientation_delta_rad / 2;
+      this.x += local_polar_length * Math.cos(global_polar_angle);
+      this.y += local_polar_length * Math.sin(global_polar_angle);
+    }
+    this.velX = fwd_speed * Math.sin(orientation_rad) + lat_speed * Math.cos(orientation_rad);
+    this.velY = fwd_speed * Math.cos(orientation_rad) - lat_speed * Math.sin(orientation_rad);
   }
   stop() {
     this.vL = 0;
     this.vR = 0;
     this.velX = 0;
     this.velY = 0;
+    this.vFL = 0;
+    this.vFR = 0;
+    this.vCL = 0;
+    this.vCR = 0;
+    this.vRL = 0;
+    this.vRR = 0;
   }
+  // x, y are the CoG offset point position; converts to kinematic center internally
   setPose(x, y, angle) {
-    this.x = x;
-    this.y = y;
     this.angle = angle;
+    const θ = toRad(angle);
+    this.x = x - (this.cogOffsetX * Math.cos(θ) + this.cogOffsetY * Math.sin(θ));
+    this.y = y - (-this.cogOffsetX * Math.sin(θ) + this.cogOffsetY * Math.cos(θ));
     this.velX = 0;
     this.velY = 0;
     return true;
   }
-}
-const builtInCommands = [
-  { name: "wait", color: "#dcdcaa" },
-  { name: "sleep", color: "#dcdcaa" },
-  { name: "delay", color: "#dcdcaa" },
-  { name: "number", color: "#b5cea8" },
-  { name: "string", color: "#ce9178" },
-  { name: "task", color: "#4ec9b0" },
-  { name: "pros", color: "#4ec9b0" },
-  { name: "sec", color: "#9cdcfe" },
-  { name: "msec", color: "#9cdcfe" }
-];
-const DEFAULT_COMMANDS = {
-  mikLib: [
-    createCommand("wait(number, msec)"),
-    createCommand("wait(number, sec)"),
-    createCommand("task::sleep(number)")
-  ],
-  ReveilLib: [
-    createCommand("pros::delay(number)")
-  ],
-  "JAR-Template": [],
-  LemLib: [],
-  "RW-Template": []
-};
-function createCommand(name, percent = 0) {
-  return {
-    name,
-    percent,
-    color: "#1566bd",
-    id: makeId(10)
-  };
 }
 const DEFAULT_FORMAT = {
   format: "mikLib",
   field: "v5-match",
   defaults: INITIAL_DEFAULTS["mikLib"],
   path: { segments: [], name: "" },
-  robot: defaultRobotConstants,
-  commands: DEFAULT_COMMANDS["mikLib"]
+  robot: defaultRobotConstants
 };
 function loadValidatedAppState() {
   const saved = localStorage.getItem("appState");
@@ -13228,8 +13395,7 @@ function loadValidatedAppState() {
       field: parsed.field ?? DEFAULT_FORMAT.field,
       defaults: parsed.defaults ?? DEFAULT_FORMAT.defaults,
       path: parsed.path && Array.isArray(parsed.path.segments) ? parsed.path : DEFAULT_FORMAT.path,
-      robot: parsed.robot ?? DEFAULT_FORMAT.robot,
-      commands: Array.isArray(parsed.commands) ? parsed.commands : DEFAULT_FORMAT.commands
+      robot: parsed.robot ?? DEFAULT_FORMAT.robot
     };
   } catch {
     return DEFAULT_FORMAT;
@@ -13239,11 +13405,11 @@ const VALIDATED_APP_STATE = loadValidatedAppState();
 const usePath = createSharedState(VALIDATED_APP_STATE.path);
 const eyeOpen = "data:image/svg+xml,%3c?xml%20version='1.0'%20encoding='utf-8'?%3e%3c!--%20Uploaded%20to:%20SVG%20Repo,%20www.svgrepo.com,%20Generator:%20SVG%20Repo%20Mixer%20Tools%20--%3e%3csvg%20width='800px'%20height='800px'%20viewBox='0%200%2024%2024'%20fill='white'%20xmlns='http://www.w3.org/2000/svg'%3e%3cpath%20d='M12%205C8.24261%205%205.43602%207.4404%203.76737%209.43934C2.51521%2010.9394%202.51521%2013.0606%203.76737%2014.5607C5.43602%2016.5596%208.24261%2019%2012%2019C15.7574%2019%2018.564%2016.5596%2020.2326%2014.5607C21.4848%2013.0606%2021.4848%2010.9394%2020.2326%209.43934C18.564%207.4404%2015.7574%205%2012%205Z'%20stroke='%23ffffffff'%20stroke-width='1.5'%20stroke-linecap='round'%20stroke-linejoin='round'/%3e%3cpath%20d='M12%2015C13.6569%2015%2015%2013.6569%2015%2012C15%2010.3431%2013.6569%209%2012%209C10.3431%209%209%2010.3431%209%2012C9%2013.6569%2010.3431%2015%2012%2015Z'%20stroke='%233C3B3B'%20stroke-width='1.5'%20stroke-linecap='round'%20stroke-linejoin='round'/%3e%3c/svg%3e";
 const eyeClosed = "data:image/svg+xml,%3c?xml%20version='1.0'%20encoding='utf-8'?%3e%3c!--%20Uploaded%20to:%20SVG%20Repo,%20www.svgrepo.com,%20Generator:%20SVG%20Repo%20Mixer%20Tools%20--%3e%3csvg%20width='800px'%20height='800px'%20viewBox='0%200%2024%2024'%20fill='none'%20xmlns='http://www.w3.org/2000/svg'%3e%3cpath%20d='M9.76404%205.29519C10.4664%205.10724%2011.2123%205%2012%205C15.7574%205%2018.564%207.4404%2020.2326%209.43934C21.4848%2010.9394%2021.4846%2013.0609%2020.2324%2014.5609C20.0406%2014.7907%2019.8337%2015.0264%2019.612%2015.2635M12.5%209.04148C13.7563%209.25224%2014.7478%2010.2437%2014.9585%2011.5M3%203L21%2021M11.5%2014.9585C10.4158%2014.7766%209.52884%2014.0132%209.17072%2013M4.34914%208.77822C4.14213%209.00124%203.94821%209.22274%203.76762%209.43907C2.51542%2010.9391%202.51523%2013.0606%203.76739%2014.5607C5.43604%2016.5596%208.24263%2019%2012%2019C12.8021%2019%2013.5608%2018.8888%2014.2744%2018.6944'%20stroke='%23ffffffff'%20stroke-width='1.5'%20stroke-linecap='round'%20stroke-linejoin='round'/%3e%3c/svg%3e";
-const lockClose = "data:image/svg+xml,%3c?xml%20version='1.0'%20encoding='utf-8'?%3e%3c!--%20Uploaded%20to:%20SVG%20Repo,%20www.svgrepo.com,%20Generator:%20SVG%20Repo%20Mixer%20Tools%20--%3e%3csvg%20width='800px'%20height='800px'%20viewBox='0%200%2024%2024'%20fill='none'%20xmlns='http://www.w3.org/2000/svg'%3e%3cpath%20d='M13%2015C13%2015.5523%2012.5523%2016%2012%2016C11.4477%2016%2011%2015.5523%2011%2015C11%2014.4477%2011.4477%2014%2012%2014C12.5523%2014%2013%2014.4477%2013%2015Z'%20stroke='%23FFFFFF'%20stroke-width='2'/%3e%3cpath%20d='M15%209C16.8856%209%2017.8284%209%2018.4142%209.58579C19%2010.1716%2019%2011.1144%2019%2013L19%2015L19%2017C19%2018.8856%2019%2019.8284%2018.4142%2020.4142C17.8284%2021%2016.8856%2021%2015%2021L12%2021L9%2021C7.11438%2021%206.17157%2021%205.58579%2020.4142C5%2019.8284%205%2018.8856%205%2017L5%2015L5%2013C5%2011.1144%205%2010.1716%205.58579%209.58579C6.17157%209%207.11438%209%209%209L12%209L15%209Z'%20stroke='%23FFFFFF'%20stroke-width='2'%20stroke-linejoin='round'/%3e%3cpath%20d='M9%209V5C9%203.89543%209.89543%203%2011%203H13C14.1046%203%2015%203.89543%2015%205V9'%20stroke='%23FFFFFF'%20stroke-width='2'%20stroke-linecap='round'%20stroke-linejoin='round'/%3e%3c/svg%3e";
-const lockOpen = "data:image/svg+xml,%3c?xml%20version='1.0'%20encoding='utf-8'?%3e%3c!--%20Uploaded%20to:%20SVG%20Repo,%20www.svgrepo.com,%20Generator:%20SVG%20Repo%20Mixer%20Tools%20--%3e%3csvg%20width='800px'%20height='800px'%20viewBox='0%200%2024%2024'%20fill='none'%20xmlns='http://www.w3.org/2000/svg'%3e%3cpath%20d='M13%2015C13%2015.5523%2012.5523%2016%2012%2016C11.4477%2016%2011%2015.5523%2011%2015C11%2014.4477%2011.4477%2014%2012%2014C12.5523%2014%2013%2014.4477%2013%2015Z'%20stroke='%23FFFFFF'%20stroke-width='2'/%3e%3cpath%20d='M15%209C16.8856%209%2017.8284%209%2018.4142%209.58579C19%2010.1716%2019%2011.1144%2019%2013L19%2015L19%2017C19%2018.8856%2019%2019.8284%2018.4142%2020.4142C17.8284%2021%2016.8856%2021%2015%2021L12%2021L9%2021C7.11438%2021%206.17157%2021%205.58579%2020.4142C5%2019.8284%205%2018.8856%205%2017L5%2015L5%2013C5%2011.1144%205%2010.1716%205.58579%209.58579C6.17157%209%207.11438%209%209%209L12%209L15%209Z'%20stroke='%23FFFFFF'%20stroke-width='2'%20stroke-linejoin='round'/%3e%3cpath%20d='M9%209V5C9%203.89543%209.89543%203%2011%203H13.0625C14.1326%203%2015%203.86745%2015%204.9375V4.9375V5'%20stroke='%23FFFFFF'%20stroke-width='2'%20stroke-linecap='round'%20stroke-linejoin='round'/%3e%3c/svg%3e";
+const clockClose = "data:image/svg+xml,%3c?xml%20version='1.0'%20encoding='utf-8'?%3e%3c!--%20Uploaded%20to:%20SVG%20Repo,%20www.svgrepo.com,%20Generator:%20SVG%20Repo%20Mixer%20Tools%20--%3e%3csvg%20width='800px'%20height='800px'%20viewBox='0%200%2024%2024'%20fill='none'%20xmlns='http://www.w3.org/2000/svg'%3e%3cpath%20d='M12%2017V12L14.5%2010.5M21%2012C21%2016.9706%2016.9706%2021%2012%2021C7.02944%2021%203%2016.9706%203%2012C3%207.02944%207.02944%203%2012%203C16.9706%203%2021%207.02944%2021%2012Z'%20stroke='%23FFFFFF'%20stroke-width='2'%20stroke-linecap='round'%20stroke-linejoin='round'/%3e%3c/svg%3e";
+const clockOpen = "data:image/svg+xml,%3c?xml%20version='1.0'%20encoding='utf-8'?%3e%3c!--%20Uploaded%20to:%20SVG%20Repo,%20www.svgrepo.com,%20Generator:%20SVG%20Repo%20Mixer%20Tools%20--%3e%3csvg%20width='800px'%20height='800px'%20viewBox='0%200%2024%2024'%20fill='none'%20xmlns='http://www.w3.org/2000/svg'%3e%3cpath%20d='M12%207V12L14.5%2010.5M21%2012C21%2016.9706%2016.9706%2021%2012%2021C7.02944%2021%203%2016.9706%203%2012C3%207.02944%207.02944%203%2012%203C16.9706%203%2021%207.02944%2021%2012Z'%20stroke='%23FFFFFF'%20stroke-width='2'%20stroke-linecap='round'%20stroke-linejoin='round'/%3e%3c/svg%3e";
 const downArrow = "data:image/svg+xml,%3c?xml%20version='1.0'%20encoding='utf-8'?%3e%3c!--%20Uploaded%20to:%20SVG%20Repo,%20www.svgrepo.com,%20Generator:%20SVG%20Repo%20Mixer%20Tools%20--%3e%3csvg%20width='100px'%20height='100px'%20viewBox='5%2010%2014%205'%20fill='none'%20xmlns='http://www.w3.org/2000/svg'%3e%3cpath%20d='M6%2010L12%2015L18%2010'%20stroke='%23FFFFFF'%20stroke-width='2.5'/%3e%3c/svg%3e";
 function Slider({
-  sliderWidth,
+  sliderWidth = 0,
   sliderHeight,
   sliderColor = "--color-lightgray",
   knobWidth,
@@ -13266,6 +13432,7 @@ function Slider({
   const startDrag = (evt) => {
     onChangeStart?.();
     evt.preventDefault();
+    evt.stopPropagation();
     const move = (evt2) => {
       handleMove(evt2.clientX);
     };
@@ -13280,10 +13447,10 @@ function Slider({
   return /* @__PURE__ */ jsxRuntimeExports.jsx(
     "div",
     {
-      className: "rounded-sm relative bg-amber-50",
+      className: "rounded-sm relative w-full",
       style: {
         backgroundColor: `var(${sliderColor})`,
-        width: `${sliderWidth}px`,
+        ...sliderWidth > 0 ? { width: `${sliderWidth}px` } : {},
         height: `${sliderHeight}px`
       },
       ref: trackRef,
@@ -13304,159 +13471,7 @@ function Slider({
     }
   );
 }
-const useCommand = createSharedState(VALIDATED_APP_STATE.commands);
-function createDropDownItem(name) {
-  return {
-    name,
-    id: makeId(10)
-  };
-}
-function Dropdown({
-  height,
-  width,
-  defaultText,
-  noneText,
-  items,
-  setSelectedItem
-}) {
-  const [isOpen, setOpen] = reactExports.useState(false);
-  const [selectedId, setSelectedId] = reactExports.useState("");
-  const menuRef = reactExports.useRef(null);
-  reactExports.useEffect(() => {
-    const handleClickOutside = (event) => {
-      if (menuRef.current && !menuRef.current.contains(event.target)) {
-        setOpen(false);
-      }
-    };
-    document.addEventListener("mousedown", handleClickOutside);
-    return () => {
-      document.removeEventListener("mousedown", handleClickOutside);
-    };
-  }, []);
-  reactExports.useEffect(() => {
-    handleSelectedItem(selectedId, isOpen);
-  }, [items]);
-  const handleToggleMenu = () => {
-    setOpen((prev) => !prev);
-  };
-  const handleSelectedItem = (id, open) => {
-    setSelectedId(id);
-    const command = items.find((c) => c.id === id);
-    setOpen(open);
-    if (!command) {
-      setSelectedItem(createDropDownItem(""));
-      return;
-    }
-    setSelectedItem(command);
-  };
-  return /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { ref: menuRef, className: `relative ${isOpen ? "bg-medgray_hover" : "bg-none"} hover:bg-medgray_hover rounded-sm`, children: [
-    /* @__PURE__ */ jsxRuntimeExports.jsxs(
-      "button",
-      {
-        onClick: handleToggleMenu,
-        className: `
-                    ${isOpen ? "bg-medgray_hover" : "bg-medlightgray"}
-                    flex
-                    justify-between
-                    pl-2
-                    pr-2
-                    hover:bg-medgray_hover
-                    items-center
-                    rounded-sm 
-                    cursor-pointer
-                `,
-        style: {
-          width: `${width}px`,
-          height: `${height}px`
-        },
-        children: [
-          /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "text-left", children: items.find((c) => c.id === selectedId) === void 0 ? defaultText : items.find((c) => c.id === selectedId)?.name }),
-          /* @__PURE__ */ jsxRuntimeExports.jsx(
-            "img",
-            {
-              className: `rotate-${isOpen ? 180 : 0} w-[10px] h-[10px]`,
-              style: {
-                width: `${height / 2.5}px`,
-                height: `${height / 2.5}px`
-              },
-              src: downArrow
-            }
-          )
-        ]
-      }
-    ),
-    isOpen && items.length > 0 && /* @__PURE__ */ jsxRuntimeExports.jsx(
-      "div",
-      {
-        className: "absolute z-50 shadow-xs mt-1 shadow-black left-0 top-full\n                    rounded-sm bg-medgray_hover min-h-2",
-        style: { width: `${width}px` },
-        children: /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "flex flex-col mt-2 pl-2 pr-2 mb-2 gap-2", children: /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex flex-col max-h-40 overflow-y-auto", children: [
-          items.map((c) => /* @__PURE__ */ jsxRuntimeExports.jsx(
-            "button",
-            {
-              onClick: () => handleSelectedItem(c.id, true),
-              className: "flex hover:bg-blackgrayhover pl-2 rounded-sm cursor-pointer",
-              children: /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "text-[16px]", children: c.name })
-            },
-            c.id
-          )),
-          /* @__PURE__ */ jsxRuntimeExports.jsx(
-            "button",
-            {
-              onClick: () => handleSelectedItem("", false),
-              className: "flex hover:bg-blackgrayhover mt-1 pl-2 rounded-sm cursor-pointer text-lightgray",
-              children: /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "text-[16px]", children: noneText })
-            }
-          )
-        ] }) })
-      }
-    )
-  ] });
-}
-function CommandList({
-  setCommand
-}) {
-  const [value, setValue] = reactExports.useState(0);
-  const [commands] = useCommand();
-  const [item, setItem] = reactExports.useState({ name: "", id: makeId(10) });
-  reactExports.useEffect(() => {
-    if (item.name === "") return;
-    setCommand((prev) => ({
-      ...prev,
-      percent: item.name === "" ? 0 : value,
-      name: item.name
-    }));
-  }, [item, value, commands.length]);
-  return /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex flex-row items-center gap-4", children: [
-    /* @__PURE__ */ jsxRuntimeExports.jsx(
-      Dropdown,
-      {
-        width: 180,
-        height: 30,
-        items: commands,
-        setSelectedItem: setItem,
-        defaultText: "Add Command...",
-        noneText: "No Command..."
-      }
-    ),
-    /* @__PURE__ */ jsxRuntimeExports.jsx(
-      Slider,
-      {
-        sliderWidth: 150,
-        sliderHeight: 5,
-        knobHeight: 16,
-        knobWidth: 16,
-        value,
-        setValue
-      }
-    ),
-    /* @__PURE__ */ jsxRuntimeExports.jsxs("span", { children: [
-      value.toFixed(0),
-      "%"
-    ] })
-  ] });
-}
-const MAX_UNDO_HISTORY = 50;
+const MAX_UNDO_HISTORY = 100;
 const undoHistory = createStore([VALIDATED_APP_STATE]);
 const redoHistory = createStore([]);
 function AddToUndoHistory(snapshot) {
@@ -13473,6 +13488,37 @@ function AddToUndoHistory(snapshot) {
   }
   undoHistory.setState(newHistory);
   redoHistory.setState([]);
+}
+function evaluate(expr) {
+  const tokens = [];
+  let i = 0;
+  while (i < expr.length) {
+    if (expr[i] === " ") {
+      i++;
+      continue;
+    }
+    const isUnary = expr[i] === "-" && (tokens.length === 0 || ["+", "-", "*", "/"].includes(tokens[tokens.length - 1]));
+    if (isUnary || /\d/.test(expr[i])) {
+      let num = isUnary ? "-" : "";
+      if (isUnary) i++;
+      while (i < expr.length && /[\d.]/.test(expr[i])) num += expr[i++];
+      tokens.push(num);
+    } else if (["+", "-", "*", "/"].includes(expr[i])) {
+      tokens.push(expr[i++]);
+    } else {
+      i++;
+    }
+  }
+  let result = parseFloat(tokens[0]);
+  for (let j = 1; j < tokens.length; j += 2) {
+    const op = tokens[j];
+    const num = parseFloat(tokens[j + 1]);
+    if (op === "+") result += num;
+    else if (op === "-") result -= num;
+    else if (op === "*") result *= num;
+    else if (op === "/") result = result / num;
+  }
+  return result;
 }
 function NumberInput({
   fontSize,
@@ -13544,11 +13590,11 @@ function NumberInput({
       setValue(null);
       return;
     }
-    if (!isFinite(Number(edit))) {
+    const num = evaluate(edit);
+    if (num === void 0) {
       resetValue();
       return;
     }
-    const num = parseFloat(edit);
     const clampNum = clamp(num, bounds[0], bounds[1]);
     if (clampNum === void 0) return;
     setValue(clampNum);
@@ -13669,7 +13715,9 @@ function ConstantRow({
   labelColor = "text-white",
   units = "",
   onChange,
-  input
+  input,
+  selected = false,
+  onToggleSelect
 }) {
   const [path] = usePath();
   const undoRef = reactExports.useRef(false);
@@ -13682,12 +13730,22 @@ function ConstantRow({
   return /* @__PURE__ */ jsxRuntimeExports.jsxs(
     "div",
     {
-      className: "flex flex-row items-center \n            justify-between h-[30px] pr-2 pl-2 gap-1",
+      className: `flex flex-row items-center
+            justify-between h-[35px] pr-2 pl-2 gap-1 rounded-lg
+            
+            hover:brightness-90
+            transition-all duration-100
+            active:scale-[0.995]
+            ${selected ? "bg-medlightgray" : ""}`,
       children: [
-        /* @__PURE__ */ jsxRuntimeExports.jsxs("span", { className: `w-[100px] ${labelColor}`, children: [
-          label,
-          " "
-        ] }),
+        /* @__PURE__ */ jsxRuntimeExports.jsx(
+          "button",
+          {
+            className: `w-[100px] text-left ${labelColor} ${onToggleSelect ? "cursor-pointer" : "cursor-default"}`,
+            onClick: onToggleSelect,
+            children: label
+          }
+        ),
         /* @__PURE__ */ jsxRuntimeExports.jsx(
           NumberInput,
           {
@@ -13716,26 +13774,81 @@ function ConstantsList({
   onChange,
   onSetDefault,
   onReset,
+  onApply,
   isOpenGlobal,
   defaults
 }) {
   const [open, setOpen] = reactExports.useState(false);
+  const [selectedKeys, setSelectedKeys] = reactExports.useState(/* @__PURE__ */ new Set());
+  const [applied, setApplied] = reactExports.useState(false);
+  const [path] = usePath();
+  const undoRef = reactExports.useRef(false);
+  const skipNextHistoryChange = reactExports.useRef(false);
+  const historyLength = undoHistory.useSelector((h) => h.length);
+  reactExports.useEffect(() => {
+    if (skipNextHistoryChange.current) {
+      skipNextHistoryChange.current = false;
+      return;
+    }
+    setApplied(false);
+  }, [historyLength]);
+  reactExports.useEffect(() => {
+    if (undoRef.current) {
+      AddToUndoHistory({ path });
+      undoRef.current = false;
+    }
+  }, [path]);
   reactExports.useEffect(() => {
     setOpen(isOpenGlobal);
   }, [isOpenGlobal]);
-  const isDirty = !deepEqual(values, defaults);
+  reactExports.useEffect(() => {
+    const handler = (e) => {
+      if (e.key === "Escape") setSelectedKeys(/* @__PURE__ */ new Set());
+    };
+    window.addEventListener("keydown", handler);
+    return () => window.removeEventListener("keydown", handler);
+  }, []);
+  const hasSelection = selectedKeys.size > 0;
+  const isDirty = (() => {
+    if (!hasSelection) return !deepEqual(values, defaults);
+    for (const key of selectedKeys) {
+      if (!deepEqual(values[key], defaults[key])) return true;
+    }
+    return false;
+  })();
+  const buildSelectedPartial = (source) => {
+    const partial = {};
+    for (const key of selectedKeys) {
+      partial[key] = source[key];
+    }
+    return partial;
+  };
+  const toggleKey = (key) => {
+    setSelectedKeys((prev) => {
+      const next = new Set(prev);
+      if (next.has(key)) next.delete(key);
+      else next.add(key);
+      return next;
+    });
+  };
   return /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex flex-col", children: [
     /* @__PURE__ */ jsxRuntimeExports.jsxs(
-      "div",
+      "button",
       {
         className: `
                 flex items-center w-[410px] h-[35px] rounded-lg justify-between
-                ${isDirty ? "bg-medlightgray " : ""}
+                hover:brightness-90
+                transition-all duration-100
+                active:scale-[0.995]
                 relative
             `,
+        onClick: () => setOpen(!open),
         children: [
           /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex pl-2 gap-2 items-center", children: [
-            /* @__PURE__ */ jsxRuntimeExports.jsx("button", { className: "cursor-pointer", onClick: () => setOpen(!open), children: !open ? /* @__PURE__ */ jsxRuntimeExports.jsx("img", { className: "w-[12px] h-[12px] rotate-270", src: downArrow }) : /* @__PURE__ */ jsxRuntimeExports.jsx("img", { className: "w-[12px] h-[12px]", src: downArrow }) }),
+            /* @__PURE__ */ jsxRuntimeExports.jsx("button", { className: "cursor-pointer", onClick: (e) => {
+              e.stopPropagation();
+              setOpen(!open);
+            }, children: /* @__PURE__ */ jsxRuntimeExports.jsx("img", { className: `w-[12px] h-[12px] transition-transform duration-200 ${open ? "" : "-rotate-90"}`, src: downArrow }) }),
             /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "text-white", children: header })
           ] }),
           /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex pr-5 gap-2", children: [
@@ -13743,37 +13856,64 @@ function ConstantsList({
               "button",
               {
                 className: `
-                    bg-medgray hover:bg-medgray_hover px-2 rounded-sm
-                    transition-all duration-100 active:scale-[0.995] active:bg-medgray_hover/70
-                    ${!isDirty ? "opacity-40 cursor-not-allowed hover:bg-medlightgray" : "cursor-pointer"}
-                `,
-                onClick: () => {
+                        bg-medgray hover:bg-medgray_hover px-2 rounded-sm
+                        transition-all duration-100 active:scale-[0.995] active:bg-medgray_hover/70
+                        ${!isDirty ? "opacity-40 cursor-not-allowed hover:bg-medlightgray" : "cursor-pointer"}`,
+                onClick: (e) => {
+                  e.stopPropagation();
                   if (!isDirty) return;
-                  onSetDefault(values);
+                  const vals = hasSelection ? buildSelectedPartial(values) : values;
+                  onSetDefault(vals);
                 },
-                children: /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "text-verylightgray", children: "Set Default" })
+                children: /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "text-verylightgray", children: "Default" })
               }
             ),
             /* @__PURE__ */ jsxRuntimeExports.jsx(
               "button",
               {
                 className: `
-                    bg-medgray hover:bg-medgray_hover px-2 rounded-sm
-                    transition-all duration-100 active:scale-[0.995] active:bg-medgray_hover/70
-                    ${!isDirty ? "opacity-40 cursor-not-allowed hover:bg-medlightgray" : "cursor-pointer"}
-                `,
-                onClick: () => {
+                        bg-medgray hover:bg-medgray_hover px-2 rounded-sm
+                        transition-all duration-100 active:scale-[0.995] active:bg-medgray_hover/70
+                        ${!isDirty ? "opacity-40 cursor-not-allowed hover:bg-medlightgray" : "cursor-pointer"}
+                        `,
+                onClick: (e) => {
+                  e.stopPropagation();
                   if (!isDirty) return;
-                  onReset();
+                  if (hasSelection) {
+                    undoRef.current = true;
+                    onChange(buildSelectedPartial(defaults));
+                  } else {
+                    onReset();
+                  }
                 },
                 children: /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "text-verylightgray", children: "Reset" })
+              }
+            ),
+            /* @__PURE__ */ jsxRuntimeExports.jsx(
+              "button",
+              {
+                className: `
+                        bg-medgray px-2 rounded-sm
+                        transition-all duration-100 active:scale-[0.995]
+                        ${applied ? "opacity-40 cursor-not-allowed" : "hover:bg-medgray_hover cursor-pointer active:bg-medgray_hover/70"}
+                        `,
+                onClick: (e) => {
+                  e.stopPropagation();
+                  if (applied) return;
+                  skipNextHistoryChange.current = true;
+                  setApplied(true);
+                  undoRef.current = true;
+                  const vals = hasSelection ? buildSelectedPartial(values) : values;
+                  onApply(vals);
+                },
+                children: /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "text-verylightgray", children: "Apply" })
               }
             )
           ] })
         ]
       }
     ),
-    open && /* @__PURE__ */ jsxRuntimeExports.jsx(reactExports.Fragment, { children: /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "relative grid grid-cols-2 min-w-0 pl-5 gap-2 mt-2 w-[400px]", children: fields.map((f) => /* @__PURE__ */ jsxRuntimeExports.jsx(
+    open && /* @__PURE__ */ jsxRuntimeExports.jsx(reactExports.Fragment, { children: /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "relative grid grid-cols-2 min-w-0 pl-5 gap-1.5 mt-2 w-[400px]", children: fields.map((f) => /* @__PURE__ */ jsxRuntimeExports.jsx(
       ConstantRow,
       {
         label: f.label,
@@ -13781,7 +13921,9 @@ function ConstantsList({
         input: f.input,
         units: f.units,
         onChange: (v) => onChange({ [f.key]: v }),
-        labelColor: deepEqual(values[f.key], defaults[f.key]) ? "text-white" : "text-white/50"
+        labelColor: deepEqual(values[f.key], defaults[f.key]) ? "text-white" : "text-white/50",
+        selected: selectedKeys.has(String(f.key)),
+        onToggleSelect: () => toggleKey(String(f.key))
       },
       String(f.key)
     )) }) })
@@ -13813,17 +13955,184 @@ function CycleImageButton({
     }
   );
 }
+const setupDragTransfer = (e, segmentId) => {
+  e.dataTransfer.setData("text/plain", segmentId);
+  e.dataTransfer.effectAllowed = "move";
+  const emptyImg = new Image();
+  emptyImg.src = "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7";
+  e.dataTransfer.setDragImage(emptyImg, 0, 0);
+};
+const buildDraggingIds = (segments, segmentId) => {
+  const segment = segments.find((s) => s.id === segmentId);
+  if (segment?.selected) {
+    const selectedIds = segments.filter((s, idx) => s.selected && idx > 0).map((s) => s.id);
+    return selectedIds.length > 0 ? selectedIds : [segmentId];
+  }
+  return [segmentId];
+};
+const MOTION_KIND_SET = /* @__PURE__ */ new Set([
+  "pointDrive",
+  "poseDrive",
+  "angleTurn",
+  "pointTurn",
+  "pointSwing",
+  "angleSwing"
+]);
+function getGroupInsertMeta(segments, groupHeaderId, draggedId) {
+  const headerIdx = segments.findIndex((s) => s.id === groupHeaderId);
+  if (headerIdx === -1) return null;
+  const groupSeg = segments[headerIdx];
+  if (!groupSeg || groupSeg.kind !== "group") return null;
+  const gid = groupSeg.groupId ?? groupSeg.id;
+  const topInsertIndex = headerIdx + 1;
+  let bottomInsertIndex = headerIdx + 1;
+  for (let i = segments.length - 1; i >= 0; i--) {
+    const s = segments[i];
+    if (s.id === draggedId) continue;
+    if (s.groupId === gid && s.kind !== "group" && s.id !== groupHeaderId) {
+      bottomInsertIndex = i + 1;
+      break;
+    }
+  }
+  return { gid, headerIdx, topInsertIndex, bottomInsertIndex };
+}
+const moveSegment = (setPath, fromId, toIndex, opts) => {
+  if (!fromId) return;
+  setPath((prev) => {
+    const original = prev.segments;
+    const fromIdx = original.findIndex((s) => s.id === fromId);
+    if (fromIdx === -1) return prev;
+    const draggedSeg = original[fromIdx];
+    if (fromIdx === 0) return prev;
+    if (draggedSeg.locked) return prev;
+    if (draggedSeg.kind === "group" && toIndex === 0) return prev;
+    if (fromIdx === toIndex) return prev;
+    const dropTarget = toIndex >= 0 && toIndex < original.length ? original[toIndex] : null;
+    const droppedOnGroupHeader = !opts?.skipGroupHandling && dropTarget?.kind === "group";
+    const groupHeaderId = droppedOnGroupHeader ? dropTarget.id : null;
+    const segments = [...original];
+    const [rawSeg] = segments.splice(fromIdx, 1);
+    if (!rawSeg) return prev;
+    const seg = {
+      ...rawSeg,
+      pose: rawSeg.pose ? { ...rawSeg.pose } : rawSeg.pose
+    };
+    let insertIdx = toIndex;
+    if (fromIdx < toIndex) {
+      insertIdx = toIndex - 1;
+    }
+    if (insertIdx < 1) insertIdx = 1;
+    if (insertIdx > segments.length) insertIdx = segments.length;
+    if (seg.kind !== "group") {
+      if (opts?.skipGroupHandling) {
+        seg.groupId = void 0;
+      } else if (groupHeaderId) {
+        const meta = getGroupInsertMeta(segments, groupHeaderId, fromId);
+        if (meta) {
+          seg.groupId = meta.gid;
+          const mode = opts?.headerDrop ?? "bottom";
+          if (mode === "top") {
+            insertIdx = meta.topInsertIndex;
+          } else {
+            insertIdx = meta.bottomInsertIndex;
+          }
+        }
+      } else if (opts?.targetGroupId) {
+        seg.groupId = opts.targetGroupId;
+      } else if (dropTarget?.groupId != null && dropTarget?.kind !== "group") {
+        seg.groupId = dropTarget.groupId;
+      } else {
+        seg.groupId = void 0;
+      }
+    }
+    if (insertIdx < 1) insertIdx = 1;
+    if (insertIdx > segments.length) insertIdx = segments.length;
+    segments.splice(insertIdx, 0, seg);
+    const next = { ...prev, segments };
+    AddToUndoHistory({ path: next });
+    return next;
+  });
+};
+const moveMultipleSegments = (setPath, fromIds, toIndex, opts) => {
+  if (!fromIds || fromIds.length === 0) return;
+  if (fromIds.length === 1) {
+    moveSegment(setPath, fromIds[0], toIndex, opts);
+    return;
+  }
+  setPath((prev) => {
+    const original = prev.segments;
+    const fromIndices = fromIds.map((id) => original.findIndex((s) => s.id === id));
+    if (fromIndices.some((idx) => idx === -1)) return prev;
+    if (fromIndices.some((idx) => idx === 0)) return prev;
+    if (fromIndices.some((idx) => original[idx].locked)) return prev;
+    const sortedIndices = [...fromIndices].sort((a, b) => a - b);
+    const hasGroup = sortedIndices.some((idx) => original[idx].kind === "group");
+    if (hasGroup && toIndex === 0) return prev;
+    const fromIdSet = new Set(fromIds);
+    const dropTarget = toIndex >= 0 && toIndex < original.length ? original[toIndex] : null;
+    if (dropTarget && fromIdSet.has(dropTarget.id)) return prev;
+    const droppedOnGroupHeader = !opts?.skipGroupHandling && dropTarget?.kind === "group";
+    const groupHeaderId = droppedOnGroupHeader ? dropTarget.id : null;
+    const segmentsToMove = sortedIndices.map((idx) => {
+      const rawSeg = original[idx];
+      return {
+        ...rawSeg,
+        pose: rawSeg.pose ? { ...rawSeg.pose } : rawSeg.pose
+      };
+    });
+    const segments = original.filter((s) => !fromIdSet.has(s.id));
+    let insertIdx = toIndex;
+    const removedBefore = sortedIndices.filter((idx) => idx < toIndex).length;
+    insertIdx -= removedBefore;
+    if (insertIdx < 1) insertIdx = 1;
+    if (insertIdx > segments.length) insertIdx = segments.length;
+    segmentsToMove.forEach((seg) => {
+      if (seg.kind !== "group") {
+        if (opts?.skipGroupHandling) {
+          seg.groupId = void 0;
+        } else if (groupHeaderId) {
+          const meta = getGroupInsertMeta(segments, groupHeaderId, null);
+          if (meta) {
+            seg.groupId = meta.gid;
+          }
+        } else if (opts?.targetGroupId) {
+          seg.groupId = opts.targetGroupId;
+        } else if (dropTarget?.groupId != null && dropTarget?.kind !== "group") {
+          seg.groupId = dropTarget.groupId;
+        } else {
+          seg.groupId = void 0;
+        }
+      }
+    });
+    if (groupHeaderId) {
+      const meta = getGroupInsertMeta(segments, groupHeaderId, null);
+      if (meta) {
+        const mode = opts?.headerDrop ?? "bottom";
+        if (mode === "top") {
+          insertIdx = meta.topInsertIndex;
+        } else {
+          insertIdx = meta.bottomInsertIndex;
+        }
+      }
+    }
+    if (insertIdx < 1) insertIdx = 1;
+    if (insertIdx > segments.length) insertIdx = segments.length;
+    segments.splice(insertIdx, 0, ...segmentsToMove);
+    const next = { ...prev, segments };
+    AddToUndoHistory({ path: next });
+    return next;
+  });
+};
 const ccw = "data:image/svg+xml,%3csvg%20width='20'%20height='20'%20viewBox='0%200%2020%2020'%20fill='none'%20xmlns='http://www.w3.org/2000/svg'%3e%3cg%20clip-path='url(%23clip0_301_13)'%3e%3cpath%20d='M1.21931%202.13826C1.89274%202.13826%202.43862%202.68416%202.43862%203.35757V5.31611C3.165%204.05176%204.17638%202.97141%205.40345%202.15761C6.94433%201.13569%208.73971%200.59552%2010.5955%200.59552C11.8646%200.59552%2013.0964%200.844329%2014.2566%201.33507C15.3766%201.80879%2016.3822%202.48673%2017.2455%203.35002C18.1088%204.21332%2018.7867%205.21896%2019.2605%206.33898C19.7512%207.4992%2020%208.73096%2020%2010C20%2011.2691%2019.7512%2012.5008%2019.2604%2013.661C18.7867%2014.7811%2018.1088%2015.7867%2017.2455%2016.65C16.3822%2017.5133%2015.3765%2018.1912%2014.2565%2018.6649C13.0963%2019.1557%2011.8646%2019.4045%2010.5955%2019.4045C9.51175%2019.4045%208.44882%2019.2214%207.43621%2018.8603C6.45763%2018.5114%205.54814%2018.0045%204.73299%2017.354C3.92588%2016.7098%203.23407%2015.9431%202.67677%2015.0752C2.10908%2014.191%201.69688%2013.226%201.45174%2012.2071C1.29421%2011.5524%201.69719%2010.8939%202.35194%2010.7363C3.00672%2010.5788%203.66515%2010.9819%203.82269%2011.6366C4.18195%2013.1297%205.04546%2014.4833%206.2542%2015.448C6.85805%2015.9299%207.53129%2016.3052%208.25526%2016.5633C9.00427%2016.8304%209.79164%2016.9659%2010.5955%2016.9659C12.4561%2016.9659%2014.2055%2016.2413%2015.5211%2014.9256C16.8368%2013.6099%2017.5614%2011.8606%2017.5614%209.99995C17.5614%208.13933%2016.8368%206.39%2015.5211%205.07433C14.2054%203.75866%2012.4561%203.03407%2010.5955%203.03407C9.22063%203.03407%207.89133%203.43372%206.75126%204.18981C5.76887%204.84137%204.97311%205.72282%204.42863%206.75724H5.77625C6.44968%206.75724%206.99556%207.30314%206.99556%207.97655C6.99556%208.64993%206.44968%209.19586%205.77625%209.19586H1.21931C0.545879%209.19586%201.06012e-07%208.64993%201.06012e-07%207.97655V3.35757C1.06012e-07%202.68416%200.545926%202.13826%201.21931%202.13826Z'%20fill='white'/%3e%3c/g%3e%3cdefs%3e%3cclipPath%20id='clip0_301_13'%3e%3crect%20width='20'%20height='20'%20fill='white'%20transform='matrix(-1%200%200%201%2020%200)'/%3e%3c/clipPath%3e%3c/defs%3e%3c/svg%3e";
 const cw = "data:image/svg+xml,%3csvg%20width='20'%20height='20'%20viewBox='0%200%2020%2020'%20fill='none'%20xmlns='http://www.w3.org/2000/svg'%3e%3cg%20clip-path='url(%23clip0_301_6)'%3e%3cpath%20d='M18.7807%202.13826C18.1073%202.13826%2017.5614%202.68416%2017.5614%203.35757V5.31611C16.835%204.05176%2015.8236%202.97141%2014.5966%202.15761C13.0557%201.13569%2011.2603%200.59552%209.40448%200.59552C8.13537%200.59552%206.90364%200.844329%205.74344%201.33507C4.62339%201.80879%203.6178%202.48673%202.75448%203.35002C1.89121%204.21332%201.21327%205.21896%200.739529%206.33898C0.248832%207.4992%200%208.73096%200%2010C0%2011.2691%200.248832%2012.5008%200.739552%2013.661C1.21327%2014.7811%201.89123%2015.7867%202.75452%2016.65C3.61782%2017.5133%204.62346%2018.1912%205.74346%2018.6649C6.90366%2019.1557%208.1354%2019.4045%209.4045%2019.4045C10.4882%2019.4045%2011.5512%2019.2214%2012.5638%2018.8603C13.5424%2018.5114%2014.4519%2018.0045%2015.267%2017.354C16.0741%2016.7098%2016.7659%2015.9431%2017.3232%2015.0752C17.8909%2014.191%2018.3031%2013.226%2018.5483%2012.2071C18.7058%2011.5524%2018.3028%2010.8939%2017.6481%2010.7363C16.9933%2010.5788%2016.3348%2010.9819%2016.1773%2011.6366C15.818%2013.1297%2014.9545%2014.4833%2013.7458%2015.448C13.142%2015.9299%2012.4687%2016.3052%2011.7447%2016.5633C10.9957%2016.8304%2010.2084%2016.9659%209.4045%2016.9659C7.54386%2016.9659%205.79453%2016.2413%204.47888%2014.9256C3.16321%2013.6099%202.43862%2011.8606%202.43862%209.99995C2.43862%208.13933%203.16319%206.39%204.47888%205.07433C5.79458%203.75866%207.54386%203.03407%209.4045%203.03407C10.7794%203.03407%2012.1087%203.43372%2013.2487%204.18981C14.2311%204.84137%2015.0269%205.72282%2015.5714%206.75724H14.2237C13.5503%206.75724%2013.0044%207.30314%2013.0044%207.97655C13.0044%208.64993%2013.5503%209.19586%2014.2237%209.19586H18.7807C19.4541%209.19586%2020%208.64993%2020%207.97655V3.35757C20%202.68416%2019.4541%202.13826%2018.7807%202.13826Z'%20fill='white'/%3e%3c/g%3e%3cdefs%3e%3cclipPath%20id='clip0_301_6'%3e%3crect%20width='20'%20height='20'%20fill='white'/%3e%3c/clipPath%3e%3c/defs%3e%3c/svg%3e";
 const cwccw = "data:image/svg+xml,%3csvg%20width='20'%20height='20'%20viewBox='0%200%2020%2020'%20fill='none'%20xmlns='http://www.w3.org/2000/svg'%3e%3cpath%20d='M5.453%209.24096C6.08872%209.24096%206.60408%208.72561%206.60408%208.08988C6.60408%207.45416%206.08872%206.93881%205.453%206.93881H4.17772C4.62934%206.08515%205.26881%205.32864%206.04444%204.7442C7.19062%203.8805%208.55757%203.424%209.99747%203.424C10.7563%203.424%2011.4997%203.55184%2012.2067%203.80398C12.8902%204.04768%2013.5258%204.40195%2014.0958%204.85692C15.2369%205.76761%2016.0521%207.04543%2016.3913%208.45505C16.5182%208.98264%2016.9897%209.33712%2017.5095%209.33708C17.5985%209.33708%2017.6892%209.32662%2017.7797%209.30487C18.3977%209.15615%2018.7783%208.53453%2018.6295%207.91646C18.398%206.95455%2018.0089%206.0436%2017.473%205.20886C16.9469%204.38947%2016.2938%203.66568%2015.5319%203.05758C14.7623%202.44341%2013.9038%201.96498%2012.9799%201.63556C12.024%201.29468%2011.0205%201.12183%209.99745%201.12183C9.01765%201.12183%208.05448%201.28065%207.13454%201.59385C6.24507%201.89671%205.41216%202.33804%204.659%202.90558C3.91471%203.46642%203.26565%204.13722%202.72991%204.89937C2.57683%205.11713%202.4344%205.3411%202.30213%205.57039V3.72931C2.30213%203.09358%201.78677%202.57823%201.15105%202.57823C0.515331%202.57823%200%203.09361%200%203.72933V8.08991C0%208.72563%200.515353%209.24098%201.15107%209.24098L5.453%209.24096Z'%20fill='white'/%3e%3cpath%20d='M18.8489%2010.7591H14.5469C13.9112%2010.7591%2013.3959%2011.2745%2013.3959%2011.9102C13.3959%2012.5459%2013.9112%2013.0613%2014.5469%2013.0613H15.8192C15.3052%2014.0378%2014.554%2014.87%2013.6265%2015.485C12.551%2016.1983%2011.2971%2016.5756%2010.0001%2016.5761C9.24206%2016.5758%208.49954%2016.448%207.7932%2016.1961C7.10975%2015.9524%206.47418%2015.5982%205.9041%2015.1432C4.76302%2014.2325%203.94782%2012.9547%203.60866%2011.5451C3.45996%2010.927%202.83838%2010.5465%202.22024%2010.6952C1.60217%2010.8439%201.22168%2011.4656%201.3704%2012.0836C1.60184%2013.0455%201.99095%2013.9565%202.52691%2014.7912C3.05301%2015.6106%203.7061%2016.3344%204.46804%2016.9425C5.23757%2017.5567%206.09617%2018.0351%207.01999%2018.3645C7.97323%2018.7044%208.97368%2018.8772%209.99379%2018.8781C9.99502%2018.8781%209.99618%2018.8782%209.99743%2018.8782C9.99835%2018.8782%209.99925%2018.8782%2010.0002%2018.8782C10.001%2018.8782%2010.0017%2018.8782%2010.0025%2018.8782C10.0034%2018.8782%2010.0044%2018.8782%2010.0053%2018.8782C11.7545%2018.8767%2013.4465%2018.3669%2014.8989%2017.4036C16.0573%2016.6354%2017.0121%2015.6154%2017.6978%2014.4218V16.2708C17.6978%2016.9065%2018.2132%2017.4219%2018.8489%2017.4219C19.4846%2017.4219%2020%2016.9065%2020%2016.2708V11.9102C20%2011.2745%2019.4846%2010.7591%2018.8489%2010.7591Z'%20fill='white'/%3e%3c/svg%3e";
-const fwd = "data:image/svg+xml,%3csvg%20width='20'%20height='20'%20viewBox='0%200%2020%2020'%20fill='none'%20xmlns='http://www.w3.org/2000/svg'%3e%3cg%20clip-path='url(%23clip0_304_10)'%3e%3cpath%20d='M16.1753%208.37015L16.8962%209.09093L0.909059%209.09093C0.406998%209.09093%20-3.20384e-05%209.49796%20-3.20384e-05%2010C-3.20384e-05%2010.5021%200.406998%2010.9091%200.909059%2010.9091L16.8962%2010.9091L16.1753%2011.63C15.9978%2011.8075%2015.909%2012.0401%2015.909%2012.2728C15.909%2012.5054%2015.9977%2012.7381%2016.1753%2012.9156C16.5303%2013.2706%2017.1059%2013.2706%2017.4609%2012.9156L19.7337%2010.6429C20.0887%2010.2879%2020.0887%209.71227%2019.7337%209.35724L17.4609%207.08451C17.1059%206.72948%2016.5303%206.72948%2016.1753%207.08451C15.8203%207.43948%2015.8203%208.01512%2016.1753%208.37015Z'%20fill='white'/%3e%3c/g%3e%3cdefs%3e%3cclipPath%20id='clip0_304_10'%3e%3crect%20width='20'%20height='20'%20fill='white'%20transform='matrix(0%201%20-1%200%2020%200)'/%3e%3c/clipPath%3e%3c/defs%3e%3c/svg%3e";
-const rev = "data:image/svg+xml,%3csvg%20width='20'%20height='20'%20viewBox='0%200%2020%2020'%20fill='none'%20xmlns='http://www.w3.org/2000/svg'%3e%3cg%20clip-path='url(%23clip0_304_8)'%3e%3cpath%20d='M3.8247%2011.6299L3.10385%2010.9091L19.0909%2010.9091C19.593%2010.9091%2020%2010.502%2020%209.99997C20%209.49791%2019.593%209.09088%2019.0909%209.09088H3.10385L3.8247%208.37004C4.00221%208.19252%204.091%207.95985%204.091%207.72725C4.091%207.49458%204.00227%207.26191%203.8247%207.0844C3.46967%206.72937%202.89409%206.72937%202.53906%207.0844L0.266334%209.35713C-0.0886965%209.7121%20-0.0886965%2010.2877%200.266334%2010.6428L2.53906%2012.9155C2.89409%2013.2705%203.46967%2013.2705%203.8247%2012.9155C4.17973%2012.5605%204.17973%2011.9849%203.8247%2011.6299Z'%20fill='white'/%3e%3c/g%3e%3cdefs%3e%3cclipPath%20id='clip0_304_8'%3e%3crect%20width='20'%20height='20'%20fill='white'%20transform='matrix(0%20-1%201%200%200%2020)'/%3e%3c/clipPath%3e%3c/defs%3e%3c/svg%3e";
-const fwdrev = "data:image/svg+xml,%3csvg%20width='20'%20height='20'%20viewBox='0%200%2020%2020'%20fill='none'%20xmlns='http://www.w3.org/2000/svg'%3e%3cg%20clip-path='url(%23clip0_296_2)'%3e%3cpath%20d='M20%204.96211C20%204.32319%2019.4821%203.80524%2018.8431%203.80524L3.96293%203.80524L4.88155%202.87553C5.10433%202.65007%205.2155%202.35622%205.2155%202.06246C5.2155%201.76408%205.10076%201.46578%204.87173%201.2395C4.41724%200.790433%203.68478%200.794817%203.23571%201.2493L0.334011%204.18602C0.119979%204.40263%206.10352e-05%204.6948%206.10352e-05%204.99911C6.10352e-05%205.0014%206.10352e-05%205.00376%208.30708e-05%205.00603C0.00193407%205.31283%200.125554%205.60637%200.343839%205.82201L3.24109%208.68473C3.69557%209.13379%204.42804%209.12941%204.8771%208.67492C5.32621%208.22041%205.3218%207.48795%204.8673%207.03888L3.93629%206.11896L18.8432%206.11896C19.4821%206.11898%2020%205.60104%2020%204.96211Z'%20fill='white'/%3e%3cpath%20d='M6.10352e-05%2013.0379C6.10352e-05%2013.6768%200.518009%2014.1948%201.15693%2014.1948H16.0638L15.1328%2015.1147C14.6783%2015.5637%2014.6739%2016.2962%2015.123%2016.7507C15.5721%2017.2052%2016.3045%2017.2096%2016.759%2016.7605L19.6562%2013.8978C19.8745%2013.6822%2019.9982%2013.3887%2020%2013.0819C20%2013.0796%2020%2013.0772%2020%2013.0749C20%2012.7706%2019.8801%2012.4784%2019.6661%2012.2618L16.7643%209.32506C16.3153%208.87057%2015.5828%208.86619%2015.1283%209.31525C14.6738%209.76431%2014.6694%2010.4968%2015.1185%2010.9513L16.0371%2011.881H1.15693C0.518009%2011.881%206.10352e-05%2012.399%206.10352e-05%2013.0379Z'%20fill='white'/%3e%3c/g%3e%3cdefs%3e%3cclipPath%20id='clip0_296_2'%3e%3crect%20width='20'%20height='20'%20fill='white'%20transform='matrix(0%20-1%201%200%200%2020)'/%3e%3c/clipPath%3e%3c/defs%3e%3c/svg%3e";
 const leftswing = "data:image/svg+xml,%3csvg%20width='20'%20height='20'%20viewBox='0%200%2020%2020'%20fill='none'%20xmlns='http://www.w3.org/2000/svg'%3e%3cg%20clip-path='url(%23clip0_304_13)'%3e%3cpath%20d='M4.07922%205.1606C4.07856%205.1458%204.07717%205.13101%204.07723%205.11621C4.07723%205.09343%204.07882%205.07091%204.08047%205.04838C4.08113%205.03907%204.08113%205.02969%204.08199%205.02038C4.0841%204.99911%204.08767%204.97824%204.0911%204.95731C4.09289%204.94634%204.09408%204.93538%204.09619%204.92455C4.09976%204.90665%204.10458%204.88921%204.10913%204.87164C4.11263%204.85777%204.11574%204.84377%204.11983%204.82997C4.12406%204.8161%204.12941%204.80262%204.13417%204.78895C4.14018%204.77198%204.14579%204.75487%204.15273%204.73816C4.15695%204.72779%204.16224%204.71795%204.16679%204.70778C4.17558%204.68863%204.1841%204.66941%204.19407%204.65072C4.19869%204.64207%204.20418%204.63394%204.20906%204.62536C4.22003%204.6062%204.23086%204.58698%204.24328%204.56842C4.25279%204.55416%204.26355%204.54081%204.27372%204.52708C4.28257%204.51519%204.29063%204.50297%204.30008%204.49141C4.32101%204.46565%204.34334%204.44108%204.36691%204.41751C4.36705%204.41737%204.36718%204.41718%204.36731%204.41704L8.49411%200.290115C8.88094%20-0.0967864%209.50826%20-0.0967864%209.89516%200.290115C10.2821%200.676951%2010.2821%201.30426%209.89516%201.69116L7.57494%204.01138C11.5239%204.39829%2014.9318%207.32145%2015.7449%2011.4091C16.0577%2012.9821%2015.952%2014.5806%2015.4725%2016.0609C15.4651%2016.0839%2015.4583%2016.1071%2015.4506%2016.13C15.0105%2017.4531%2014.2702%2018.6791%2013.2607%2019.7043C13.2201%2019.7456%2013.1764%2019.7814%2013.131%2019.814C12.9592%2019.9372%2012.7573%2020%2012.5547%2020C12.5233%2020%2012.4919%2019.9985%2012.4607%2019.9955C12.2419%2019.9748%2012.0284%2019.8815%2011.8596%2019.7152C11.4697%2019.3313%2011.4648%2018.7041%2011.8488%2018.3142C12.0868%2018.0725%2012.3051%2017.8161%2012.5043%2017.5482C13.7222%2015.9108%2014.2054%2013.8261%2013.8015%2011.7957C13.1595%208.56828%2010.4545%206.26285%207.3303%205.97892L9.89522%208.54391C10.2821%208.93081%2010.2821%209.55805%209.89522%209.94495C9.70177%2010.1384%209.44822%2010.2352%209.19467%2010.2352C8.94111%2010.2352%208.68756%2010.1385%208.49417%209.94495L4.3722%205.82291C4.37075%205.82146%204.36923%205.81988%204.36777%205.81842L4.36731%205.81803C4.36645%205.81717%204.36579%205.81624%204.36493%205.81539C4.34261%205.793%204.32141%205.76955%204.30133%205.74505C4.29552%205.73804%204.29063%205.73058%204.28508%205.72345C4.27075%205.70502%204.25655%205.68653%204.24354%205.66704C4.23594%205.65568%204.22947%205.64386%204.2224%205.63224C4.21276%205.61639%204.20286%205.6008%204.19407%205.58435C4.18582%205.5689%204.17875%205.55298%204.17142%205.53726C4.16514%205.52392%204.15854%205.51091%204.15286%205.49724C4.1444%205.4769%204.13747%205.45616%204.1304%205.43542C4.12703%205.42551%204.12314%205.41593%204.1201%205.40583C4.11164%205.37802%204.10484%205.34989%204.0989%205.32162C4.0981%205.31799%204.09692%205.31455%204.09619%205.31085C4.09612%205.31059%204.09612%205.31026%204.09606%205.31C4.08965%205.2775%204.08476%205.24481%204.08166%205.21198C4.08001%205.19468%204.08001%205.17764%204.07922%205.1606Z'%20fill='white'/%3e%3c/g%3e%3cdefs%3e%3cclipPath%20id='clip0_304_13'%3e%3crect%20width='20'%20height='20'%20fill='white'%20transform='matrix(-1%200%200%201%2020%200)'/%3e%3c/clipPath%3e%3c/defs%3e%3c/svg%3e";
 const rightswing = "data:image/svg+xml,%3csvg%20width='20'%20height='20'%20viewBox='0%200%2020%2020'%20fill='none'%20xmlns='http://www.w3.org/2000/svg'%3e%3cg%20clip-path='url(%23clip0_304_6)'%3e%3cpath%20d='M15.9208%205.1606C15.9214%205.1458%2015.9228%205.13101%2015.9228%205.11621C15.9228%205.09343%2015.9212%205.07091%2015.9195%205.04838C15.9189%205.03907%2015.9189%205.02969%2015.918%205.02038C15.9159%204.99911%2015.9123%204.97824%2015.9089%204.95731C15.9071%204.94634%2015.9059%204.93538%2015.9038%204.92455C15.9002%204.90665%2015.8954%204.88921%2015.8909%204.87164C15.8874%204.85777%2015.8843%204.84377%2015.8802%204.82997C15.8759%204.8161%2015.8706%204.80262%2015.8658%204.78895C15.8598%204.77198%2015.8542%204.75487%2015.8473%204.73816C15.843%204.72779%2015.8378%204.71795%2015.8332%204.70778C15.8244%204.68863%2015.8159%204.66941%2015.8059%204.65072C15.8013%204.64207%2015.7958%204.63394%2015.7909%204.62536C15.78%204.6062%2015.7691%204.58698%2015.7567%204.56842C15.7472%204.55416%2015.7364%204.54081%2015.7263%204.52708C15.7174%204.51519%2015.7094%204.50297%2015.6999%204.49141C15.679%204.46565%2015.6567%204.44108%2015.6331%204.41751C15.633%204.41737%2015.6328%204.41718%2015.6327%204.41704L11.5059%200.290115C11.1191%20-0.0967864%2010.4917%20-0.0967864%2010.1048%200.290115C9.71794%200.676951%209.71794%201.30426%2010.1048%201.69116L12.4251%204.01138C8.47607%204.39829%205.06819%207.32145%204.25509%2011.4091C3.94229%2012.9821%204.04796%2014.5806%204.52753%2016.0609C4.53493%2016.0839%204.54173%2016.1071%204.54939%2016.13C4.98946%2017.4531%205.72984%2018.6791%206.7393%2019.7043C6.77985%2019.7456%206.82358%2019.7814%206.86902%2019.814C7.04081%2019.9372%207.24271%2020%207.44534%2020C7.47671%2020%207.50809%2019.9985%207.53933%2019.9955C7.75814%2019.9748%207.9716%2019.8815%208.14042%2019.7152C8.53029%2019.3313%208.53518%2018.7041%208.15125%2018.3142C7.91322%2018.0725%207.69493%2017.8161%207.49567%2017.5482C6.27777%2015.9108%205.79464%2013.8261%206.19851%2011.7957C6.84049%208.56828%209.54549%206.26285%2012.6697%205.97892L10.1048%208.54391C9.71788%208.93081%209.71788%209.55805%2010.1048%209.94495C10.2982%2010.1384%2010.5518%2010.2352%2010.8053%2010.2352C11.0589%2010.2352%2011.3124%2010.1385%2011.5058%209.94495L15.6278%205.82291C15.6293%205.82146%2015.6308%205.81988%2015.6322%205.81842L15.6327%205.81803C15.6335%205.81717%2015.6342%205.81624%2015.6351%205.81539C15.6574%205.793%2015.6786%205.76955%2015.6987%205.74505C15.7045%205.73804%2015.7094%205.73058%2015.7149%205.72345C15.7292%205.70502%2015.7434%205.68653%2015.7565%205.66704C15.7641%205.65568%2015.7705%205.64386%2015.7776%205.63224C15.7872%205.61639%2015.7971%205.6008%2015.8059%205.58435C15.8142%205.5689%2015.8213%205.55298%2015.8286%205.53726C15.8349%205.52392%2015.8415%205.51091%2015.8471%205.49724C15.8556%205.4769%2015.8625%205.45616%2015.8696%205.43542C15.873%205.42551%2015.8769%205.41593%2015.8799%205.40583C15.8884%205.37802%2015.8952%205.34989%2015.9011%205.32162C15.9019%205.31799%2015.9031%205.31455%2015.9038%205.31085C15.9039%205.31059%2015.9039%205.31026%2015.9039%205.31C15.9103%205.2775%2015.9152%205.24481%2015.9183%205.21198C15.92%205.19468%2015.92%205.17764%2015.9208%205.1606Z'%20fill='white'/%3e%3c/g%3e%3cdefs%3e%3cclipPath%20id='clip0_304_6'%3e%3crect%20width='20'%20height='20'%20fill='white'/%3e%3c/clipPath%3e%3c/defs%3e%3c/svg%3e";
-const createDrivePIDGroup$1 = (format, path, setPath, segmentId, segmentKind, driveConstants, headingConstants) => {
+const createDrivePIDGroup$2 = (format, setPath, segmentId, segmentKind, driveConstants, headingConstants) => {
   const onDriveChange = (partial) => updatePathConstants(setPath, segmentId, { drive: partial });
   const onHeadingChange = (partial) => updatePathConstants(setPath, segmentId, { heading: partial });
+  const onApplyDrive = (partial) => updatePathConstantsByKind(setPath, segmentKind, { drive: partial });
+  const onApplyHeading = (partial) => updatePathConstantsByKind(setPath, segmentKind, { heading: partial });
   const setDefaultDrive = (partial) => {
     updateDefaultConstants(format, segmentKind, { drive: partial });
   };
@@ -13836,13 +14145,15 @@ const createDrivePIDGroup$1 = (format, path, setPath, segmentId, segmentKind, dr
       header: "Exit Conditions",
       values: driveConstants,
       fields: [
-        { key: "settleError", units: "in", label: "Settle Error", input: { bounds: [0, 100], stepSize: 0.5, roundTo: 2 } },
-        { key: "settleTime", units: "ms", label: "Settle Time", input: { bounds: [0, 9999], stepSize: 10, roundTo: 0 } },
+        { key: "settle_error", units: "in", label: "Settle Error", input: { bounds: [0, 100], stepSize: 0.5, roundTo: 2 } },
+        { key: "settle_time", units: "ms", label: "Settle Time", input: { bounds: [0, 9999], stepSize: 10, roundTo: 0 } },
         { key: "timeout", units: "ms", label: "Timeout", input: { bounds: [0, 9999], stepSize: 100, roundTo: 0 } },
-        { key: "minSpeed", units: "volt", label: "Min Speed", input: { bounds: [0, 12], stepSize: 1, roundTo: 1 } }
+        { key: "min_voltage", units: "volt", label: "Min Speed", input: { bounds: [0, 12], stepSize: 1, roundTo: 1 } },
+        { key: "exit_error", units: "in", label: "Exit Error", input: { bounds: [0, 100], stepSize: 0.5, roundTo: 2 } }
       ],
       onChange: onDriveChange,
       setDefault: setDefaultDrive,
+      onApply: onApplyDrive,
       defaults: currentDefaults?.drive ?? {}
     },
     {
@@ -13857,12 +14168,12 @@ const createDrivePIDGroup$1 = (format, path, setPath, segmentId, segmentKind, dr
         { key: "slew", units: "volt/10ms", label: "Slew", input: { bounds: [0, 100], stepSize: 0.1, roundTo: 2 } },
         ...segmentKind === "poseDrive" ? [
           { key: "lead", label: "Lead", input: { bounds: [0, 1], stepSize: 0.1, roundTo: 2 } },
-          { key: "setback", label: "Setback", units: "in", input: { bounds: [0, 100], stepSize: 0.5, roundTo: 2 } },
           { key: "drift", label: "Drift", units: "", input: { bounds: [0, 100], stepSize: 1, roundTo: 1 } }
         ] : []
       ],
       onChange: onDriveChange,
       setDefault: setDefaultDrive,
+      onApply: onApplyDrive,
       defaults: currentDefaults?.drive ?? {}
     },
     {
@@ -13880,13 +14191,15 @@ const createDrivePIDGroup$1 = (format, path, setPath, segmentId, segmentKind, dr
       ],
       onChange: onHeadingChange,
       setDefault: setDefaultHeading,
+      onApply: onApplyHeading,
       defaults: currentDefaults?.heading ?? {}
     }
   ];
 };
-const createTurnPIDGroup$1 = (format, setPath, segmentId, segmentKind, turnConstants, isSwing = false) => {
+const createTurnPIDGroup$2 = (format, setPath, segmentId, segmentKind, turnConstants, isSwing = false) => {
   const slot = isSwing ? "swing" : "turn";
   const onChange = (partial) => updatePathConstants(setPath, segmentId, { [slot]: partial });
+  const onApply = (partial) => updatePathConstantsByKind(setPath, segmentKind, { [slot]: partial });
   const setDefault = (partial) => {
     updateDefaultConstants(format, segmentKind, { [slot]: partial });
   };
@@ -13897,13 +14210,15 @@ const createTurnPIDGroup$1 = (format, setPath, segmentId, segmentKind, turnConst
       header: "Exit Conditions",
       values: turnConstants,
       fields: [
-        { key: "settleError", label: "Settle Error", units: "deg", input: { bounds: [0, 100], stepSize: 0.5, roundTo: 2 } },
-        { key: "settleTime", label: "Settle Time", units: "ms", input: { bounds: [0, 9999], stepSize: 10, roundTo: 0 } },
+        { key: "settle_error", label: "Settle Error", units: "deg", input: { bounds: [0, 100], stepSize: 0.5, roundTo: 2 } },
+        { key: "settle_time", label: "Settle Time", units: "ms", input: { bounds: [0, 9999], stepSize: 10, roundTo: 0 } },
         { key: "timeout", label: "Timeout", units: "ms", input: { bounds: [0, 9999], stepSize: 100, roundTo: 0 } },
-        { key: "minSpeed", label: "Min Speed", units: "volt", input: { bounds: [0, 12], stepSize: 1, roundTo: 1 } }
+        { key: "min_voltage", label: "Min Speed", units: "volt", input: { bounds: [0, 12], stepSize: 1, roundTo: 1 } },
+        { key: "exit_error", units: "deg", label: "Exit Error", input: { bounds: [0, 100], stepSize: 0.5, roundTo: 2 } }
       ],
       onChange,
       setDefault,
+      onApply,
       defaults: specificDefaults ?? {}
     },
     {
@@ -13911,6 +14226,9 @@ const createTurnPIDGroup$1 = (format, setPath, segmentId, segmentKind, turnConst
       values: turnConstants,
       fields: [
         { key: "maxSpeed", units: "volt", label: "Max Speed", input: { bounds: [0, 12], stepSize: 1, roundTo: 1 } },
+        ...segmentKind === "angleSwing" || segmentKind === "pointSwing" ? [
+          { key: "opposite_voltage", units: "volt", label: "Oppos Speed", input: { bounds: [0, 12], stepSize: 0.1, roundTo: 1 } }
+        ] : [],
         { key: "kp", label: "kP", input: { bounds: [0, 100], stepSize: 0.1, roundTo: 3 } },
         { key: "ki", label: "kI", input: { bounds: [0, 100], stepSize: 0.01, roundTo: 5 } },
         { key: "kd", label: "kD", input: { bounds: [0, 100], stepSize: 0.1, roundTo: 3 } },
@@ -13919,15 +14237,17 @@ const createTurnPIDGroup$1 = (format, setPath, segmentId, segmentKind, turnConst
       ],
       onChange,
       setDefault,
+      onApply,
       defaults: specificDefaults ?? {}
     }
   ];
 };
-const getDirectionState = (path, segmentId, field, slot) => {
+const getDirectionState$2 = (path, segmentId, field, slot) => {
   const segment = path.segments.find((s) => s.id === segmentId);
-  return segment?.constants?.[slot]?.[field] ?? null;
+  const constants = segment?.constants;
+  return constants?.[slot]?.[field] ?? null;
 };
-const createTurnDirectionGroup = (path, setPath, segmentId, slot) => {
+const createTurnDirectionGroup$1 = (path, setPath, segmentId, slot) => {
   return {
     imageKeys: [
       { src: cw, key: "clockwise" },
@@ -13935,56 +14255,43 @@ const createTurnDirectionGroup = (path, setPath, segmentId, slot) => {
       { src: cwccw, key: null }
     ],
     onKeyChange: (key) => {
-      updatePathConstants(setPath, segmentId, { [slot]: { turnDirection: key } });
+      updatePathConstants(setPath, segmentId, { [slot]: { turn_direction: key } });
     },
-    value: getDirectionState(path, segmentId, "turnDirection", slot)
+    value: getDirectionState$2(path, segmentId, "turn_direction", slot)
   };
 };
-const createDriveDirectionGroup = (path, setPath, segmentId, slot) => {
-  return {
-    imageKeys: [
-      { src: fwd, key: "forward" },
-      { src: rev, key: "reverse" },
-      { src: fwdrev, key: null }
-    ],
-    onKeyChange: (key) => {
-      updatePathConstants(setPath, segmentId, { [slot]: { driveDirection: key } });
-    },
-    value: getDirectionState(path, segmentId, "driveDirection", slot)
-  };
-};
-const createSwingDirectionGroup = (path, setPath, segmentId, slot) => {
+const createSwingDirectionGroup$2 = (path, setPath, segmentId, slot) => {
   return {
     imageKeys: [
       { src: rightswing, key: "right" },
       { src: leftswing, key: "left" }
     ],
     onKeyChange: (key) => {
-      updatePathConstants(setPath, segmentId, { [slot]: { swingDirection: key } });
+      updatePathConstants(setPath, segmentId, { [slot]: { swing_direction: key } });
     },
-    value: getDirectionState(path, segmentId, "swingDirection", slot)
+    value: getDirectionState$2(path, segmentId, "swing_direction", slot)
   };
 };
 function getMikLibDirectionConfig(path, setPath, segmentId) {
   const s = path.segments.find((c) => c.id === segmentId);
   if (s === void 0) return [];
   switch (s.kind) {
-    case "pointDrive":
-    case "poseDrive":
-    case "distanceDrive":
-      return [
-        createDriveDirectionGroup(path, setPath, segmentId, "drive")
-      ];
+    // case "pointDrive":
+    // case "poseDrive":
+    // case "distanceDrive":
+    //     return [
+    //     createDriveDirectionGroup(path, setPath, segmentId, "drive"),
+    //     ]
     case "pointTurn":
     case "angleTurn":
       return [
-        createTurnDirectionGroup(path, setPath, segmentId, "turn")
+        createTurnDirectionGroup$1(path, setPath, segmentId, "turn")
       ];
     case "angleSwing":
     case "pointSwing":
       return [
-        createSwingDirectionGroup(path, setPath, segmentId, "swing"),
-        createTurnDirectionGroup(path, setPath, segmentId, "swing")
+        createSwingDirectionGroup$2(path, setPath, segmentId, "swing"),
+        createTurnDirectionGroup$1(path, setPath, segmentId, "swing")
       ];
   }
 }
@@ -13993,19 +14300,26 @@ function getmikLibConstantsConfig(format, path, setPath, segmentId) {
   if (s === void 0) return [];
   switch (s.kind) {
     case "pointDrive":
-    case "poseDrive":
-      return createDrivePIDGroup$1(format, path, setPath, segmentId, s.kind, s.constants.drive, s.constants.heading);
+    case "poseDrive": {
+      const constants = s.constants;
+      return createDrivePIDGroup$2(format, setPath, segmentId, s.kind, constants.drive, constants.heading);
+    }
     case "pointTurn":
-    case "angleTurn":
-      return createTurnPIDGroup$1(format, setPath, segmentId, s.kind, s.constants.turn, false);
+    case "angleTurn": {
+      const constants = s.constants;
+      return createTurnPIDGroup$2(format, setPath, segmentId, s.kind, constants.turn, false);
+    }
     case "angleSwing":
-    case "pointSwing":
-      return createTurnPIDGroup$1(format, setPath, segmentId, s.kind, s.constants.swing, true);
+    case "pointSwing": {
+      const constants = s.constants;
+      return createTurnPIDGroup$2(format, setPath, segmentId, s.kind, constants.swing, true);
+    }
   }
   return void 0;
 }
-const createDrivePIDGroup = (format, setPath, segmentId, segmentKind, driveConstants) => {
+const createDrivePIDGroup$1 = (format, setPath, segmentId, segmentKind, driveConstants) => {
   const onDriveChange = (partial) => updatePathConstants(setPath, segmentId, { drive: partial });
+  const onApplyDrive = (partial) => updatePathConstantsByKind(setPath, segmentKind, { drive: partial });
   const setDefaultDrive = (partial) => {
     updateDefaultConstants(format, segmentKind, { drive: partial });
   };
@@ -14024,6 +14338,7 @@ const createDrivePIDGroup = (format, setPath, segmentId, segmentKind, driveConst
       ],
       onChange: onDriveChange,
       setDefault: setDefaultDrive,
+      onApply: onApplyDrive,
       defaults: currentDefaults?.drive ?? {}
     },
     {
@@ -14038,12 +14353,14 @@ const createDrivePIDGroup = (format, setPath, segmentId, segmentKind, driveConst
       ],
       onChange: onDriveChange,
       setDefault: setDefaultDrive,
+      onApply: onApplyDrive,
       defaults: currentDefaults?.drive ?? {}
     }
   ];
 };
-const createTurnPIDGroup = (format, setPath, segmentId, segmentKind, turnConstants) => {
+const createTurnPIDGroup$1 = (format, setPath, segmentId, segmentKind, turnConstants) => {
   const onChange = (partial) => updatePathConstants(setPath, segmentId, { turn: partial });
+  const onApply = (partial) => updatePathConstantsByKind(setPath, segmentKind, { turn: partial });
   const setDefault = (partial) => {
     updateDefaultConstants(format, segmentKind, { turn: partial });
   };
@@ -14064,6 +14381,7 @@ const createTurnPIDGroup = (format, setPath, segmentId, segmentKind, turnConstan
       ],
       onChange,
       setDefault,
+      onApply,
       defaults: currentDefaults?.turn ?? {}
     }
   ];
@@ -14075,13 +14393,409 @@ function getRevConstantsConfig(format, path, setPath, segmentId) {
     case "pointDrive":
     case "poseDrive":
     case "distanceDrive":
-      return createDrivePIDGroup(format, setPath, segmentId, s.kind, s.constants.drive);
+      return createDrivePIDGroup$1(format, setPath, segmentId, s.kind, s.constants.drive);
     case "pointTurn":
     case "angleTurn":
-      return createTurnPIDGroup(format, setPath, segmentId, s.kind, s.constants.turn);
+      return createTurnPIDGroup$1(format, setPath, segmentId, s.kind, s.constants.turn);
     case "angleSwing":
     case "pointSwing":
-      return createTurnPIDGroup(format, setPath, segmentId, s.kind, s.constants.turn);
+      return createTurnPIDGroup$1(format, setPath, segmentId, s.kind, s.constants.turn);
+  }
+  return void 0;
+}
+const fwd = "data:image/svg+xml,%3csvg%20width='20'%20height='20'%20viewBox='0%200%2020%2020'%20fill='none'%20xmlns='http://www.w3.org/2000/svg'%3e%3cg%20clip-path='url(%23clip0_304_10)'%3e%3cpath%20d='M16.1753%208.37015L16.8962%209.09093L0.909059%209.09093C0.406998%209.09093%20-3.20384e-05%209.49796%20-3.20384e-05%2010C-3.20384e-05%2010.5021%200.406998%2010.9091%200.909059%2010.9091L16.8962%2010.9091L16.1753%2011.63C15.9978%2011.8075%2015.909%2012.0401%2015.909%2012.2728C15.909%2012.5054%2015.9977%2012.7381%2016.1753%2012.9156C16.5303%2013.2706%2017.1059%2013.2706%2017.4609%2012.9156L19.7337%2010.6429C20.0887%2010.2879%2020.0887%209.71227%2019.7337%209.35724L17.4609%207.08451C17.1059%206.72948%2016.5303%206.72948%2016.1753%207.08451C15.8203%207.43948%2015.8203%208.01512%2016.1753%208.37015Z'%20fill='white'/%3e%3c/g%3e%3cdefs%3e%3cclipPath%20id='clip0_304_10'%3e%3crect%20width='20'%20height='20'%20fill='white'%20transform='matrix(0%201%20-1%200%2020%200)'/%3e%3c/clipPath%3e%3c/defs%3e%3c/svg%3e";
+const rev = "data:image/svg+xml,%3csvg%20width='20'%20height='20'%20viewBox='0%200%2020%2020'%20fill='none'%20xmlns='http://www.w3.org/2000/svg'%3e%3cg%20clip-path='url(%23clip0_304_8)'%3e%3cpath%20d='M3.8247%2011.6299L3.10385%2010.9091L19.0909%2010.9091C19.593%2010.9091%2020%2010.502%2020%209.99997C20%209.49791%2019.593%209.09088%2019.0909%209.09088H3.10385L3.8247%208.37004C4.00221%208.19252%204.091%207.95985%204.091%207.72725C4.091%207.49458%204.00227%207.26191%203.8247%207.0844C3.46967%206.72937%202.89409%206.72937%202.53906%207.0844L0.266334%209.35713C-0.0886965%209.7121%20-0.0886965%2010.2877%200.266334%2010.6428L2.53906%2012.9155C2.89409%2013.2705%203.46967%2013.2705%203.8247%2012.9155C4.17973%2012.5605%204.17973%2011.9849%203.8247%2011.6299Z'%20fill='white'/%3e%3c/g%3e%3cdefs%3e%3cclipPath%20id='clip0_304_8'%3e%3crect%20width='20'%20height='20'%20fill='white'%20transform='matrix(0%20-1%201%200%200%2020)'/%3e%3c/clipPath%3e%3c/defs%3e%3c/svg%3e";
+const createMoveGroup = (format, path, setPath, segmentId, segmentKind, driveConstants, headingConstants) => {
+  const onLateralChange = (partial) => updatePathConstants(setPath, segmentId, { lateral: partial });
+  const onAngularChange = (partial) => updatePathConstants(setPath, segmentId, { angular: partial });
+  const onApplyLateral = (partial) => updatePathConstantsByKind(setPath, segmentKind, { lateral: partial });
+  const onApplyAngular = (partial) => updatePathConstantsByKind(setPath, segmentKind, { angular: partial });
+  const setDefaultLateral = (partial) => {
+    updateDefaultConstants(format, segmentKind, { lateral: partial });
+  };
+  const setDefaultAngular = (partial) => {
+    updateDefaultConstants(format, segmentKind, { angular: partial });
+  };
+  const currentDefaults = getDefaultConstants(format, segmentKind);
+  return [
+    {
+      header: "Motion Settings",
+      values: driveConstants,
+      fields: [
+        { key: "maxSpeed", label: "Max Speed", input: { bounds: [0, 127], stepSize: 10, roundTo: 0 } },
+        { key: "minSpeed", label: "Min Speed", input: { bounds: [0, 127], stepSize: 10, roundTo: 0 } },
+        { key: "timeout", units: "ms", label: "Timeout", input: { bounds: [0, 9999], stepSize: 10, roundTo: 0 } },
+        { key: "earlyExitRange", units: "in", label: "Early Exit", input: { bounds: [0, 100], stepSize: 1, roundTo: 1 } },
+        ...segmentKind === "poseDrive" ? [
+          { key: "horizontalDrift", label: "Drift", input: { bounds: [0, 30], stepSize: 1, roundTo: 1 } },
+          { key: "lead", label: "Lead", units: "in", input: { bounds: [0, 1], stepSize: 0.1, roundTo: 1 } }
+        ] : []
+      ],
+      onChange: onLateralChange,
+      setDefault: setDefaultLateral,
+      onApply: onApplyLateral,
+      defaults: currentDefaults?.lateral ?? {}
+    },
+    {
+      header: "Lateral Settings",
+      values: driveConstants,
+      fields: [
+        { key: "kp", label: "kP", input: { bounds: [0, 100], stepSize: 0.1, roundTo: 5 } },
+        { key: "ki", label: "kI", input: { bounds: [0, 100], stepSize: 0.01, roundTo: 5 } },
+        { key: "kd", label: "kD", input: { bounds: [0, 100], stepSize: 0.1, roundTo: 5 } },
+        { key: "antiWindup", units: "in", label: "Anti Windup", input: { bounds: [0, 100], stepSize: 0.1, roundTo: 2 } },
+        { key: "smallError", units: "in", label: "Small Error", input: { bounds: [0, 100], stepSize: 0.1, roundTo: 2 } },
+        { key: "smallErrorTimeout", units: "ms", label: "Sml Timeout", input: { bounds: [0, 9999], stepSize: 10, roundTo: 0 } },
+        { key: "largeError", units: "in", label: "Large Error", input: { bounds: [0, 100], stepSize: 0.1, roundTo: 2 } },
+        { key: "largeErrorTimeout", units: "ms", label: "Lge Timeout", input: { bounds: [0, 9999], stepSize: 10, roundTo: 0 } },
+        { key: "slew", label: "Slew", input: { bounds: [0, 127], stepSize: 1, roundTo: 1 } }
+      ],
+      onChange: onLateralChange,
+      setDefault: setDefaultLateral,
+      onApply: onApplyLateral,
+      defaults: currentDefaults?.lateral ?? {}
+    },
+    {
+      header: "Angular Settings",
+      values: headingConstants,
+      fields: [
+        { key: "kp", label: "kP", input: { bounds: [0, 100], stepSize: 0.1, roundTo: 5 } },
+        { key: "ki", label: "kI", input: { bounds: [0, 100], stepSize: 0.01, roundTo: 5 } },
+        { key: "kd", label: "kD", input: { bounds: [0, 100], stepSize: 0.1, roundTo: 5 } },
+        { key: "antiWindup", units: "deg", label: "Anti Windup", input: { bounds: [0, 100], stepSize: 0.1, roundTo: 2 } },
+        { key: "smallError", units: "in", label: "Small Error", input: { bounds: [0, 100], stepSize: 0.1, roundTo: 2 } },
+        { key: "smallErrorTimeout", units: "ms", label: "Sml Timeout", input: { bounds: [0, 9999], stepSize: 10, roundTo: 0 } },
+        { key: "largeError", units: "in", label: "Large Error", input: { bounds: [0, 100], stepSize: 0.1, roundTo: 2 } },
+        { key: "largeErrorTimeout", units: "ms", label: "Lge Timeout", input: { bounds: [0, 9999], stepSize: 10, roundTo: 0 } },
+        { key: "slew", label: "Slew", input: { bounds: [0, 127], stepSize: 1, roundTo: 1 } }
+      ],
+      onChange: onAngularChange,
+      setDefault: setDefaultAngular,
+      onApply: onApplyAngular,
+      defaults: currentDefaults?.angular ?? {}
+    }
+  ];
+};
+const createAngularGroup = (format, setPath, segmentId, segmentKind, turnConstants) => {
+  const onChange = (partial) => updatePathConstants(setPath, segmentId, { angular: partial });
+  const onApply = (partial) => updatePathConstantsByKind(setPath, segmentKind, { angular: partial });
+  const setDefault = (partial) => {
+    updateDefaultConstants(format, segmentKind, { angular: partial });
+  };
+  const currentDefaults = getDefaultConstants(format, segmentKind);
+  const specificDefaults = currentDefaults?.angular;
+  return [
+    {
+      header: "Motion Settings",
+      values: turnConstants,
+      fields: [
+        { key: "maxSpeed", label: "Max Speed", input: { bounds: [0, 127], stepSize: 10, roundTo: 0 } },
+        { key: "minSpeed", label: "Min Speed", input: { bounds: [0, 127], stepSize: 10, roundTo: 0 } },
+        { key: "timeout", units: "ms", label: "Timeout", input: { bounds: [0, 9999], stepSize: 10, roundTo: 0 } },
+        { key: "earlyExitRange", units: "in", label: "Early Exit Range", input: { bounds: [0, 100], stepSize: 1, roundTo: 1 } }
+      ],
+      onChange,
+      setDefault,
+      onApply,
+      defaults: specificDefaults ?? {}
+    },
+    {
+      header: "Angular Settings",
+      values: turnConstants,
+      fields: [
+        { key: "kp", label: "kP", input: { bounds: [0, 100], stepSize: 0.1, roundTo: 5 } },
+        { key: "ki", label: "kI", input: { bounds: [0, 100], stepSize: 0.01, roundTo: 5 } },
+        { key: "kd", label: "kD", input: { bounds: [0, 100], stepSize: 0.1, roundTo: 5 } },
+        { key: "antiWindup", label: "Anti Windup", input: { bounds: [0, 100], stepSize: 0.1, roundTo: 2 } },
+        { key: "smallError", units: "in", label: "Small Error", input: { bounds: [0, 100], stepSize: 0.1, roundTo: 2 } },
+        { key: "smallErrorTimeout", units: "ms", label: "Sml Timeout", input: { bounds: [0, 9999], stepSize: 10, roundTo: 0 } },
+        { key: "largeError", units: "in", label: "Large Error", input: { bounds: [0, 100], stepSize: 0.1, roundTo: 2 } },
+        { key: "largeErrorTimeout", units: "ms", label: "Lge Timeout", input: { bounds: [0, 9999], stepSize: 10, roundTo: 0 } },
+        { key: "slew", label: "Slew", input: { bounds: [0, 127], stepSize: 1, roundTo: 1 } }
+      ],
+      onChange,
+      setDefault,
+      onApply,
+      defaults: specificDefaults ?? {}
+    }
+  ];
+};
+const getDirectionState$1 = (path, segmentId, field, slot) => {
+  const segment = path.segments.find((s) => s.id === segmentId);
+  const constants = segment?.constants;
+  return constants?.[slot]?.[field] ?? null;
+};
+const createAngularDirectionGroup = (path, setPath, segmentId, slot) => {
+  return {
+    imageKeys: [
+      { src: cw, key: "clockwise" },
+      { src: ccw, key: "counterclockwise" },
+      { src: cwccw, key: null }
+    ],
+    onKeyChange: (key) => {
+      updatePathConstants(setPath, segmentId, { [slot]: { direction: key } });
+    },
+    value: getDirectionState$1(path, segmentId, "direction", slot)
+  };
+};
+const createMoveDirectionGroup = (path, setPath, segmentId, slot) => {
+  return {
+    imageKeys: [
+      { src: fwd, key: "forward" },
+      { src: rev, key: "reverse" }
+    ],
+    onKeyChange: (key) => {
+      updatePathConstants(setPath, segmentId, { [slot]: { forwards: key } });
+    },
+    value: getDirectionState$1(path, segmentId, "forwards", slot)
+  };
+};
+const createSwingDirectionGroup$1 = (path, setPath, segmentId, slot) => {
+  return {
+    imageKeys: [
+      { src: rightswing, key: "right" },
+      { src: leftswing, key: "left" }
+    ],
+    onKeyChange: (key) => {
+      updatePathConstants(setPath, segmentId, { [slot]: { lockedSide: key } });
+    },
+    value: getDirectionState$1(path, segmentId, "lockedSide", slot)
+  };
+};
+function getLemLibDirectionConfig(path, setPath, segmentId) {
+  const s = path.segments.find((c) => c.id === segmentId);
+  if (s === void 0) return [];
+  switch (s.kind) {
+    case "pointDrive":
+    case "poseDrive":
+    case "distanceDrive":
+      return [
+        createMoveDirectionGroup(path, setPath, segmentId, "lateral")
+      ];
+    case "pointTurn":
+      return [
+        createMoveDirectionGroup(path, setPath, segmentId, "lateral"),
+        createAngularDirectionGroup(path, setPath, segmentId, "angular")
+      ];
+    case "angleTurn":
+      return [
+        createAngularDirectionGroup(path, setPath, segmentId, "angular")
+      ];
+    case "angleSwing":
+    case "pointSwing":
+      return [
+        createSwingDirectionGroup$1(path, setPath, segmentId, "angular"),
+        createAngularDirectionGroup(path, setPath, segmentId, "angular")
+      ];
+  }
+}
+function getLemLibConstantsConfig(format, path, setPath, segmentId) {
+  const s = path.segments.find((c) => c.id === segmentId);
+  if (s === void 0) return [];
+  switch (s.kind) {
+    case "pointDrive":
+    case "poseDrive": {
+      const constants = s.constants;
+      return createMoveGroup(format, path, setPath, segmentId, s.kind, constants.lateral, constants.angular);
+    }
+    case "pointTurn":
+    case "angleTurn": {
+      const constants = s.constants;
+      return createAngularGroup(format, setPath, segmentId, s.kind, constants.angular);
+    }
+    case "angleSwing":
+    case "pointSwing": {
+      const constants = s.constants;
+      return createAngularGroup(format, setPath, segmentId, s.kind, constants.angular);
+    }
+  }
+  return void 0;
+}
+const createDrivePIDGroup = (format, setPath, segmentId, segmentKind, driveConstants, headingConstants) => {
+  const onDriveChange = (partial) => updatePathConstants(setPath, segmentId, { drive: partial });
+  const onHeadingChange = (partial) => updatePathConstants(setPath, segmentId, { turn: partial });
+  const onApplyDrive = (partial) => updatePathConstantsByKind(setPath, segmentKind, { drive: partial });
+  const onApplyHeading = (partial) => updatePathConstantsByKind(setPath, segmentKind, { turn: partial });
+  const setDefaultDrive = (partial) => {
+    updateDefaultConstants(format, segmentKind, { drive: partial });
+  };
+  const setDefaultHeading = (partial) => {
+    updateDefaultConstants(format, segmentKind, { turn: partial });
+  };
+  const currentDefaults = getDefaultConstants(format, segmentKind);
+  return [
+    {
+      header: "Exit Conditions",
+      values: driveConstants,
+      fields: [
+        { key: "timeout", units: "ms", label: "Timeout", input: { bounds: [0, 9999], stepSize: 100, roundTo: 0 } },
+        { key: "min_voltage", units: "volt", label: "Min Speed", input: { bounds: [0, 12], stepSize: 1, roundTo: 1 } },
+        { key: "exit_error", units: "in", label: "Exit Error", input: { bounds: [0, 100], stepSize: 0.5, roundTo: 2 } }
+      ],
+      onChange: onDriveChange,
+      setDefault: setDefaultDrive,
+      onApply: onApplyDrive,
+      defaults: currentDefaults?.drive ?? {}
+    },
+    {
+      header: "Drive Constants",
+      values: driveConstants,
+      fields: [
+        { key: "maxSpeed", units: "volt", label: "Max Speed", input: { bounds: [0, 12], stepSize: 1, roundTo: 1 } },
+        { key: "kp", label: "kP", input: { bounds: [0, 100], stepSize: 0.1, roundTo: 5 } },
+        { key: "ki", label: "kI", input: { bounds: [0, 100], stepSize: 0.01, roundTo: 5 } },
+        { key: "kd", label: "kD", input: { bounds: [0, 100], stepSize: 0.1, roundTo: 5 } },
+        { key: "starti", units: "in", label: "Starti", input: { bounds: [0, 100], stepSize: 1, roundTo: 2 } },
+        { key: "slew", units: "volt/10ms", label: "Slew", input: { bounds: [0, 100], stepSize: 0.1, roundTo: 2 } },
+        { key: "settle_error", units: "in", label: "Settle Error", input: { bounds: [0, 100], stepSize: 0.5, roundTo: 2 } },
+        { key: "settle_time", units: "ms", label: "Settle Time", input: { bounds: [0, 9999], stepSize: 10, roundTo: 0 } },
+        { key: "start_turn", label: "Start Turn", input: { bounds: [0, 99], stepSize: 1, roundTo: 1 } },
+        ...segmentKind === "poseDrive" ? [
+          { key: "drift", label: "Drift", units: "", input: { bounds: [0, 100], stepSize: 1, roundTo: 1 } }
+        ] : []
+      ],
+      onChange: onDriveChange,
+      setDefault: setDefaultDrive,
+      onApply: onApplyDrive,
+      defaults: currentDefaults?.drive ?? {}
+    },
+    {
+      header: "Turn Constants",
+      values: headingConstants,
+      fields: [
+        { key: "maxSpeed", units: "volt", label: "Max Speed", input: { bounds: [0, 12], stepSize: 1, roundTo: 1 } },
+        { key: "kp", label: "kP", input: { bounds: [0, 100], stepSize: 0.1, roundTo: 3 } },
+        { key: "ki", label: "kI", input: { bounds: [0, 100], stepSize: 0.01, roundTo: 5 } },
+        { key: "kd", label: "kD", input: { bounds: [0, 100], stepSize: 0.1, roundTo: 3 } },
+        { key: "starti", units: "deg", label: "Starti", input: { bounds: [0, 360], stepSize: 1, roundTo: 2 } },
+        { key: "settle_error", units: "in", label: "Settle Error", input: { bounds: [0, 100], stepSize: 0.5, roundTo: 2 } },
+        { key: "settle_time", units: "ms", label: "Settle Time", input: { bounds: [0, 9999], stepSize: 10, roundTo: 0 } },
+        ...segmentKind === "pointDrive" ? [
+          { key: "slew", units: "volt/10ms", label: "Slew", input: { bounds: [0, 100], stepSize: 0.1, roundTo: 1 } }
+        ] : []
+      ],
+      onChange: onHeadingChange,
+      setDefault: setDefaultHeading,
+      onApply: onApplyHeading,
+      defaults: currentDefaults?.turn ?? {}
+    }
+  ];
+};
+const createTurnPIDGroup = (format, setPath, segmentId, segmentKind, turnConstants, isSwing = false) => {
+  const slot = isSwing ? "swing" : "turn";
+  const onChange = (partial) => updatePathConstants(setPath, segmentId, { [slot]: partial });
+  const onApply = (partial) => updatePathConstantsByKind(setPath, segmentKind, { [slot]: partial });
+  const setDefault = (partial) => {
+    updateDefaultConstants(format, segmentKind, { [slot]: partial });
+  };
+  const currentDefaults = getDefaultConstants(format, segmentKind);
+  const specificDefaults = isSwing ? currentDefaults?.swing : currentDefaults?.turn;
+  return [
+    {
+      header: "Exit Conditions",
+      values: turnConstants,
+      fields: [
+        { key: "settle_error", label: "Settle Error", units: "deg", input: { bounds: [0, 100], stepSize: 0.5, roundTo: 2 } },
+        { key: "settle_time", label: "Settle Time", units: "ms", input: { bounds: [0, 9999], stepSize: 10, roundTo: 0 } },
+        { key: "timeout", label: "Timeout", units: "ms", input: { bounds: [0, 9999], stepSize: 100, roundTo: 0 } },
+        { key: "min_voltage", label: "Min Speed", units: "volt", input: { bounds: [0, 12], stepSize: 1, roundTo: 1 } },
+        { key: "exit_error", units: "deg", label: "Exit Error", input: { bounds: [0, 100], stepSize: 0.5, roundTo: 2 } }
+      ],
+      onChange,
+      setDefault,
+      onApply,
+      defaults: specificDefaults ?? {}
+    },
+    {
+      header: isSwing ? "Swing Constants" : "Turn Constants",
+      values: turnConstants,
+      fields: [
+        { key: "maxSpeed", units: "volt", label: "Max Speed", input: { bounds: [0, 12], stepSize: 1, roundTo: 1 } },
+        { key: "kp", label: "kP", input: { bounds: [0, 100], stepSize: 0.1, roundTo: 3 } },
+        { key: "ki", label: "kI", input: { bounds: [0, 100], stepSize: 0.01, roundTo: 5 } },
+        { key: "kd", label: "kD", input: { bounds: [0, 100], stepSize: 0.1, roundTo: 3 } },
+        { key: "starti", label: "Starti", units: "deg", input: { bounds: [0, 360], stepSize: 1, roundTo: 2 } },
+        { key: "slew", units: "volt/10ms", label: "Slew", input: { bounds: [0, 100], stepSize: 0.1, roundTo: 2 } }
+      ],
+      onChange,
+      setDefault,
+      onApply,
+      defaults: specificDefaults ?? {}
+    }
+  ];
+};
+const getDirectionState = (path, segmentId, field, slot) => {
+  const segment = path.segments.find((s) => s.id === segmentId);
+  const constants = segment?.constants;
+  return constants?.[slot]?.[field] ?? null;
+};
+const createTurnDirectionGroup = (path, setPath, segmentId, slot) => {
+  return {
+    imageKeys: [
+      { src: cw, key: "clockwise" },
+      { src: ccw, key: "counterclockwise" },
+      { src: cwccw, key: null }
+    ],
+    onKeyChange: (key) => {
+      updatePathConstants(setPath, segmentId, { [slot]: { turn_direction: key } });
+    },
+    value: getDirectionState(path, segmentId, "turn_direction", slot)
+  };
+};
+const createSwingDirectionGroup = (path, setPath, segmentId, slot) => {
+  return {
+    imageKeys: [
+      { src: rightswing, key: "right" },
+      { src: leftswing, key: "left" }
+    ],
+    onKeyChange: (key) => {
+      updatePathConstants(setPath, segmentId, { [slot]: { swing_direction: key } });
+    },
+    value: getDirectionState(path, segmentId, "swing_direction", slot)
+  };
+};
+function getRevMecanumDirectionConfig(path, setPath, segmentId) {
+  const s = path.segments.find((c) => c.id === segmentId);
+  if (s === void 0) return [];
+  switch (s.kind) {
+    // case "pointDrive":
+    // case "poseDrive":
+    // case "distanceDrive":
+    //     return [
+    //     createDriveDirectionGroup(path, setPath, segmentId, "drive"),
+    //     ]
+    case "pointTurn":
+    case "angleTurn":
+      return [
+        createTurnDirectionGroup(path, setPath, segmentId, "turn")
+      ];
+    case "angleSwing":
+    case "pointSwing":
+      return [
+        createSwingDirectionGroup(path, setPath, segmentId, "swing"),
+        createTurnDirectionGroup(path, setPath, segmentId, "swing")
+      ];
+  }
+}
+function getRevMecanumConstantsConfig(format, path, setPath, segmentId) {
+  const s = path.segments.find((c) => c.id === segmentId);
+  if (s === void 0) return [];
+  switch (s.kind) {
+    case "pointDrive":
+    case "poseDrive": {
+      const constants = s.constants;
+      return createDrivePIDGroup(format, setPath, segmentId, s.kind, constants.drive, constants.turn);
+    }
+    case "pointTurn":
+    case "angleTurn": {
+      const constants = s.constants;
+      return createTurnPIDGroup(format, setPath, segmentId, s.kind, constants.turn, false);
+    }
+    case "angleSwing":
+    case "pointSwing": {
+      const constants = s.constants;
+      return createTurnPIDGroup(format, setPath, segmentId, s.kind, constants.swing, true);
+    }
   }
   return void 0;
 }
@@ -14089,22 +14803,18 @@ function updateDefaultConstants(format, kind, patch) {
   globalDefaultsStore.setState((prev) => {
     const currentFormatDefaults = prev[format];
     const currentSegmentDefaults = currentFormatDefaults[kind];
-    const mergedSegment = { ...currentSegmentDefaults };
-    const keys = Object.keys(patch);
-    for (const key of keys) {
-      const patchValue = patch[key];
-      const existingValue = mergedSegment[key];
-      if (typeof patchValue === "object" && patchValue !== null && typeof existingValue === "object" && existingValue !== null) {
-        mergedSegment[key] = { ...existingValue, ...patchValue };
-      } else {
-        mergedSegment[key] = patchValue;
-      }
+    const merged = { ...currentSegmentDefaults };
+    const updates = patch;
+    for (const key of Object.keys(updates)) {
+      const pv = updates[key];
+      const ev = merged[key];
+      merged[key] = typeof pv === "object" && pv !== null && typeof ev === "object" && ev !== null ? { ...ev, ...pv } : pv;
     }
     return {
       ...prev,
       [format]: {
         ...prev[format],
-        [kind]: mergedSegment
+        [kind]: merged
       }
     };
   });
@@ -14137,12 +14847,44 @@ function updatePathConstants(setPath, segmentId, partial) {
     })
   }));
 }
+function updatePathConstantsByKind(setPath, segmentKind, partial) {
+  setPath((prev) => ({
+    ...prev,
+    segments: prev.segments.map((s) => {
+      if (s.kind !== segmentKind) return s;
+      const key = Object.keys(partial)[0];
+      if (key && typeof partial[key] === "object" && !Array.isArray(partial[key])) {
+        return {
+          ...s,
+          constants: {
+            ...s.constants,
+            [key]: {
+              ...s.constants[key],
+              ...partial[key]
+            }
+          }
+        };
+      }
+      return {
+        ...s,
+        constants: {
+          ...s.constants,
+          ...partial
+        }
+      };
+    })
+  }));
+}
 function getFormatConstantsConfig(format, path, setPath, segmentId) {
   switch (format) {
     case "mikLib":
       return getmikLibConstantsConfig(format, path, setPath, segmentId);
     case "ReveilLib":
       return getRevConstantsConfig(format, path, setPath, segmentId);
+    case "LemLib":
+      return getLemLibConstantsConfig(format, path, setPath, segmentId);
+    case "RevMecanum":
+      return getRevMecanumConstantsConfig(format, path, setPath, segmentId);
   }
   return [];
 }
@@ -14150,6 +14892,10 @@ function getFormatDirectionConfig(format, path, setPath, segmentId) {
   switch (format) {
     case "mikLib":
       return getMikLibDirectionConfig(path, setPath, segmentId);
+    case "LemLib":
+      return getLemLibDirectionConfig(path, setPath, segmentId);
+    case "RevMecanum":
+      return getRevMecanumDirectionConfig(path, setPath, segmentId);
   }
   return [];
 }
@@ -14165,6 +14911,8 @@ function getFormatPathName(format) {
       return "LemLib Path";
     case "RW-Template":
       return "RW-Template Path";
+    case "RevMecanum":
+      return "RevMecanum Path";
   }
 }
 function getFormatSpeed(format) {
@@ -14179,6 +14927,8 @@ function getFormatSpeed(format) {
       return 12;
     case "LemLib":
       return 127;
+    case "RevMecanum":
+      return 12;
   }
 }
 function segmentAllowed(format, segment) {
@@ -14203,6 +14953,25 @@ function segmentAllowed(format, segment) {
       break;
     }
     case "ReveilLib": {
+      switch (segment) {
+        case "pointDrive":
+          return true;
+        case "poseDrive":
+          return true;
+        case "pointTurn":
+          return true;
+        case "angleTurn":
+          return true;
+        case "angleSwing":
+          return false;
+        case "pointSwing":
+          return false;
+        case "distanceDrive":
+          return false;
+      }
+      break;
+    }
+    case "RevMecanum": {
       switch (segment) {
         case "pointDrive":
           return true;
@@ -14307,11 +15076,28 @@ function getSegmentName(format, segment) {
         case "pointDrive":
           return "Pilons Segment";
         case "poseDrive":
-          return "Boomerang Segment";
+          return "Boomerang";
         case "pointTurn":
           return "Look At";
         case "angleTurn":
           return "Turn Segment";
+      }
+      break;
+    }
+    case "RevMecanum": {
+      switch (segment) {
+        case "pointDrive":
+          return "Point Drive";
+        case "poseDrive":
+          return "Arc Drive";
+        case "pointTurn":
+          return "Point Turn";
+        case "angleTurn":
+          return "Angle Turn";
+        case "angleSwing":
+          return "Angle Swing";
+        case "pointSwing":
+          return "Point Swing";
       }
       break;
     }
@@ -14378,14 +15164,121 @@ function useFormat() {
   );
   return [format, formatStore.setState];
 }
+const SIM_CONSTANTS = {
+  seconds: 99,
+  dt: 1 / 60
+  // Sim is run at 60 hertz
+};
+const pathTelemetry = createStore([]);
+const activeSimSegmentStore = createStore(-1);
+const computedPathStore = createStore({
+  totalTime: 0,
+  trajectory: [],
+  endTrajectory: [],
+  segmentTrajectorys: [],
+  segmentCumulativeDists: [],
+  timeOffset: 0
+});
+function precomputePath(robot, auton) {
+  const simLengthSeconds = SIM_CONSTANTS.seconds;
+  let autoIdx = 0;
+  const trajectory = [];
+  const endTrajectory = [];
+  const segmentTrajectory = [];
+  const segmentTrajectorys = [];
+  const segmentKinds = [];
+  const segmentTargetDists = [];
+  const dt = SIM_CONSTANTS.dt;
+  let t = 0;
+  let safetyIter = 0;
+  const maxIter = 60 * simLengthSeconds;
+  while (safetyIter < maxIter) {
+    if (autoIdx < auton.length) {
+      const [done, kind, targetDist] = auton[autoIdx](robot, dt);
+      if (done) {
+        endTrajectory.push({
+          x: robot.getX(),
+          y: robot.getY(),
+          angle: robot.getAngle()
+        });
+        segmentTrajectorys.push([...segmentTrajectory]);
+        segmentKinds.push(kind);
+        segmentTargetDists.push(targetDist);
+        segmentTrajectory.length = 0;
+        autoIdx++;
+      }
+    }
+    if (autoIdx >= auton.length) {
+      if (Math.abs(robot.getXVelocity()) < 0.01 && Math.abs(robot.getYVelocity()) < 0.01) break;
+      robot.tankDrive(0, 0, dt);
+    }
+    segmentTrajectory.push({
+      t,
+      x: robot.getX(),
+      y: robot.getY(),
+      angle: robot.getAngle()
+    });
+    trajectory.push({
+      t,
+      x: robot.getX(),
+      y: robot.getY(),
+      angle: robot.getAngle()
+    });
+    t += dt;
+    safetyIter++;
+  }
+  const turnKinds = /* @__PURE__ */ new Set(["pointTurn", "angleTurn", "angleSwing", "pointSwing"]);
+  function shortAngleDiff(a, b) {
+    let d = normalizeDeg(b - a);
+    if (d > 180) d -= 360;
+    return Math.abs(d);
+  }
+  const segmentCumulativeDists = [];
+  const telemetry = segmentTrajectorys.map((seg, i) => {
+    const kind = segmentKinds[i];
+    const isTurn = turnKinds.has(kind);
+    const totalDistance = segmentTargetDists[i] ?? 0;
+    if (seg.length === 0) {
+      segmentCumulativeDists.push([]);
+      return { totalTime: 0, totalDistance, progressRaw: 0, progressPercent: 0, units: isTurn ? "deg" : "in" };
+    }
+    const totalTime = seg[seg.length - 1].t - seg[0].t;
+    const cumDist = [0];
+    for (let j = 1; j < seg.length; j++) {
+      let step;
+      if (isTurn) {
+        step = shortAngleDiff(seg[j - 1].angle, seg[j].angle);
+      } else {
+        const dx = seg[j].x - seg[j - 1].x;
+        const dy = seg[j].y - seg[j - 1].y;
+        step = Math.sqrt(dx * dx + dy * dy);
+      }
+      cumDist.push(cumDist[j - 1] + step);
+    }
+    segmentCumulativeDists.push(cumDist);
+    const progressRaw = cumDist[cumDist.length - 1];
+    const progressPercent = totalDistance > 0 ? Math.min(progressRaw / totalDistance * 100, 100) : 100;
+    return {
+      totalTime,
+      totalDistance,
+      progressRaw,
+      progressPercent,
+      units: isTurn ? "deg" : "in"
+    };
+  });
+  pathTelemetry.setState(telemetry);
+  return { totalTime: t, trajectory, endTrajectory, segmentTrajectorys, segmentCumulativeDists, timeOffset: 0 };
+}
 function MotionList({
   name,
   speedScale,
   field,
   directionField,
   segmentId,
+  index,
   isOpenGlobal,
-  start = false,
+  isTelemetryOpenGlobal,
+  start: start2 = false,
   draggable = false,
   onDragStart,
   onDragEnd,
@@ -14396,10 +15289,10 @@ function MotionList({
   const [path, setPath] = usePath();
   const segment = path.segments.find((s) => s.id === segmentId);
   const selected = path.segments.find((c) => c.id === segmentId)?.selected;
+  const activeSimSegment = activeSimSegmentStore.useStore();
   const [isEyeOpen, setEyeOpen] = reactExports.useState(true);
-  const [isLocked, setLocked] = reactExports.useState(false);
+  const [isTelemetryOpen, setTelemetryOpen] = reactExports.useState(false);
   const [isOpen, setOpen] = reactExports.useState(false);
-  const [command, setCommand] = reactExports.useState(createCommand(""));
   const [format] = useFormat();
   const pathRef = reactExports.useRef(path);
   pathRef.current = path;
@@ -14449,14 +15342,14 @@ function MotionList({
         }
       }
       if (anchorIdx === -1) anchorIdx = clickedIdx;
-      const start2 = Math.min(anchorIdx, clickedIdx);
+      const start22 = Math.min(anchorIdx, clickedIdx);
       const end = Math.max(anchorIdx, clickedIdx);
       return {
         ...prev,
         // Select segments in range, but exclude groups and deselect all groups
         segments: segments.map((s, i) => ({
           ...s,
-          selected: s.kind === "group" ? false : i >= start2 && i <= end
+          selected: s.kind === "group" ? false : i >= start22 && i <= end
         }))
       };
     });
@@ -14495,13 +15388,8 @@ function MotionList({
     setOpen(isOpenGlobal);
   }, [isOpenGlobal]);
   reactExports.useEffect(() => {
-    setPath((prev) => ({
-      ...prev,
-      segments: prev.segments.map(
-        (segment2) => segment2.id === segmentId ? { ...segment2, command } : { ...segment2 }
-      )
-    }));
-  }, [command, segmentId, setPath]);
+    if (isTelemetryOpenGlobal !== void 0) setTelemetryOpen(isTelemetryOpenGlobal);
+  }, [isTelemetryOpenGlobal]);
   const toggleSegment = (patch) => {
     setPath((prev) => {
       const next = {
@@ -14515,15 +15403,9 @@ function MotionList({
   const handleEyeOnClick = () => {
     toggleSegment((s) => ({ ...s, visible: !s.visible }));
   };
-  const handleLockOnClick = () => {
-    toggleSegment((s) => ({ ...s, locked: !s.locked }));
-  };
   reactExports.useEffect(() => {
     setEyeOpen(segment.visible);
   }, [segment.visible]);
-  reactExports.useEffect(() => {
-    setLocked(segment.locked);
-  }, [segment.locked]);
   const getValuesFromKeys = (keys, obj) => {
     return keys.reduce((acc, key) => {
       if (key in (obj ?? {})) {
@@ -14539,33 +15421,36 @@ function MotionList({
       updateUndoRef.current = false;
     }
   }, [path]);
-  return /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: `flex flex-col gap-2 mt-[1px]`, children: [
-    /* @__PURE__ */ jsxRuntimeExports.jsxs(
-      "button",
-      {
-        draggable,
-        onDragStart: (e) => {
-          if (e.dataTransfer) {
-            e.dataTransfer.setData("text/plain", segmentId);
-            e.dataTransfer.effectAllowed = "move";
-            const emptyImg = new Image();
-            emptyImg.src = "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7";
-            e.dataTransfer.setDragImage(emptyImg, 0, 0);
-          }
-          if (onDragStart) onDragStart(e);
-        },
-        onDragEnd: (e) => {
-          if (onDragEnd) onDragEnd(e);
-        },
-        onDragEnter: () => {
-          if (onDragEnter) onDragEnter();
-        },
-        onClick: handleOnClick,
-        onMouseEnter: StartHover,
-        onMouseLeave: EndHover,
-        style: { width: `${!shrink ? 450 : 400}px` },
-        className: `${selected ? "bg-medlightgray" : ""}
-                flex flex-row justify-start items-center
+  const groupsBefore = path.segments.slice(0, index).filter((s) => s.kind === "group").length;
+  const telemetrySlice = pathTelemetry.getState()?.[index - groupsBefore];
+  return /* @__PURE__ */ jsxRuntimeExports.jsxs(
+    "button",
+    {
+      className: `flex flex-col gap-2 mt-[1px] ${segment.locked ? "opacity-50 pointer-events-none" : ""}`,
+      onClick: () => {
+        if (selected) setOpen(!isOpen);
+      },
+      children: [
+        /* @__PURE__ */ jsxRuntimeExports.jsxs(
+          "button",
+          {
+            draggable: draggable && !segment.locked,
+            onDragStart: (e) => {
+              setupDragTransfer(e, segmentId);
+              if (onDragStart) onDragStart(e);
+            },
+            onDragEnd: (e) => {
+              if (onDragEnd) onDragEnd(e);
+            },
+            onDragEnter: () => {
+              if (onDragEnter) onDragEnter();
+            },
+            onClick: handleOnClick,
+            onMouseEnter: StartHover,
+            onMouseLeave: EndHover,
+            style: { width: `${!shrink ? 450 : 400}px` },
+            className: `${selected ? "bg-medlightgray" : ""}
+                relative flex flex-row justify-start items-center
                 h-[35px] gap-[12px]
                 bg-medgray
                 hover:brightness-92
@@ -14575,95 +15460,135 @@ function MotionList({
                 ${isOpen && !selected ? "border-2 border-medlightgray" : "border-2 border-transparent"}
                 ${draggingIds.includes(segmentId) ? "opacity-10" : ""}
             `,
-        children: [
-          /* @__PURE__ */ jsxRuntimeExports.jsx(
-            "button",
-            {
-              className: "cursor-pointer shrink-0",
-              onClick: () => setOpen(!isOpen),
-              children: !isOpen ? /* @__PURE__ */ jsxRuntimeExports.jsx("img", { className: "w-[15px] h-[15px] rotate-270", src: downArrow }) : /* @__PURE__ */ jsxRuntimeExports.jsx("img", { className: "w-[15px] h-[15px]", src: downArrow })
-            }
-          ),
-          /* @__PURE__ */ jsxRuntimeExports.jsx("button", { className: "cursor-pointer shrink-0", onClick: handleEyeOnClick, children: /* @__PURE__ */ jsxRuntimeExports.jsx("img", { className: "w-[20px] h-[20px]", src: isEyeOpen ? eyeOpen : eyeClosed }) }),
-          /* @__PURE__ */ jsxRuntimeExports.jsx("button", { className: "cursor-pointer shrink-0", onClick: handleLockOnClick, children: /* @__PURE__ */ jsxRuntimeExports.jsx("img", { className: "w-[20px] h-[20px]", src: isLocked ? lockClose : lockOpen }) }),
-          /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "w-[50px] items-center shrink-0 text-left truncate", children: name }),
-          !start && field !== void 0 ? /* @__PURE__ */ jsxRuntimeExports.jsx(
-            Slider,
-            {
-              sliderWidth: !shrink ? 210 : 160,
-              sliderHeight: 5,
-              knobHeight: 16,
-              knobWidth: 16,
-              value: (field[0]?.values?.["maxSpeed"] ?? 0) / speedScale * 100,
-              setValue: (v) => field[0]?.onChange({ maxSpeed: v / 100 * speedScale }),
-              OnChangeEnd: (sliderValue) => {
-                const currentPath = pathRef.current;
-                const realValue = sliderValue / 100 * speedScale;
-                AddToUndoHistory({
-                  path: {
-                    ...currentPath,
-                    segments: currentPath.segments.map(
-                      (s) => s.id === segmentId ? { ...s, constants: { ...s.constants, maxSpeed: realValue } } : s
-                    )
+            children: [
+              /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: `absolute left-0 top-[20%] h-[60%] w-[3px] rounded-full bg-lightgray transition-opacity duration-150 ${activeSimSegment === index - groupsBefore ? "opacity-100" : "opacity-0"}` }),
+              /* @__PURE__ */ jsxRuntimeExports.jsx(
+                "button",
+                {
+                  className: "cursor-pointer shrink-0",
+                  onClick: (e) => {
+                    e.stopPropagation();
+                    setOpen(!isOpen);
+                  },
+                  children: /* @__PURE__ */ jsxRuntimeExports.jsx("img", { className: `w-[15px] h-[15px] transition-transform duration-200 ${isOpen ? "" : "-rotate-90"}`, src: downArrow })
+                }
+              ),
+              /* @__PURE__ */ jsxRuntimeExports.jsx("button", { className: "cursor-pointer shrink-0", onClick: (e) => {
+                e.stopPropagation();
+                handleEyeOnClick();
+              }, children: /* @__PURE__ */ jsxRuntimeExports.jsx("img", { className: "w-[20px] h-[20px]", src: isEyeOpen ? eyeOpen : eyeClosed }) }),
+              /* @__PURE__ */ jsxRuntimeExports.jsx("button", { className: "cursor-pointer shrink-0", onClick: (e) => {
+                e.stopPropagation();
+                setTelemetryOpen(!isTelemetryOpen);
+              }, children: /* @__PURE__ */ jsxRuntimeExports.jsx("img", { className: "w-[20px] h-[20px]", src: isTelemetryOpen ? clockClose : clockOpen }) }),
+              /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "shrink-0 text-left truncate max-w-[130px]", children: name }),
+              !start2 && field !== void 0 && /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { onClick: (e) => e.stopPropagation(), className: "flex-1 min-w-0 flex items-center gap-2", children: [
+                /* @__PURE__ */ jsxRuntimeExports.jsx(
+                  Slider,
+                  {
+                    sliderHeight: 5,
+                    knobHeight: 16,
+                    knobWidth: 16,
+                    value: (field[0]?.values?.["maxSpeed"] ?? 0) / speedScale * 100,
+                    setValue: (v) => field[0]?.onChange({ maxSpeed: v / 100 * speedScale }),
+                    OnChangeEnd: (sliderValue) => {
+                      const currentPath = pathRef.current;
+                      const realValue = sliderValue / 100 * speedScale;
+                      AddToUndoHistory({
+                        path: {
+                          ...currentPath,
+                          segments: currentPath.segments.map(
+                            (s) => s.id === segmentId ? { ...s, constants: { ...s.constants, maxSpeed: realValue } } : s
+                          )
+                        }
+                      });
+                    }
                   }
-                });
-              }
-            }
-          ) : /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "w-[230px]" }),
-          !start && /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "w-6 shrink-0 text-left tabular-nums pl-1", children: field !== void 0 && (field[0]?.values?.["maxSpeed"] ?? 0).toFixed(speedScale > 9.9 ? speedScale > 99.9 ? 0 : 1 : 2) }),
-          directionField !== void 0 && directionField.length !== 0 && /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "w-max flex flex-row items-center justify-end gap-2.5 pl-[12px]", children: directionField.map((f, i) => /* @__PURE__ */ jsxRuntimeExports.jsx(
-            CycleImageButton,
-            {
-              imageKeys: f.imageKeys,
-              onKeyChange: (key) => {
-                updateUndoRef.current = true;
-                f.onKeyChange(key);
-              },
-              value: f.value
-            },
-            i
-          )) })
-        ]
-      }
-    ),
-    /* @__PURE__ */ jsxRuntimeExports.jsxs(
-      "div",
-      {
-        className: `relative flex flex-col ml-9 gap-2 transition-all ${isOpen ? "block" : "hidden"}`,
-        children: [
-          /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "absolute left-[-16px] top-0 h-full w-[4px] rounded-full bg-medlightgray" }),
-          /* @__PURE__ */ jsxRuntimeExports.jsx(CommandList, { command, setCommand }),
-          field !== void 0 && field.map((f) => {
-            const fieldKeys = f.fields.map((m) => m.key);
-            const relevantValues = getValuesFromKeys(fieldKeys, f.values);
-            const relevantDefaults = getValuesFromKeys(fieldKeys, f.defaults);
-            return /* @__PURE__ */ jsxRuntimeExports.jsx(
-              ConstantsList,
-              {
-                header: f.header,
-                fields: f.fields,
-                values: relevantValues,
-                isOpenGlobal,
-                onChange: f.onChange,
-                onReset: () => {
-                  AddToUndoHistory({ path });
-                  f.onChange(relevantDefaults);
+                ),
+                /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "shrink-0 text-left tabular-nums pl-1", children: (field[0]?.values?.["maxSpeed"] ?? 0).toFixed(speedScale > 9.9 ? speedScale > 99.9 ? 0 : 1 : 2) })
+              ] }),
+              directionField !== void 0 && directionField.length !== 0 && /* @__PURE__ */ jsxRuntimeExports.jsx("div", { onClick: (e) => e.stopPropagation(), className: "ml-auto flex flex-row items-center gap-2.5", children: directionField.map((f, i) => /* @__PURE__ */ jsxRuntimeExports.jsx(
+                CycleImageButton,
+                {
+                  imageKeys: f.imageKeys,
+                  onKeyChange: (key) => {
+                    updateUndoRef.current = true;
+                    f.onKeyChange(key);
+                  },
+                  value: f.value
                 },
-                onSetDefault: (constants) => {
-                  f.setDefault(constants);
-                  AddToUndoHistory({
-                    defaults: structuredClone(globalDefaultsStore.getState()[format])
-                  });
-                },
-                defaults: relevantDefaults
-              },
-              f.header
-            );
-          })
-        ]
-      }
-    )
-  ] });
+                i
+              )) })
+            ]
+          }
+        ),
+        /* @__PURE__ */ jsxRuntimeExports.jsxs(
+          "div",
+          {
+            onClick: (e) => e.stopPropagation(),
+            className: `relative flex flex-col ml-9 gap-2 ${(!isTelemetryOpen || telemetrySlice === void 0) && !isOpen ? "hidden" : ""}`,
+            children: [
+              /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "absolute left-[-16px] top-0 h-full w-[4px] rounded-full bg-medlightgray" }),
+              isTelemetryOpen && telemetrySlice !== void 0 && /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex pl-1.5 gap-2 text-left", children: [
+                /* @__PURE__ */ jsxRuntimeExports.jsxs("span", { children: [
+                  "Time: ",
+                  roundNum(telemetrySlice.totalTime),
+                  /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "text-[8px] text-lightgray align-super leading-none", children: " s" })
+                ] }),
+                /* @__PURE__ */ jsxRuntimeExports.jsxs("span", { children: [
+                  "Distance: ",
+                  roundNum(telemetrySlice.totalDistance),
+                  /* @__PURE__ */ jsxRuntimeExports.jsxs("span", { className: "text-[8px] text-lightgray align-super leading-none", children: [
+                    " ",
+                    telemetrySlice.units
+                  ] })
+                ] }),
+                /* @__PURE__ */ jsxRuntimeExports.jsxs("span", { children: [
+                  "Traveled: ",
+                  roundNum(telemetrySlice.progressRaw),
+                  /* @__PURE__ */ jsxRuntimeExports.jsxs("span", { className: "text-[8px] text-lightgray align-super leading-none", children: [
+                    " ",
+                    telemetrySlice.units
+                  ] }),
+                  "  ",
+                  roundNum(telemetrySlice.progressPercent),
+                  /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "text-[10px] text-lightgray align-super leading-none", children: " %" })
+                ] })
+              ] }),
+              isOpen && field !== void 0 && field.map((f) => {
+                const fieldKeys = f.fields.map((m) => m.key);
+                const relevantValues = getValuesFromKeys(fieldKeys, f.values);
+                const relevantDefaults = getValuesFromKeys(fieldKeys, f.defaults);
+                return /* @__PURE__ */ jsxRuntimeExports.jsx(
+                  ConstantsList,
+                  {
+                    header: f.header,
+                    fields: f.fields,
+                    values: relevantValues,
+                    isOpenGlobal: false,
+                    onChange: f.onChange,
+                    onReset: () => {
+                      AddToUndoHistory({ path });
+                      f.onChange(relevantDefaults);
+                    },
+                    onSetDefault: (constants) => {
+                      f.setDefault(constants);
+                      AddToUndoHistory({
+                        defaults: structuredClone(globalDefaultsStore.getState()[format])
+                      });
+                    },
+                    onApply: f.onApply,
+                    defaults: relevantDefaults
+                  },
+                  f.header
+                );
+              })
+            ]
+          }
+        )
+      ]
+    }
+  );
 }
 const usePathVisibility = createSharedState(false);
 const plus = "data:image/svg+xml,%3c?xml%20version='1.0'%20encoding='utf-8'?%3e%3c!--%20Uploaded%20to:%20SVG%20Repo,%20www.svgrepo.com,%20Generator:%20SVG%20Repo%20Mixer%20Tools%20--%3e%3csvg%20width='800px'%20height='800px'%20viewBox='0%200%2024%2024'%20fill='%23FFFFFF'%20xmlns='http://www.w3.org/2000/svg'%3e%3cpath%20d='M13%203C13%202.44772%2012.5523%202%2012%202C11.4477%202%2011%202.44772%2011%203V11H3C2.44772%2011%202%2011.4477%202%2012C2%2012.5523%202.44772%2013%203%2013H11V21C11%2021.5523%2011.4477%2022%2012%2022C12.5523%2022%2013%2021.5523%2013%2021V13H21C21.5523%2013%2022%2012.5523%2022%2012C22%2011.4477%2021.5523%2011%2021%2011H13V3Z'%20stroke='%23ffffff'%20stroke-width='2'%20fill='%23ffffff'/%3e%3c/svg%3e";
@@ -14690,7 +15615,6 @@ function createPointDriveSegment(format, position) {
     disabled: false,
     visible: true,
     pose: { x: position.x, y: position.y, angle: null },
-    command: createCommand(""),
     format,
     kind: "pointDrive",
     constants: getDefaultConstants(format, "pointDrive")
@@ -14705,7 +15629,6 @@ function createPoseDriveSegment(format, pose) {
     locked: false,
     visible: true,
     pose,
-    command: createCommand(""),
     format,
     kind: "poseDrive",
     constants: getDefaultConstants(format, "poseDrive")
@@ -14720,7 +15643,6 @@ function createPointTurnSegment(format, pose) {
     disabled: false,
     visible: true,
     pose,
-    command: createCommand(""),
     format,
     kind: "pointTurn",
     constants: getDefaultConstants(format, "pointTurn")
@@ -14734,7 +15656,6 @@ function createAngleTurnSegment(format, heading) {
     locked: false,
     disabled: false,
     visible: true,
-    command: createCommand(""),
     pose: { x: null, y: null, angle: heading },
     format,
     kind: "angleTurn",
@@ -14749,7 +15670,6 @@ function createAngleSwingSegment(format, heading) {
     locked: false,
     disabled: false,
     visible: true,
-    command: createCommand(""),
     pose: { x: null, y: null, angle: heading },
     format,
     kind: "angleSwing",
@@ -14764,7 +15684,6 @@ function createPointSwingSegment(format, pose) {
     locked: false,
     disabled: false,
     visible: true,
-    command: createCommand(""),
     pose,
     format,
     kind: "pointSwing",
@@ -14779,69 +15698,625 @@ function createDistanceSegment(format, pose) {
     locked: false,
     disabled: false,
     visible: true,
-    command: createCommand(""),
     pose,
     format,
     kind: "distanceDrive",
     constants: getDefaultConstants(format, "distanceDrive")
   };
 }
-const SIM_CONSTANTS = {
-  seconds: 99,
-  dt: 1 / 60
-  // Sim is run at 60 hertz
-};
-const computedPathStore = createStore({
-  totalTime: 0,
-  trajectory: [],
-  endTrajectory: [],
-  segmentTrajectorys: []
-});
-function precomputePath(robot, auton) {
-  const simLengthSeconds = SIM_CONSTANTS.seconds;
-  let autoIdx = 0;
-  const trajectory = [];
-  const endTrajectory = [];
-  const segmentTrajectory = [];
-  const segmentTrajectorys = [];
-  const dt = SIM_CONSTANTS.dt;
-  let t = 0;
-  let safetyIter = 0;
-  const maxIter = 60 * simLengthSeconds;
-  while (safetyIter < maxIter) {
-    if (autoIdx < auton.length) {
-      const done = auton[autoIdx](robot, dt);
-      if (done) {
-        endTrajectory.push({
-          x: robot.getX(),
-          y: robot.getY(),
-          angle: robot.getAngle()
-        });
-        segmentTrajectorys.push([...segmentTrajectory]);
-        segmentTrajectory.length = 0;
-        autoIdx++;
-      }
-    }
-    if (autoIdx >= auton.length) {
-      if (Math.abs(robot.getXVelocity()) < 0.01 && Math.abs(robot.getYVelocity()) < 0.01) break;
-      robot.tankDrive(0, 0, dt);
-    }
-    segmentTrajectory.push({
-      t,
-      x: robot.getX(),
-      y: robot.getY(),
-      angle: robot.getAngle()
-    });
-    trajectory.push({
-      t,
-      x: robot.getX(),
-      y: robot.getY(),
-      angle: robot.getAngle()
-    });
-    t += dt;
-    safetyIter++;
+class LemExitCondition {
+  range;
+  time;
+  timeInRange = 0;
+  done = false;
+  constructor(range, time) {
+    this.range = range;
+    this.time = time;
   }
-  return { totalTime: t, trajectory, endTrajectory, segmentTrajectorys };
+  getExit() {
+    return this.done;
+  }
+  update(input, dt) {
+    if (Math.abs(input) > this.range) {
+      this.timeInRange = 0;
+    } else {
+      this.timeInRange += dt * 1e3;
+      if (this.timeInRange >= this.time) this.done = true;
+    }
+    return this.done;
+  }
+  reset() {
+    this.timeInRange = 0;
+    this.done = false;
+  }
+}
+class LemPID {
+  kp;
+  ki;
+  kd;
+  windupRange;
+  integral = 0;
+  prevError = 0;
+  constructor(constants) {
+    this.kp = constants.kp;
+    this.ki = constants.ki;
+    this.kd = constants.kd;
+    this.windupRange = constants.antiWindup;
+  }
+  update(error) {
+    this.integral += error;
+    if (Math.sign(error) != Math.sign(this.prevError)) this.integral = 0;
+    if (Math.abs(error) > this.windupRange && this.windupRange !== 0) this.integral = 0;
+    const derivative = error - this.prevError;
+    this.prevError = error;
+    return error * this.kp + this.integral * this.ki + derivative * this.kd;
+  }
+  reset() {
+    this.integral = 0;
+    this.prevError = 0;
+  }
+}
+class LemPose {
+  x;
+  y;
+  theta;
+  constructor(x, y, theta = 0) {
+    this.x = x;
+    this.y = y;
+    this.theta = theta;
+  }
+  add(other) {
+    return new LemPose(this.x + other.x, this.y + other.y, this.theta);
+  }
+  sub(other) {
+    return new LemPose(this.x - other.x, this.y - other.y, this.theta);
+  }
+  dot(other) {
+    return this.x * other.x + this.y * other.y;
+  }
+  mulScalar(other) {
+    return new LemPose(this.x * other, this.y * other, this.theta);
+  }
+  divScalar(other) {
+    return new LemPose(this.x / other, this.y / other, this.theta);
+  }
+  lerp(other, t) {
+    return new LemPose(this.x + (other.x - this.x) * t, this.y + (other.y - this.y) * t, this.theta);
+  }
+  distance(other) {
+    return Math.hypot(this.x - other.x, this.y - other.y);
+  }
+  angle(other) {
+    return Math.atan2(other.y - this.y, other.x - this.x);
+  }
+  rotate(angle) {
+    return new LemPose(
+      this.x * Math.cos(angle) - this.y * Math.sin(angle),
+      this.x * Math.sin(angle) + this.y * Math.cos(angle),
+      this.theta
+    );
+  }
+  toString() {
+    return `LemPose { x: ${this.x}, y: ${this.y}, theta: ${this.theta} }`;
+  }
+}
+class LemTimer {
+  period;
+  timeWaited = 0;
+  paused = false;
+  constructor(time) {
+    this.period = time;
+  }
+  update(dt) {
+    if (!this.paused) this.timeWaited += dt * 1e3;
+  }
+  getTimeSet() {
+    return this.period;
+  }
+  getTimeLeft() {
+    const delta = this.period - this.timeWaited;
+    return delta > 0 ? delta : 0;
+  }
+  getTimePassed() {
+    return this.timeWaited;
+  }
+  isDone() {
+    return this.timeWaited >= this.period;
+  }
+  isPaused() {
+    return this.paused;
+  }
+  set(time) {
+    this.period = time;
+    this.reset();
+  }
+  reset() {
+    this.timeWaited = 0;
+  }
+  pause() {
+    this.paused = true;
+  }
+  resume() {
+    this.paused = false;
+  }
+}
+function slew(target2, current, maxChange) {
+  let change = target2 - current;
+  if (maxChange === 0) return target2;
+  if (change > maxChange) change = maxChange;
+  else if (change < -maxChange) change = -maxChange;
+  return current + change;
+}
+function toLemPose(pose, radians = false, standardPos = false) {
+  let theta = toRad(pose.angle ?? 0);
+  if (standardPos) theta = Math.PI / 2 - theta;
+  if (!radians) theta = toDeg(theta);
+  return new LemPose(
+    pose.x ?? 0,
+    pose.y ?? 0,
+    theta
+  );
+}
+function sanitizeAngle(angle, radians) {
+  if (radians) return (angle % (2 * Math.PI) + 2 * Math.PI) % (2 * Math.PI);
+  else return (angle % 360 + 360) % 360;
+}
+function angleError(target2, position, radians = true, direction = null) {
+  target2 = sanitizeAngle(target2, radians);
+  position = sanitizeAngle(position, radians);
+  const max = radians ? 2 * Math.PI : 360;
+  const rawError = target2 - position;
+  switch (direction) {
+    case "clockwise":
+      return rawError < 0 ? rawError + max : rawError;
+    case "counterclockwise":
+      return rawError > 0 ? rawError - max : rawError;
+    default: {
+      const half = max / 2;
+      return ((rawError + half) % max + max) % max - half;
+    }
+  }
+}
+function getCurvature(pose, other) {
+  const theta = pose.theta;
+  const side = Math.sign(Math.sin(theta) * (other.x - pose.x) - Math.cos(theta) * (other.y - pose.y));
+  const a = -Math.tan(theta);
+  const c = Math.tan(theta) * pose.x - pose.y;
+  const x = Math.abs(a * other.x + other.y + c) / Math.sqrt(a * a + 1);
+  const d = Math.hypot(other.x - pose.x, other.y - pose.y);
+  return side * (2 * x) / (d * d);
+}
+let lateralPID$1;
+let lateralLargeExit$1;
+let lateralSmallExit$1;
+let angularPID$5;
+let angularLargeExit$4;
+let angularSmallExit$4;
+let timer$5;
+let close$1;
+let lateralSettled;
+let prevLateralOut$1;
+let prevSameSide;
+let target$1;
+let start$f = true;
+function resetMoveToPose() {
+  start$f = true;
+}
+function moveToPose(robot, dt, x, y, angle, k) {
+  if (start$f) {
+    lateralPID$1 = new LemPID(k.lateral);
+    angularPID$5 = new LemPID(k.angular);
+    lateralLargeExit$1 = new LemExitCondition(k.lateral.largeError, k.lateral.largeErrorTimeout);
+    lateralSmallExit$1 = new LemExitCondition(k.lateral.smallError, k.lateral.smallErrorTimeout);
+    angularLargeExit$4 = new LemExitCondition(k.angular.largeError, k.angular.largeErrorTimeout);
+    angularSmallExit$4 = new LemExitCondition(k.angular.smallError, k.angular.smallErrorTimeout);
+    timer$5 = new LemTimer(k.lateral.timeout);
+    close$1 = false;
+    lateralSettled = false;
+    prevLateralOut$1 = 0;
+    prevSameSide = false;
+    target$1 = new LemPose(x, y, Math.PI / 2 - toRad(angle));
+    if (k.lateral.forwards !== "forward") target$1.theta = (target$1.theta + Math.PI) % (2 * Math.PI);
+    start$f = false;
+  }
+  timer$5.update(dt);
+  if (timer$5.isDone() || lateralSettled && (angularLargeExit$4.getExit() || angularSmallExit$4.getExit()) && close$1) {
+    resetMoveToPose();
+    robot.tankDrive(0, 0, dt);
+    return true;
+  }
+  const params = k.lateral;
+  const pose = toLemPose(robot.getPose(), true, true);
+  const distTarget = pose.distance(target$1);
+  let effectiveMaxSpeed = params.maxSpeed;
+  if (distTarget < 7.5 && !close$1) {
+    close$1 = true;
+    effectiveMaxSpeed = Math.max(Math.abs(prevLateralOut$1), 60);
+  }
+  if (lateralLargeExit$1.getExit() && lateralSmallExit$1.getExit()) lateralSettled = true;
+  let carrot = target$1.sub(new LemPose(Math.cos(target$1.theta), Math.sin(target$1.theta)).mulScalar(params.lead * distTarget));
+  if (close$1) carrot = target$1;
+  const robotSide = (pose.y - target$1.y) * -Math.sin(target$1.theta) <= (pose.x - target$1.x) * Math.cos(target$1.theta) + params.earlyExitRange;
+  const carrotSide = (carrot.y - target$1.y) * -Math.sin(target$1.theta) <= (carrot.x - target$1.x) * Math.cos(target$1.theta) + params.earlyExitRange;
+  const sameSide = robotSide === carrotSide;
+  if (!sameSide && prevSameSide && close$1 && params.minSpeed !== 0) {
+    resetMoveToPose();
+    return true;
+  }
+  prevSameSide = sameSide;
+  const adjustedRobotTheta = params.forwards === "forward" ? pose.theta : pose.theta + Math.PI;
+  const angularError = close$1 ? angleError(adjustedRobotTheta, target$1.theta) : angleError(adjustedRobotTheta, pose.angle(carrot));
+  let lateralError = pose.distance(carrot);
+  if (close$1) lateralError *= Math.cos(angleError(pose.theta, pose.angle(carrot)));
+  else lateralError *= Math.sign(Math.cos(angleError(pose.theta, pose.angle(carrot))));
+  lateralSmallExit$1.update(lateralError, dt);
+  lateralLargeExit$1.update(lateralError, dt);
+  angularSmallExit$4.update(toDeg(angularError), dt);
+  angularLargeExit$4.update(toDeg(angularError), dt);
+  let lateralOut = lateralPID$1.update(lateralError);
+  let angularOut = angularPID$5.update(toDeg(angularError));
+  angularOut = clamp(angularOut, -effectiveMaxSpeed, effectiveMaxSpeed);
+  lateralOut = clamp(lateralOut, -effectiveMaxSpeed, effectiveMaxSpeed);
+  if (!close$1) lateralOut = slew(lateralOut, prevLateralOut$1, params.slew);
+  const radius = 1 / Math.abs(getCurvature(pose, carrot));
+  const horizontalDrift = params.horizontalDrift !== 0 ? params.horizontalDrift : 2;
+  const maxSlipSpeed = Math.sqrt(horizontalDrift * radius * 9.8);
+  lateralOut = clamp(lateralOut, -maxSlipSpeed, maxSlipSpeed);
+  const overturn = Math.abs(angularOut) + Math.abs(lateralOut) - effectiveMaxSpeed;
+  if (overturn > 0) lateralOut -= lateralOut > 0 ? overturn : -overturn;
+  if (params.forwards === "forward" && !close$1) lateralOut = Math.max(lateralOut, 0);
+  else if (params.forwards === "reverse" && !close$1) lateralOut = Math.min(lateralOut, 0);
+  if (params.forwards === "forward" && lateralOut < Math.abs(params.minSpeed) && lateralOut > 0) lateralOut = Math.abs(params.minSpeed);
+  if (params.forwards === "reverse" && -lateralOut < Math.abs(params.minSpeed) && lateralOut < 0) lateralOut = -Math.abs(params.minSpeed);
+  prevLateralOut$1 = lateralOut;
+  let leftPower = lateralOut + angularOut;
+  let rightPower = lateralOut - angularOut;
+  const ratio = Math.max(Math.abs(leftPower), Math.abs(rightPower)) / effectiveMaxSpeed;
+  if (ratio > 1) {
+    leftPower /= ratio;
+    rightPower /= ratio;
+  }
+  robot.tankDrive(leftPower / kLemLibSpeed, rightPower / kLemLibSpeed, dt);
+  return false;
+}
+let lateralPID;
+let lateralLargeExit;
+let lateralSmallExit;
+let angularPID$4;
+let lastPose;
+let timer$4;
+let close;
+let prevLateralOut;
+let prevAngularOut;
+let prevSide;
+let target;
+let start$e = true;
+function resetMoveToPoint() {
+  start$e = true;
+}
+function moveToPoint(robot, dt, x, y, k) {
+  if (start$e) {
+    lateralPID = new LemPID(k.lateral);
+    angularPID$4 = new LemPID(k.angular);
+    lateralLargeExit = new LemExitCondition(k.lateral.largeError, k.lateral.largeErrorTimeout);
+    lateralSmallExit = new LemExitCondition(k.lateral.smallError, k.lateral.smallErrorTimeout);
+    lastPose = toLemPose(robot.getPose());
+    timer$4 = new LemTimer(k.lateral.timeout);
+    close = false;
+    prevLateralOut = 0;
+    prevAngularOut = 0;
+    prevSide = null;
+    target = new LemPose(x, y);
+    target.theta = lastPose.angle(target);
+    start$e = false;
+  }
+  timer$4.update(dt);
+  if (timer$4.isDone() || (lateralSmallExit.getExit() || lateralLargeExit.getExit()) && close) {
+    resetMoveToPoint();
+    robot.tankDrive(0, 0, dt);
+    return true;
+  }
+  const params = k.lateral;
+  const pose = toLemPose(robot.getPose(), true, true);
+  lastPose = pose;
+  const distTarget = pose.distance(target);
+  let effectiveMaxSpeed = params.maxSpeed;
+  if (distTarget < 7.5 && close == false) {
+    close = true;
+    effectiveMaxSpeed = Math.max(Math.abs(prevLateralOut), 60);
+  }
+  const side = (pose.y - target.y) * -Math.sin(target.theta) <= (pose.x - target.x) * Math.cos(target.theta) + params.earlyExitRange;
+  if (prevSide == null) prevSide = side;
+  const sameSide = side == prevSide;
+  if (!sameSide && params.minSpeed != 0) {
+    resetMoveToPoint();
+    return true;
+  }
+  prevSide = side;
+  const adjustedRobotTheta = params.forwards === "forward" ? pose.theta : pose.theta + Math.PI;
+  const angularError = angleError(adjustedRobotTheta, pose.angle(target));
+  const lateralError = pose.distance(target) * Math.cos(angleError(pose.theta, pose.angle(target)));
+  lateralSmallExit.update(lateralError, dt);
+  lateralLargeExit.update(lateralError, dt);
+  let lateralOut = lateralPID.update(lateralError);
+  let angularOut = angularPID$4.update(toDeg(angularError));
+  if (close) angularOut = 0;
+  angularOut = clamp(angularOut, -effectiveMaxSpeed, effectiveMaxSpeed);
+  angularOut = slew(angularOut, prevAngularOut, k.angular.slew);
+  lateralOut = clamp(lateralOut, -effectiveMaxSpeed, effectiveMaxSpeed);
+  if (!close) lateralOut = slew(lateralOut, prevLateralOut, k.lateral.slew);
+  if (params.forwards === "forward" && !close) lateralOut = Math.max(lateralOut, 0);
+  else if (params.forwards === "reverse" && !close) lateralOut = Math.min(lateralOut, 0);
+  if (params.forwards === "forward" && lateralOut < Math.abs(params.minSpeed) && lateralOut > 0) lateralOut = Math.abs(params.minSpeed);
+  if (params.forwards === "reverse" && -lateralOut < Math.abs(params.minSpeed) && lateralOut < 0)
+    lateralOut = -Math.abs(params.minSpeed);
+  prevAngularOut = angularOut;
+  prevLateralOut = lateralOut;
+  let leftPower = lateralOut + angularOut;
+  let rightPower = lateralOut - angularOut;
+  const ratio = Math.max(Math.abs(leftPower), Math.abs(rightPower)) / effectiveMaxSpeed;
+  if (ratio > 1) {
+    leftPower /= ratio;
+    rightPower /= ratio;
+  }
+  robot.tankDrive(leftPower / kLemLibSpeed, rightPower / kLemLibSpeed, dt);
+  return false;
+}
+let angularPID$3;
+let angularLargeExit$3;
+let angularSmallExit$3;
+let timer$3;
+let prevRawDeltaTheta$3;
+let prevDeltaTheta$3;
+let prevMotorPower$3;
+let settling$4;
+let start$d = true;
+function resetSwingToHeading() {
+  start$d = true;
+}
+function swingToHeading(robot, dt, angle, k) {
+  const params = k.angular;
+  if (start$d) {
+    angularPID$3 = new LemPID(params);
+    angularLargeExit$3 = new LemExitCondition(params.largeError, params.largeErrorTimeout);
+    angularSmallExit$3 = new LemExitCondition(params.smallError, params.smallErrorTimeout);
+    timer$3 = new LemTimer(params.timeout);
+    prevRawDeltaTheta$3 = null;
+    prevDeltaTheta$3 = null;
+    prevMotorPower$3 = 0;
+    settling$4 = false;
+    start$d = false;
+  }
+  timer$3.update(dt);
+  if (timer$3.isDone() || angularLargeExit$3.getExit() || angularSmallExit$3.getExit()) {
+    resetSwingToHeading();
+    robot.tankDrive(0, 0, dt);
+    return true;
+  }
+  const pose = toLemPose(robot.getPose(), false, false);
+  const rawDeltaTheta = angleError(angle, pose.theta, false);
+  if (prevRawDeltaTheta$3 === null) prevRawDeltaTheta$3 = rawDeltaTheta;
+  if (Math.sign(rawDeltaTheta) !== Math.sign(prevRawDeltaTheta$3)) settling$4 = true;
+  prevRawDeltaTheta$3 = rawDeltaTheta;
+  let deltaTheta;
+  if (settling$4) deltaTheta = angleError(angle, pose.theta, false);
+  else deltaTheta = angleError(angle, pose.theta, false, params.direction);
+  if (prevDeltaTheta$3 === null) prevDeltaTheta$3 = deltaTheta;
+  if (params.minSpeed !== 0 && Math.abs(deltaTheta) < params.earlyExitRange) {
+    resetSwingToHeading();
+    return true;
+  }
+  if (params.minSpeed !== 0 && Math.sign(deltaTheta) !== Math.sign(prevDeltaTheta$3)) {
+    resetSwingToHeading();
+    return true;
+  }
+  prevDeltaTheta$3 = deltaTheta;
+  let motorPower = angularPID$3.update(deltaTheta);
+  angularLargeExit$3.update(deltaTheta, dt);
+  angularSmallExit$3.update(deltaTheta, dt);
+  if (motorPower > params.maxSpeed) motorPower = params.maxSpeed;
+  else if (motorPower < -params.maxSpeed) motorPower = -params.maxSpeed;
+  if (Math.abs(deltaTheta) > 20) motorPower = slew(motorPower, prevMotorPower$3, params.slew);
+  if (motorPower < 0 && motorPower > -Math.abs(params.minSpeed)) motorPower = -Math.abs(params.minSpeed);
+  else if (motorPower > 0 && motorPower < Math.abs(params.minSpeed)) motorPower = Math.abs(params.minSpeed);
+  prevMotorPower$3 = motorPower;
+  if (params.lockedSide === "left") {
+    robot.tankDrive(0, -motorPower / kLemLibSpeed, dt);
+  } else {
+    robot.tankDrive(motorPower / kLemLibSpeed, 0, dt);
+  }
+  return false;
+}
+let angularPID$2;
+let angularLargeExit$2;
+let angularSmallExit$2;
+let timer$2;
+let prevRawDeltaTheta$2;
+let prevDeltaTheta$2;
+let prevMotorPower$2;
+let settling$3;
+let start$c = true;
+function resetSwingToPoint() {
+  start$c = true;
+}
+function swingToPoint$1(robot, dt, x, y, angle, k) {
+  const params = k.angular;
+  if (start$c) {
+    angularPID$2 = new LemPID(params);
+    angularLargeExit$2 = new LemExitCondition(params.largeError, params.largeErrorTimeout);
+    angularSmallExit$2 = new LemExitCondition(params.smallError, params.smallErrorTimeout);
+    timer$2 = new LemTimer(params.timeout);
+    prevRawDeltaTheta$2 = null;
+    prevDeltaTheta$2 = null;
+    prevMotorPower$2 = 0;
+    settling$3 = false;
+    start$c = false;
+  }
+  timer$2.update(dt);
+  if (timer$2.isDone() || angularLargeExit$2.getExit() || angularSmallExit$2.getExit()) {
+    resetSwingToPoint();
+    robot.tankDrive(0, 0, dt);
+    return true;
+  }
+  const pose = toLemPose(robot.getPose(), false, false);
+  const effectiveTheta = params.forwards === "forward" ? pose.theta : pose.theta - 180;
+  const targetTheta = toDeg(Math.atan2(x - pose.x, y - pose.y)) + angle;
+  const rawDeltaTheta = angleError(targetTheta, effectiveTheta, false);
+  if (prevRawDeltaTheta$2 === null) prevRawDeltaTheta$2 = rawDeltaTheta;
+  if (Math.sign(rawDeltaTheta) !== Math.sign(prevRawDeltaTheta$2)) settling$3 = true;
+  prevRawDeltaTheta$2 = rawDeltaTheta;
+  let deltaTheta;
+  if (settling$3) deltaTheta = angleError(targetTheta, effectiveTheta, false);
+  else deltaTheta = angleError(targetTheta, effectiveTheta, false, params.direction);
+  if (prevDeltaTheta$2 === null) prevDeltaTheta$2 = deltaTheta;
+  if (params.minSpeed !== 0 && Math.abs(deltaTheta) < params.earlyExitRange) {
+    resetSwingToPoint();
+    return true;
+  }
+  if (params.minSpeed !== 0 && Math.sign(deltaTheta) !== Math.sign(prevDeltaTheta$2)) {
+    resetSwingToPoint();
+    return true;
+  }
+  prevDeltaTheta$2 = deltaTheta;
+  let motorPower = angularPID$2.update(deltaTheta);
+  angularLargeExit$2.update(deltaTheta, dt);
+  angularSmallExit$2.update(deltaTheta, dt);
+  if (motorPower > params.maxSpeed) motorPower = params.maxSpeed;
+  else if (motorPower < -params.maxSpeed) motorPower = -params.maxSpeed;
+  if (Math.abs(deltaTheta) > 20) motorPower = slew(motorPower, prevMotorPower$2, params.slew);
+  if (motorPower < 0 && motorPower > -Math.abs(params.minSpeed)) motorPower = -Math.abs(params.minSpeed);
+  else if (motorPower > 0 && motorPower < Math.abs(params.minSpeed)) motorPower = Math.abs(params.minSpeed);
+  prevMotorPower$2 = motorPower;
+  if (params.lockedSide === "left") {
+    robot.tankDrive(0, -motorPower / kLemLibSpeed, dt);
+  } else {
+    robot.tankDrive(motorPower / kLemLibSpeed, 0, dt);
+  }
+  return false;
+}
+let angularPID$1;
+let angularLargeExit$1;
+let angularSmallExit$1;
+let timer$1;
+let prevRawDeltaTheta$1;
+let prevDeltaTheta$1;
+let prevMotorPower$1;
+let settling$2;
+let start$b = true;
+function resetTurnToHeading() {
+  start$b = true;
+}
+function turnToHeading(robot, dt, angle, k) {
+  const params = k.angular;
+  if (start$b) {
+    angularPID$1 = new LemPID(params);
+    angularLargeExit$1 = new LemExitCondition(params.largeError, params.largeErrorTimeout);
+    angularSmallExit$1 = new LemExitCondition(params.smallError, params.smallErrorTimeout);
+    timer$1 = new LemTimer(params.timeout);
+    prevRawDeltaTheta$1 = null;
+    prevDeltaTheta$1 = null;
+    prevMotorPower$1 = 0;
+    settling$2 = false;
+    start$b = false;
+  }
+  timer$1.update(dt);
+  if (timer$1.isDone() || angularLargeExit$1.getExit() || angularSmallExit$1.getExit()) {
+    resetTurnToHeading();
+    robot.tankDrive(0, 0, dt);
+    return true;
+  }
+  const pose = toLemPose(robot.getPose(), false, false);
+  const rawDeltaTheta = angleError(angle, pose.theta, false);
+  if (prevRawDeltaTheta$1 === null) prevRawDeltaTheta$1 = rawDeltaTheta;
+  if (Math.sign(rawDeltaTheta) !== Math.sign(prevRawDeltaTheta$1)) settling$2 = true;
+  prevRawDeltaTheta$1 = rawDeltaTheta;
+  let deltaTheta;
+  if (settling$2) deltaTheta = angleError(angle, pose.theta, false);
+  else deltaTheta = angleError(angle, pose.theta, false, params.direction);
+  if (prevDeltaTheta$1 === null) prevDeltaTheta$1 = deltaTheta;
+  if (params.minSpeed !== 0 && Math.abs(deltaTheta) < params.earlyExitRange) {
+    resetTurnToHeading();
+    return true;
+  }
+  if (params.minSpeed !== 0 && Math.sign(deltaTheta) !== Math.sign(prevDeltaTheta$1)) {
+    resetTurnToHeading();
+    return true;
+  }
+  prevDeltaTheta$1 = deltaTheta;
+  let motorPower = angularPID$1.update(deltaTheta);
+  angularLargeExit$1.update(deltaTheta, dt);
+  angularSmallExit$1.update(deltaTheta, dt);
+  if (motorPower > params.maxSpeed) motorPower = params.maxSpeed;
+  else if (motorPower < -params.maxSpeed) motorPower = -params.maxSpeed;
+  if (Math.abs(deltaTheta) > 20) motorPower = slew(motorPower, prevMotorPower$1, params.slew);
+  if (motorPower < 0 && motorPower > -Math.abs(params.minSpeed)) motorPower = -Math.abs(params.minSpeed);
+  else if (motorPower > 0 && motorPower < Math.abs(params.minSpeed)) motorPower = Math.abs(params.minSpeed);
+  prevMotorPower$1 = motorPower;
+  robot.tankDrive(motorPower / kLemLibSpeed, -motorPower / kLemLibSpeed, dt);
+  return false;
+}
+let angularPID;
+let angularLargeExit;
+let angularSmallExit;
+let timer;
+let prevRawDeltaTheta;
+let prevDeltaTheta;
+let prevMotorPower;
+let settling$1;
+let start$a = true;
+function resetTurnToPoint$1() {
+  start$a = true;
+}
+function turnToPoint$1(robot, dt, x, y, angle, k) {
+  const params = k.angular;
+  if (start$a) {
+    angularPID = new LemPID(params);
+    angularLargeExit = new LemExitCondition(params.largeError, params.largeErrorTimeout);
+    angularSmallExit = new LemExitCondition(params.smallError, params.smallErrorTimeout);
+    timer = new LemTimer(params.timeout);
+    prevRawDeltaTheta = null;
+    prevDeltaTheta = null;
+    prevMotorPower = 0;
+    settling$1 = false;
+    start$a = false;
+  }
+  timer.update(dt);
+  if (timer.isDone() || angularLargeExit.getExit() || angularSmallExit.getExit()) {
+    resetTurnToPoint$1();
+    robot.tankDrive(0, 0, dt);
+    return true;
+  }
+  const pose = toLemPose(robot.getPose(), false, false);
+  const effectiveTheta = params.forwards === "forward" ? pose.theta : pose.theta - 180;
+  const targetTheta = toDeg(Math.atan2(x - pose.x, y - pose.y)) + angle;
+  const rawDeltaTheta = angleError(targetTheta, effectiveTheta, false);
+  if (prevRawDeltaTheta === null) prevRawDeltaTheta = rawDeltaTheta;
+  if (Math.sign(rawDeltaTheta) !== Math.sign(prevRawDeltaTheta)) settling$1 = true;
+  prevRawDeltaTheta = rawDeltaTheta;
+  let deltaTheta;
+  if (settling$1) deltaTheta = angleError(targetTheta, effectiveTheta, false);
+  else deltaTheta = angleError(targetTheta, effectiveTheta, false, params.direction);
+  if (prevDeltaTheta === null) prevDeltaTheta = deltaTheta;
+  if (params.minSpeed !== 0 && Math.abs(deltaTheta) < params.earlyExitRange) {
+    resetTurnToPoint$1();
+    return true;
+  }
+  if (params.minSpeed !== 0 && Math.sign(deltaTheta) !== Math.sign(prevDeltaTheta)) {
+    resetTurnToPoint$1();
+    return true;
+  }
+  prevDeltaTheta = deltaTheta;
+  let motorPower = angularPID.update(deltaTheta);
+  angularLargeExit.update(deltaTheta, dt);
+  angularSmallExit.update(deltaTheta, dt);
+  if (motorPower > params.maxSpeed) motorPower = params.maxSpeed;
+  else if (motorPower < -params.maxSpeed) motorPower = -params.maxSpeed;
+  if (Math.abs(deltaTheta) > 20) motorPower = slew(motorPower, prevMotorPower, params.slew);
+  if (motorPower < 0 && motorPower > -Math.abs(params.minSpeed)) motorPower = -Math.abs(params.minSpeed);
+  else if (motorPower > 0 && motorPower < Math.abs(params.minSpeed)) motorPower = Math.abs(params.minSpeed);
+  prevMotorPower = motorPower;
+  robot.tankDrive(motorPower / kLemLibSpeed, -motorPower / kLemLibSpeed, dt);
+  return false;
 }
 function angle_error(error, direction) {
   if (direction === null) return reduce_negative_180_to_180(error);
@@ -14874,25 +16349,23 @@ function reduce_negative_90_to_90(angle) {
   }
   return angle;
 }
-function is_line_settled(desired_X, desired_Y, desired_angle_deg, current_X, current_Y) {
-  return (desired_Y - current_Y) * Math.cos(toRad(desired_angle_deg)) <= -(desired_X - current_X) * Math.sin(toRad(desired_angle_deg));
+function is_line_settled(desired_X, desired_Y, desired_angle_deg, current_X, current_Y, exit_error) {
+  return (desired_Y - current_Y) * Math.cos(toRad(desired_angle_deg)) <= -(desired_X - current_X) * Math.sin(toRad(desired_angle_deg)) + exit_error;
 }
-function slew_scaling(drive_output, prev_drive_output, slew, scale = true) {
-  let change = drive_output - prev_drive_output;
-  if (slew === 0 || !scale) return drive_output;
-  if (change > slew) change = slew;
-  else if (change < -slew) change = -slew;
-  return prev_drive_output + change;
+function slew_scaling(drive_output, prev_drive_output2, slew2, scale = true) {
+  let change = drive_output - prev_drive_output2;
+  if (slew2 === 0 || !scale) return drive_output;
+  if (change > slew2) change = slew2;
+  else if (change < -slew2) change = -slew2;
+  return prev_drive_output2 + change;
 }
 function clamp_max_slip(drive_output, current_X, current_Y, current_angle_deg, desired_X, desired_Y, drift) {
   const heading = toRad(current_angle_deg);
-  const side = Math.sign(Math.sin(heading) * (desired_X - current_X) - Math.cos(heading) * (desired_Y - current_Y));
-  const a = -Math.tan(heading);
-  const c = Math.tan(heading) * current_X - current_Y;
-  const perpDist = Math.abs(a * desired_X + desired_Y + c) / Math.sqrt(a * a + 1);
-  const dist2 = Math.hypot(desired_X - current_X, desired_Y - current_Y);
-  const curvature = side * (2 * perpDist / (dist2 * dist2));
-  const radius = 1 / Math.abs(curvature);
+  const dx = desired_X - current_X;
+  const dy = desired_Y - current_Y;
+  const perpDist = Math.abs(Math.sin(heading) * dy - Math.cos(heading) * dx);
+  const dist2 = Math.hypot(dx, dy);
+  const radius = dist2 * dist2 / (2 * perpDist);
   const max_slip = Math.sqrt(drift * radius * 9.8);
   return clamp(drive_output, -max_slip, max_slip);
 }
@@ -14901,7 +16374,7 @@ function overturn_scaling(drive_output, heading_output, max_speed) {
   if (overturn > 0) {
     if (drive_output > 0) {
       return drive_output - overturn;
-    } else {
+    } else if (drive_output < 0) {
       return drive_output + overturn;
     }
   }
@@ -14930,226 +16403,586 @@ function clamp_min_voltage(drive_output, drive_min_voltage) {
   }
   return drive_output;
 }
-let driveDistanceStartX = null;
-let driveDistanceStartY = null;
-let prevDriveOutput$1 = null;
-let prevHeadingOutput$1 = null;
-function resetDriveDistance(drivePID, headingPID) {
-  driveDistanceStartX = null;
-  driveDistanceStartY = null;
-  prevDriveOutput$1 = null;
-  prevHeadingOutput$1 = null;
-  drivePID.reset();
-  headingPID.reset();
+SIM_CONSTANTS.seconds = 99;
+function LemLibToSim(path) {
+  const auton = [];
+  for (let idx = 0; idx < path.segments.length; idx++) {
+    const control = path.segments[idx];
+    const x = control.pose.x ?? 0;
+    const y = control.pose.y ?? 0;
+    const angle = control.pose.angle ?? 0;
+    if (idx === 0) {
+      auton.push(
+        (robot, dt) => {
+          return [robot.setPose(x, y, angle), "start", 0];
+        }
+      );
+      continue;
+    }
+    if (control.kind === "pointDrive") {
+      const constants = control.constants;
+      let started = false;
+      let targetDist = 0;
+      resetMoveToPoint();
+      auton.push(
+        (robot, dt) => {
+          if (!started) {
+            DEBUG_printSegmentStart$2(idx, control.kind);
+            targetDist = Math.hypot(x - robot.getX(), y - robot.getY());
+            started = true;
+          }
+          const output = moveToPoint(robot, dt, x, y, constants);
+          if (output) DEBUG_printSegmentEnd$2(idx, control.kind);
+          return [output, "pointDrive", targetDist];
+        }
+      );
+    }
+    if (control.kind === "poseDrive") {
+      const constants = control.constants;
+      let started = false;
+      let targetDist = 0;
+      resetMoveToPose();
+      auton.push(
+        (robot, dt) => {
+          if (!started) {
+            DEBUG_printSegmentStart$2(idx, control.kind);
+            targetDist = Math.hypot(x - robot.getX(), y - robot.getY());
+            started = true;
+          }
+          const output = moveToPose(robot, dt, x, y, angle, constants);
+          if (output) DEBUG_printSegmentEnd$2(idx, control.kind);
+          return [output, "poseDrive", targetDist];
+        }
+      );
+    }
+    if (control.kind === "pointTurn") {
+      const previousPos = getBackwardsSnapPose(path, idx - 1);
+      const turnToPos = getForwardSnapPose(path, idx);
+      const pos = turnToPos ? { x: turnToPos.x ?? 0, y: turnToPos.y ?? 0 } : previousPos ? { x: previousPos.x ?? 0, y: (previousPos.y ?? 0) + 5 } : { x: 0, y: 5 };
+      const constants = control.constants;
+      let started = false;
+      let targetDist = 0;
+      resetTurnToPoint$1();
+      auton.push(
+        (robot, dt) => {
+          if (!started) {
+            DEBUG_printSegmentStart$2(idx, control.kind);
+            const targetAngle = toDeg(Math.atan2(pos.x - robot.getX(), pos.y - robot.getY())) + angle;
+            targetDist = Math.abs(angle_error(targetAngle - robot.getAngle(), null));
+            started = true;
+          }
+          const output = turnToPoint$1(robot, dt, pos.x, pos.y, angle, constants);
+          if (output) DEBUG_printSegmentEnd$2(idx, control.kind);
+          return [output, "pointTurn", targetDist];
+        }
+      );
+    }
+    if (control.kind === "angleTurn") {
+      const constants = control.constants;
+      let started = false;
+      let targetDist = 0;
+      resetTurnToHeading();
+      auton.push(
+        (robot, dt) => {
+          if (!started) {
+            DEBUG_printSegmentStart$2(idx, control.kind);
+            targetDist = Math.abs(angle_error(angle - robot.getAngle(), null));
+            started = true;
+          }
+          const output = turnToHeading(robot, dt, angle, constants);
+          if (output) DEBUG_printSegmentEnd$2(idx, control.kind);
+          return [output, "angleTurn", targetDist];
+        }
+      );
+    }
+    if (control.kind === "pointSwing") {
+      const previousPos = getBackwardsSnapPose(path, idx - 1);
+      const turnToPos = getForwardSnapPose(path, idx);
+      const pos = turnToPos ? { x: turnToPos.x ?? 0, y: turnToPos.y ?? 0 } : previousPos ? { x: previousPos.x ?? 0, y: (previousPos.y ?? 0) + 5 } : { x: 0, y: 5 };
+      const constants = control.constants;
+      let started = false;
+      let targetDist = 0;
+      resetSwingToPoint();
+      auton.push(
+        (robot, dt) => {
+          if (!started) {
+            DEBUG_printSegmentStart$2(idx, control.kind);
+            const targetAngle = toDeg(Math.atan2(pos.x - robot.getX(), pos.y - robot.getY())) + angle;
+            targetDist = Math.abs(angle_error(targetAngle - robot.getAngle(), null));
+            started = true;
+          }
+          const output = swingToPoint$1(robot, dt, pos.x, pos.y, angle, constants);
+          if (output) DEBUG_printSegmentEnd$2(idx, control.kind);
+          return [output, "pointSwing", targetDist];
+        }
+      );
+    }
+    if (control.kind === "angleSwing") {
+      const constants = control.constants;
+      let started = false;
+      let targetDist = 0;
+      resetSwingToHeading();
+      auton.push(
+        (robot, dt) => {
+          if (!started) {
+            DEBUG_printSegmentStart$2(idx, control.kind);
+            targetDist = Math.abs(angle_error(angle - robot.getAngle(), null));
+            started = true;
+          }
+          const output = swingToHeading(robot, dt, angle, constants);
+          if (output) DEBUG_printSegmentEnd$2(idx, control.kind);
+          return [output, "angleSwing", targetDist];
+        }
+      );
+    }
+    if (control.kind === "distanceDrive") {
+      const constants = control.constants;
+      let started = false;
+      let targetDist = 0;
+      auton.push(
+        (robot, dt) => {
+          if (!started) {
+            DEBUG_printSegmentStart$2(idx, control.kind);
+            targetDist = Math.hypot(x - robot.getX(), y - robot.getY());
+            started = true;
+          }
+          const output = moveToPoint(robot, dt, x, y, constants);
+          if (output) DEBUG_printSegmentEnd$2(idx, control.kind);
+          return [output, "distanceDrive", targetDist];
+        }
+      );
+    }
+  }
+  return auton;
 }
-function driveDistance(robot, dt, distance, heading, drivePID, headingPID) {
-  if (driveDistanceStartX === null || driveDistanceStartY === null) {
+function DEBUG_printSegmentStart$2(idx, kind) {
+  return;
+}
+function DEBUG_printSegmentEnd$2(idx, kind) {
+  return;
+}
+const roundOff$3 = (val, digits) => {
+  if (val === null || val === void 0 || typeof val === "string") return "";
+  return trimZeros(val.toFixed(digits));
+};
+const lockedSideToString = (value) => {
+  switch (value) {
+    case "left":
+      return "DriveSide::LEFT";
+    case "right":
+      return "DriveSide::RIGHT";
+  }
+};
+const keyToLemConstant = (key, value) => {
+  switch (key) {
+    case "forwards":
+      return value === "forward" ? ".forwards = true" : ".forwards = false";
+    case "direction": {
+      switch (value) {
+        case "clockwise":
+          return ".direction = AngularDirection::CW_CLOCKWISE";
+        case "counterclockwise":
+          return ".direction = AngularDirection::CCW_COUNTERCLOCKWISE";
+      }
+      return "";
+    }
+    case "horizontalDrift":
+      return `.horizontalDrift = ${roundOff$3(value, 1)}`;
+    case "lead":
+      return `.lead = ${roundOff$3(value, 2)}`;
+    case "maxSpeed":
+      return `.maxSpeed = ${roundOff$3(value, 0)}`;
+    case "minSpeed":
+      return `.minSpeed = ${roundOff$3(value, 0)}`;
+    case "earlyExitRange":
+      return `.earlyExitRange = ${roundOff$3(value, 1)}`;
+  }
+  return "";
+};
+const getConstantList$2 = (constants) => {
+  const constantsList = [];
+  for (const k of Object.keys(constants)) {
+    const value = constants[k];
+    if (value === void 0) continue;
+    const c = keyToLemConstant(k, value);
+    if (c !== "") constantsList.push(c);
+  }
+  return constantsList;
+};
+function LemLibToString(path, selected = false) {
+  let pathString = "";
+  for (let idx = 0; idx < path.segments.length; idx++) {
+    const control = path.segments[idx];
+    if (selected && !control.selected) continue;
+    const kind = control.kind;
+    const x = roundOff$3(control.pose.x, 2);
+    const y = roundOff$3(control.pose.y, 2);
+    const angle = roundOff$3(control.pose.angle, 2);
+    const kAngular = control.constants.angular;
+    const kLateral = control.constants.lateral;
+    const kDefaultAngular = getDefaultConstants("LemLib", kind).angular;
+    const kDefaultLateral = getDefaultConstants("LemLib", kind).lateral;
+    const kUnequalAngular = getUnequalLemConstants(kDefaultAngular, kAngular);
+    const kUnequalLateral = getUnequalLemConstants(kDefaultLateral, kLateral);
+    if (idx === 0) {
+      pathString += `    chassis.setPose(${x}, ${y}, ${angle});`;
+      continue;
+    }
+    if (kind === "angleTurn") {
+      const constantsList = getConstantList$2(kUnequalAngular);
+      const formattedConstants = constantsList.map((c) => ` ${c}`).join(", ");
+      pathString += constantsList.length === 0 ? `
+    chassis.turnToHeading(${angle}, ${roundOff$3(kAngular.timeout, 0)});` : `
+    chassis.turnToHeading(${angle}, ${roundOff$3(kAngular.timeout, 0)}, {${formattedConstants}});`;
+    }
+    if (kind === "pointTurn") {
+      const constantsList = getConstantList$2(kUnequalAngular);
+      const formattedConstants = constantsList.map((c) => ` ${c}`).join(", ");
+      const point = findPointToFace(path, idx);
+      pathString += constantsList.length === 0 ? `
+    chassis.turnToPoint(${roundOff$3(point.x, 2)}, ${roundOff$3(point.y, 2)}, ${roundOff$3(kAngular.timeout, 0)});` : `
+    chassis.turnToPoint(${roundOff$3(point.x, 2)}, ${roundOff$3(point.y, 2)}, ${roundOff$3(kAngular.timeout, 0)}, {${formattedConstants}});`;
+    }
+    if (kind === "angleSwing") {
+      const constantsList = getConstantList$2(kUnequalAngular);
+      const formattedConstants = constantsList.map((c) => ` ${c}`).join(", ");
+      pathString += constantsList.length === 0 ? `
+    chassis.swingToHeading(${angle}, ${lockedSideToString(kAngular.lockedSide)}, ${roundOff$3(kAngular.timeout, 0)});` : `
+    chassis.swingToHeading(${angle}, ${lockedSideToString(kAngular.lockedSide)}, ${roundOff$3(kAngular.timeout, 0)}, {${formattedConstants}});`;
+    }
+    if (kind === "pointSwing") {
+      const constantsList = getConstantList$2(kUnequalAngular);
+      const formattedConstants = constantsList.map((c) => ` ${c}`).join(", ");
+      const point = findPointToFace(path, idx);
+      pathString += constantsList.length === 0 ? `
+    chassis.swingToPoint(${roundOff$3(point.x, 2)}, ${roundOff$3(point.y, 2)}, ${lockedSideToString(kAngular.lockedSide)}, ${roundOff$3(kAngular.timeout, 0)});` : `
+    chassis.swingToPoint(${roundOff$3(point.x, 2)}, ${roundOff$3(point.y, 2)}, ${lockedSideToString(kAngular.lockedSide)}, ${roundOff$3(kAngular.timeout, 0)}, {${formattedConstants}});`;
+    }
+    if (kind === "pointDrive") {
+      const constantsList = getConstantList$2(kUnequalLateral);
+      const formattedConstants = constantsList.map((c) => ` ${c}`).join(", ");
+      pathString += constantsList.length === 0 ? `
+    chassis.moveToPoint(${x}, ${y}, ${roundOff$3(kLateral.timeout, 0)});` : `
+    chassis.moveToPoint(${x}, ${y}, ${roundOff$3(kLateral.timeout, 0)}, {${formattedConstants}});`;
+    }
+    if (kind === "poseDrive") {
+      const constantsList = getConstantList$2(kUnequalLateral);
+      const formattedConstants = constantsList.map((c) => ` ${c}`).join(", ");
+      pathString += constantsList.length === 0 ? `
+    chassis.moveToPose(${x}, ${y}, ${angle}, ${roundOff$3(kLateral.timeout, 0)});` : `
+    chassis.moveToPose(${x}, ${y}, ${angle}, ${roundOff$3(kLateral.timeout, 0)}, {${formattedConstants}});`;
+    }
+  }
+  if (selected) pathString = pathString.startsWith("\n") ? pathString.slice(1) : pathString;
+  return pathString;
+}
+class PID {
+  constructor(kp, ki, kd, starti, settle_time, settle_error, timeout, exit_error) {
+    this.kp = kp;
+    this.ki = ki;
+    this.kd = kd;
+    this.starti = starti;
+    this.settle_time = settle_time;
+    this.settle_error = settle_error;
+    this.timeout = timeout;
+    this.exit_error = exit_error;
+  }
+  accumulated_error = 0;
+  previous_error = 0;
+  time_spent_settled = 0;
+  time_spent_running = 0;
+  exiting = false;
+  compute(error) {
+    if (Math.abs(error) < this.starti) {
+      this.accumulated_error += error;
+    }
+    if (error > 0 && this.previous_error < 0 || error < 0 && this.previous_error > 0) {
+      this.accumulated_error = 0;
+    }
+    const output = this.kp * error + this.ki * this.accumulated_error + this.kd * (error - this.previous_error);
+    this.previous_error = error;
+    if (Math.abs(error) < this.settle_error) {
+      this.time_spent_settled += 1 / 60 * 1e3;
+    } else {
+      this.time_spent_settled = 0;
+    }
+    if (Math.abs(error) < this.exit_error) {
+      this.exiting = true;
+    }
+    this.time_spent_running += 1 / 60 * 1e3;
+    return output;
+  }
+  isSettled() {
+    if (this.time_spent_running > this.timeout && this.timeout != 0) {
+      return true;
+    }
+    if (this.time_spent_settled > this.settle_time) {
+      return true;
+    }
+    if (this.exiting) {
+      this.exiting = false;
+      return true;
+    }
+    return false;
+  }
+  reset() {
+    this.exiting = false;
+    this.previous_error = 0;
+    this.accumulated_error = 0;
+    this.time_spent_running = 0;
+    this.time_spent_settled = 0;
+  }
+}
+let driveDistanceStartX = 0;
+let driveDistanceStartY = 0;
+let prev_drive_output$2 = 0;
+let prev_heading_output$1 = 0;
+let drivePID$4;
+let headingPID$3;
+let start$9 = true;
+function resetDriveDistance() {
+  driveDistanceStartX = 0;
+  driveDistanceStartY = 0;
+  prev_drive_output$2 = 0;
+  prev_heading_output$1 = 0;
+  drivePID$4.reset();
+  headingPID$3.reset();
+  start$9 = true;
+}
+function driveDistance(robot, dt, distance, heading, drive_p, heading_p) {
+  if (start$9) {
     driveDistanceStartX = robot.getX();
     driveDistanceStartY = robot.getY();
+    drivePID$4 = new PID(drive_p.kp, drive_p.ki, drive_p.kd, drive_p.starti, drive_p.settle_time, drive_p.settle_error, drive_p.timeout, drive_p.min_voltage > 0 ? drive_p.exit_error : 0);
+    headingPID$3 = new PID(heading_p.kp, heading_p.ki, heading_p.kd, heading_p.starti, heading_p.settle_time, heading_p.settle_error, heading_p.timeout, 0);
+    start$9 = false;
   }
   const dx = robot.getX() - driveDistanceStartX;
   const dy = robot.getY() - driveDistanceStartY;
   const traveled = dx * Math.sin(toRad(heading)) + dy * Math.cos(toRad(heading));
   const drive_error = distance - traveled;
   const heading_error = reduce_negative_180_to_180(heading - robot.getAngle());
-  let drive_output = drivePID.compute(drive_error);
-  let heading_output = headingPID.compute(heading_error);
-  drive_output = clamp(drive_output, -drivePID.maxSpeed, drivePID.maxSpeed);
-  heading_output = clamp(heading_output, -headingPID.maxSpeed, headingPID.maxSpeed);
-  drive_output = slew_scaling(drive_output, prevDriveOutput$1 ?? 0, drivePID.slew * (dt / 0.01), Math.abs(drive_error) > drivePID.settleError);
-  heading_output = slew_scaling(heading_output, prevHeadingOutput$1 ?? 0, headingPID.slew * (dt / 0.01));
-  drive_output = clamp_min_voltage(drive_output, drivePID.minSpeed);
-  if (drivePID.isSettled()) {
-    resetDriveDistance(drivePID, headingPID);
+  let drive_output = drivePID$4.compute(drive_error);
+  let heading_output = headingPID$3.compute(heading_error);
+  drive_output = clamp(drive_output, -drive_p.maxSpeed, drive_p.maxSpeed);
+  heading_output = clamp(heading_output, -heading_p.maxSpeed, heading_p.maxSpeed);
+  drive_output = slew_scaling(drive_output, prev_drive_output$2 ?? 0, drive_p.slew * (dt / 0.01), Math.abs(drive_error) > drive_p.settle_error);
+  heading_output = slew_scaling(heading_output, prev_heading_output$1 ?? 0, heading_p.slew * (dt / 0.01));
+  drive_output = clamp_min_voltage(drive_output, drive_p.min_voltage);
+  if (drivePID$4.isSettled()) {
+    resetDriveDistance();
     return true;
   }
   robot.tankDrive((drive_output + heading_output) / 12, (drive_output - heading_output) / 12, dt);
-  prevDriveOutput$1 = drive_output;
-  prevHeadingOutput$1 = heading_output;
+  prev_drive_output$2 = drive_output;
+  prev_heading_output$1 = heading_output;
   return false;
 }
-let pointStartHeading = null;
-let pointPrevLineSettled = null;
-let prevDriveOutput = null;
-let prevHeadingOutput = null;
-function exitDriveToPoint(drivePID, headingPID) {
-  drivePID.reset();
-  headingPID.reset();
-  pointStartHeading = null;
-  pointPrevLineSettled = null;
-  prevHeadingOutput = null;
-  prevDriveOutput = null;
-  return true;
+const DRIVE_LARGE_SETTLE_ERROR$1 = 6;
+let desired_heading$1 = 0;
+let prev_line_settled$2 = false;
+let prev_drive_output$1 = 0;
+let prev_heading_output = 0;
+let heading_locked$1 = false;
+let locked_heading$1 = 0;
+let drivePID$3;
+let headingPID$2;
+let start$8 = true;
+function resetDriveToPoint() {
+  drivePID$3.reset();
+  headingPID$2.reset();
+  desired_heading$1 = 0;
+  prev_line_settled$2 = false;
+  prev_drive_output$1 = 0;
+  prev_heading_output = 0;
+  heading_locked$1 = false;
+  locked_heading$1 = 0;
+  start$8 = true;
 }
-function driveToPoint(robot, dt, x, y, drivePID, headingPID) {
-  const dx = x - robot.getX();
-  const dy = y - robot.getY();
-  const headingToPoint = toDeg(Math.atan2(dx, dy));
-  if (pointStartHeading === null) {
-    pointStartHeading = toDeg(Math.atan2(dx, dy));
-    pointPrevLineSettled = is_line_settled(x, y, pointStartHeading, robot.getX(), robot.getY());
+function driveToPoint(robot, dt, x, y, drive_p, heading_p) {
+  if (start$8) {
+    drivePID$3 = new PID(drive_p.kp, drive_p.ki, drive_p.kd, drive_p.starti, drive_p.settle_time, drive_p.settle_error, drive_p.timeout, 0);
+    headingPID$2 = new PID(heading_p.kp, heading_p.ki, heading_p.kd, heading_p.starti, heading_p.settle_time, heading_p.settle_error, heading_p.timeout, 0);
+    desired_heading$1 = toDeg(Math.atan2(x - robot.getX(), y - robot.getY()));
+    start$8 = false;
   }
-  if (drivePID.isSettled()) {
-    return exitDriveToPoint(drivePID, headingPID);
+  if (drivePID$3.isSettled()) {
+    resetDriveToPoint();
+    return true;
   }
-  const line_settled = is_line_settled(x, y, pointStartHeading, robot.getX(), robot.getY());
-  if (line_settled && !pointPrevLineSettled) {
-    return exitDriveToPoint(drivePID, headingPID);
+  console.log(drive_p.exit_error);
+  const line_settled = is_line_settled(x, y, desired_heading$1, robot.getX(), robot.getY(), drive_p.exit_error);
+  if (!(line_settled === prev_line_settled$2) && drive_p.min_voltage > 0) {
+    resetDriveToPoint();
+    return true;
   }
-  pointPrevLineSettled = line_settled;
-  const drive_error = Math.hypot(dx, dy);
-  let desiredHeading = headingToPoint;
-  let driveSign = 1;
-  if (drivePID.driveDirection === "reverse") {
-    desiredHeading = reduce_negative_180_to_180(headingToPoint + 180);
-    driveSign = -1;
+  prev_line_settled$2 = line_settled;
+  desired_heading$1 = toDeg(Math.atan2(x - robot.getX(), y - robot.getY()));
+  const drive_error = Math.hypot(x - robot.getX(), y - robot.getY());
+  let heading_error = reduce_negative_180_to_180(desired_heading$1 - robot.getAngle());
+  let drive_output = drivePID$3.compute(drive_error);
+  const heading_scale_factor = Math.cos(toRad(heading_error));
+  drive_output *= heading_scale_factor;
+  if (drive_error < DRIVE_LARGE_SETTLE_ERROR$1) {
+    if (!heading_locked$1) {
+      locked_heading$1 = desired_heading$1;
+      heading_locked$1 = true;
+    }
+    heading_error = reduce_negative_180_to_180(locked_heading$1 - robot.getAngle());
   }
-  let heading_error = reduce_negative_180_to_180(desiredHeading - robot.getAngle());
-  let drive_output = drivePID.compute(drive_error);
-  let heading_scale_factor = Math.cos(toRad(heading_error));
-  if (drivePID.driveDirection !== null) heading_scale_factor = Math.max(0, heading_scale_factor);
-  drive_output *= heading_scale_factor * driveSign;
-  if (drivePID.driveDirection === null) heading_error = reduce_negative_90_to_90(heading_error);
-  let heading_output = headingPID.compute(heading_error);
-  let close = false;
-  if (drive_error < drivePID.settleError) {
-    heading_output = 0;
-    close = true;
-  }
-  drive_output = clamp(drive_output, -Math.abs(heading_scale_factor) * drivePID.maxSpeed, Math.abs(heading_scale_factor) * drivePID.maxSpeed);
-  heading_output = clamp(heading_output, -headingPID.maxSpeed, headingPID.maxSpeed);
-  drive_output = slew_scaling(drive_output, prevDriveOutput ?? 0, drivePID.slew * (dt / 0.01), !close);
-  heading_output = slew_scaling(heading_output, prevHeadingOutput ?? 0, headingPID.slew * (dt / 0.01));
-  drive_output = clamp_min_voltage(drive_output, drivePID.minSpeed);
-  prevDriveOutput = drive_output;
-  prevHeadingOutput = heading_output;
-  robot.tankDrive(left_voltage_scaling(drive_output, heading_output) / kMikLibSpeed, right_voltage_scaling(drive_output, heading_output) / kMikLibSpeed, dt);
+  heading_error = reduce_negative_90_to_90(heading_error);
+  let heading_output = headingPID$2.compute(heading_error);
+  drive_output = clamp(drive_output, -Math.abs(heading_scale_factor) * drive_p.maxSpeed, Math.abs(heading_scale_factor) * drive_p.maxSpeed);
+  heading_output = clamp(heading_output, -heading_p.maxSpeed, heading_p.maxSpeed);
+  drive_output = slew_scaling(drive_output, prev_drive_output$1, drive_p.slew * (dt / 0.01), !heading_locked$1);
+  heading_output = slew_scaling(heading_output, prev_heading_output, heading_p.slew * (dt / 0.01));
+  drive_output = clamp_min_voltage(drive_output, drive_p.min_voltage);
+  prev_drive_output$1 = drive_output;
+  prev_heading_output = heading_output;
+  const leftVoltage = left_voltage_scaling(drive_output, heading_output) / kMikLibSpeed;
+  const rightVoltage = right_voltage_scaling(drive_output, heading_output) / kMikLibSpeed;
+  robot.tankDrive(leftVoltage, rightVoltage, dt);
   return false;
 }
-let posePrevLineSettled = null;
-let poseInitCenterLineSide = null;
-let posePrevDriveOutput = null;
-let poseCrossedCenterLine = false;
-let poseClose = false;
-function resetDriveToPose(drivePID, headingPID) {
-  drivePID.reset();
-  headingPID.reset();
-  posePrevLineSettled = null;
-  poseInitCenterLineSide = null;
-  posePrevDriveOutput = null;
-  poseCrossedCenterLine = false;
-  poseClose = false;
+const DRIVE_LARGE_SETTLE_ERROR = 6;
+const BOOMERANG_MIN_VOLTAGE = 6;
+let crossed_line = false;
+let prev_crossed_line = false;
+let prev_drive_output = 0;
+let settling = false;
+let reverse = false;
+let drive_max_speed = 0;
+let drivePID$2;
+let headingPID$1;
+let start$7 = true;
+function resetDriveToPose() {
+  drivePID$2.reset();
+  headingPID$1.reset();
+  crossed_line = false;
+  prev_crossed_line = false;
+  prev_drive_output = 0;
+  settling = false;
+  reverse = false;
+  start$7 = true;
 }
-function driveToPose(robot, dt, x, y, angle, drivePID, headingPID) {
-  if (posePrevLineSettled === null || poseInitCenterLineSide === null) {
-    posePrevLineSettled = is_line_settled(x, y, angle, robot.getX(), robot.getY());
-    poseInitCenterLineSide = is_line_settled(x, y, angle + 90, robot.getX(), robot.getY());
-    poseCrossedCenterLine = false;
+function driveToPose(robot, dt, x, y, angle, drive_p, heading_p) {
+  if (start$7) {
+    drivePID$2 = new PID(drive_p.kp, drive_p.ki, drive_p.kd, drive_p.starti, drive_p.settle_time, drive_p.settle_error, drive_p.timeout, 0);
+    headingPID$1 = new PID(heading_p.kp, heading_p.ki, heading_p.kd, heading_p.starti, heading_p.settle_time, heading_p.settle_error, heading_p.timeout, 0);
+    drive_max_speed = drive_p.maxSpeed;
+    const rawHeadingError = reduce_negative_180_to_180(toDeg(Math.atan2(x - robot.getX(), y - robot.getY())) - robot.getAngle());
+    reverse = Math.abs(rawHeadingError) > 100;
+    start$7 = false;
+    prev_crossed_line = is_line_settled(x, y, angle, robot.getX(), robot.getY(), drive_p.exit_error);
   }
-  if (drivePID.isSettled()) {
-    resetDriveToPose(drivePID, headingPID);
+  if (drivePID$2.isSettled()) {
+    resetDriveToPose();
     return true;
   }
-  const pose_line_settled = is_line_settled(x, y, angle, robot.getX(), robot.getY());
-  if (pose_line_settled && !posePrevLineSettled) {
-    resetDriveToPose(drivePID, headingPID);
-    return true;
-  }
-  posePrevLineSettled = pose_line_settled;
-  const centerSide = is_line_settled(x, y, angle + 90, robot.getX(), robot.getY());
-  poseCrossedCenterLine ||= centerSide !== poseInitCenterLineSide;
+  if (reverse) angle = normalizeDeg(angle + 180);
   const target_distance = Math.hypot(x - robot.getX(), y - robot.getY());
-  const carrot_X = x - Math.sin(toRad(angle)) * (drivePID.lead * target_distance + drivePID.setback);
-  const carrot_Y = y - Math.cos(toRad(angle)) * (drivePID.lead * target_distance + drivePID.setback);
+  let carrot_X = x - Math.sin(toRad(angle)) * (drive_p.lead * target_distance);
+  let carrot_Y = y - Math.cos(toRad(angle)) * (drive_p.lead * target_distance);
+  if (target_distance < DRIVE_LARGE_SETTLE_ERROR && !settling) {
+    settling = true;
+    drive_max_speed = Math.max(Math.abs(prev_drive_output), BOOMERANG_MIN_VOLTAGE);
+  }
+  const line_settled = is_line_settled(x, y, angle, robot.getX(), robot.getY(), drive_p.exit_error);
+  const carrot_settled = is_line_settled(x, y, angle, carrot_X, carrot_Y, drive_p.exit_error);
+  crossed_line = line_settled === carrot_settled;
+  console.log(line_settled, carrot_settled, crossed_line, prev_crossed_line, settling);
+  if (!crossed_line && prev_crossed_line && settling && drive_p.min_voltage > 0) {
+    resetDriveToPose();
+    return true;
+  }
+  prev_crossed_line = crossed_line;
   let drive_error = Math.hypot(carrot_X - robot.getX(), carrot_Y - robot.getY());
-  let heading_error = reduce_negative_180_to_180(
-    toDeg(Math.atan2(carrot_X - robot.getX(), carrot_Y - robot.getY())) - robot.getAngle()
-  );
-  let driveSign = 1;
-  if (drive_error < drivePID.settleError || poseCrossedCenterLine || drive_error < drivePID.setback) {
-    heading_error = reduce_negative_180_to_180(angle - robot.getAngle());
+  let current_angle = robot.getAngle();
+  if (reverse) current_angle = current_angle + 180;
+  let heading_error = reduce_negative_180_to_180(toDeg(Math.atan2(carrot_X - robot.getX(), carrot_Y - robot.getY())) - current_angle);
+  if (settling) {
     drive_error = target_distance;
-    poseClose = true;
+    heading_error = reduce_negative_180_to_180(angle - current_angle);
+    drive_error *= Math.cos(toRad(reduce_negative_180_to_180(toDeg(Math.atan2(x - robot.getX(), y - robot.getY())) - robot.getAngle())));
+    carrot_X = x;
+    carrot_Y = y;
+  } else {
+    drive_error *= Math.sign(Math.cos(toRad(reduce_negative_180_to_180(toDeg(Math.atan2(carrot_X - robot.getX(), carrot_Y - robot.getY())) - robot.getAngle()))));
   }
-  if (drivePID.driveDirection === "reverse") {
-    heading_error = reduce_negative_180_to_180(heading_error + 180);
-    driveSign = -1;
-  }
-  let drive_output = drivePID.compute(drive_error);
-  let heading_scale_factor = Math.cos(toRad(heading_error));
-  if (drivePID.driveDirection !== null) heading_scale_factor = Math.max(0, heading_scale_factor);
-  drive_output *= heading_scale_factor * driveSign;
-  if (drivePID.driveDirection === null) heading_error = reduce_negative_90_to_90(heading_error);
-  let heading_output = headingPID.compute(heading_error);
-  drive_output = clamp(
-    drive_output,
-    -Math.abs(heading_scale_factor) * drivePID.maxSpeed,
-    Math.abs(heading_scale_factor) * drivePID.maxSpeed
-  );
-  heading_output = clamp(heading_output, -headingPID.maxSpeed, headingPID.maxSpeed);
-  console.log(poseClose);
-  drive_output = slew_scaling(drive_output, posePrevDriveOutput ?? 0, drivePID.slew * (dt / 0.01), !poseClose);
-  drive_output = clamp_max_slip(drive_output, robot.getX(), robot.getY(), robot.getAngle(), carrot_X, carrot_Y, drivePID.drift);
-  drive_output = overturn_scaling(drive_output, heading_output, drivePID.maxSpeed);
-  drive_output = clamp_min_voltage(drive_output, drivePID.minSpeed);
+  let drive_output = drivePID$2.compute(drive_error);
+  let heading_output = headingPID$1.compute(heading_error);
+  heading_output = clamp(heading_output, -heading_p.maxSpeed, heading_p.maxSpeed);
+  drive_output = clamp(drive_output, -drive_max_speed, drive_max_speed);
+  drive_output = slew_scaling(drive_output, prev_drive_output, drive_p.slew * (dt / 0.01), !settling);
+  drive_output = clamp_max_slip(drive_output, robot.getX(), robot.getY(), current_angle, carrot_X, carrot_Y, drive_p.drift);
+  drive_output = overturn_scaling(drive_output, heading_output, drive_max_speed);
+  if (!reverse && !settling) drive_output = Math.max(drive_output, 0);
+  else if (reverse && !settling) drive_output = Math.min(drive_output, 0);
+  drive_output = clamp_min_voltage(drive_output, drive_p.min_voltage);
+  prev_drive_output = drive_output;
   robot.tankDrive(
     left_voltage_scaling(drive_output, heading_output) / kMikLibSpeed,
     right_voltage_scaling(drive_output, heading_output) / kMikLibSpeed,
     dt
   );
-  posePrevDriveOutput = drive_output;
   return false;
 }
-let crossed$2 = false;
-let prevError$2 = null;
-let prevRawError$2 = null;
-let prevOutput$2 = null;
-function resetSwingToAngle(swingPID) {
-  crossed$2 = false;
-  prevOutput$2 = null;
-  prevError$2 = null;
-  prevRawError$2 = null;
+let crossed$4 = false;
+let prev_error$4 = 0;
+let prev_raw_error$4 = 0;
+let prev_output$2 = 0;
+let swingPID;
+let start$6 = true;
+function resetSwingToAngle() {
+  crossed$4 = false;
+  prev_error$4 = 0;
+  prev_raw_error$4 = 0;
+  prev_output$2 = 0;
   swingPID.reset();
+  start$6 = true;
 }
-function swingToAngle(robot, dt, angle, swingPID) {
-  const rawError = angle_error(angle - robot.getAngle(), null);
-  let error = angle_error(angle - robot.getAngle(), swingPID.turnDirection);
-  if (prevError$2 === null || prevRawError$2 === null) {
-    prevError$2 = error;
-    prevRawError$2 = rawError;
+function swingToAngle(robot, dt, angle, p) {
+  const raw_error = angle_error(angle - robot.getAngle(), null);
+  let error = angle_error(angle - robot.getAngle(), p.turn_direction);
+  if (start$6) {
+    prev_error$4 = error;
+    prev_raw_error$4 = raw_error;
+    swingPID = new PID(p.kp, p.ki, p.kd, p.starti, p.settle_time, p.settle_error, p.timeout, p.min_voltage > 0 ? p.exit_error : 0);
+    start$6 = false;
   }
-  if (Math.sign(rawError) != Math.sign(prevRawError$2)) {
-    crossed$2 = true;
+  if (Math.sign(raw_error) != Math.sign(prev_raw_error$4)) {
+    crossed$4 = true;
   }
-  prevRawError$2 = rawError;
-  if (crossed$2) {
-    error = rawError;
+  prev_raw_error$4 = raw_error;
+  if (crossed$4) {
+    error = raw_error;
   } else {
-    error = angle_error(angle - robot.getAngle(), swingPID.turnDirection);
+    error = angle_error(angle - robot.getAngle(), p.turn_direction);
   }
-  if (swingPID.minSpeed != 0 && crossed$2 && Math.sign(error) != Math.sign(prevError$2)) {
-    resetSwingToAngle(swingPID);
+  if (p.min_voltage != 0 && crossed$4 && Math.sign(error) != Math.sign(prev_error$4)) {
+    resetSwingToAngle();
     return true;
   }
-  prevError$2 = error;
+  prev_error$4 = error;
   let output = swingPID.compute(error);
   if (swingPID.isSettled()) {
-    resetSwingToAngle(swingPID);
+    resetSwingToAngle();
     return true;
   }
-  output = clamp(output, -swingPID.maxSpeed, swingPID.maxSpeed);
-  output = slew_scaling(output, prevOutput$2 ?? 0, swingPID.slew * (dt / 0.01), Math.abs(error) > swingPID.starti);
-  output = clamp_min_voltage(output, swingPID.minSpeed);
-  prevOutput$2 = output;
-  if (swingPID.swingDirection === "left") {
-    robot.tankDrive(output / kMikLibSpeed, 0, dt);
+  output = clamp(output, -p.maxSpeed, p.maxSpeed);
+  output = slew_scaling(output, prev_output$2 ?? 0, p.slew * (dt / 0.01), Math.abs(error) > p.starti);
+  output = clamp_min_voltage(output, p.min_voltage);
+  prev_output$2 = output;
+  const scale = output / p.maxSpeed;
+  if (p.swing_direction === "left") {
+    robot.tankDrive(output / kMikLibSpeed, p.opposite_voltage * scale / kMikLibSpeed, dt);
   } else {
-    robot.tankDrive(0, -output / kMikLibSpeed, dt);
+    robot.tankDrive(-p.opposite_voltage * scale / kMikLibSpeed, -output / kMikLibSpeed, dt);
   }
   return false;
 }
 let initialAngle = null;
-function swingToPoint(robot, dt, x, y, offset, swingPID) {
+function swingToPoint(robot, dt, x, y, offset, p) {
   if (initialAngle === null) {
     initialAngle = reduce_negative_180_to_180(
       toDeg(Math.atan2(
@@ -15158,191 +16991,111 @@ function swingToPoint(robot, dt, x, y, offset, swingPID) {
       )) + offset
     );
   }
-  const out = swingToAngle(robot, dt, initialAngle, swingPID);
+  const out = swingToAngle(robot, dt, initialAngle, p);
   if (out) {
     initialAngle = null;
     return true;
   }
   return false;
 }
-let crossed$1 = false;
-let prevError$1 = null;
-let prevRawError$1 = null;
-let prevOutput$1 = null;
-function resetTurnToAngle(turnPID) {
-  crossed$1 = false;
-  prevError$1 = null;
-  prevRawError$1 = null;
-  prevOutput$1 = null;
-  turnPID.reset();
+let crossed$3 = false;
+let prev_error$3 = 0;
+let prev_raw_error$3 = 0;
+let prev_output$1 = 0;
+let turnPID$4;
+let start$5 = true;
+function resetTurnToAngle() {
+  crossed$3 = false;
+  prev_error$3 = 0;
+  prev_raw_error$3 = 0;
+  prev_output$1 = 0;
+  turnPID$4.reset();
+  start$5 = true;
 }
-function turnToAngle(robot, dt, angle, turnPID) {
-  const rawError = angle_error(angle - robot.getAngle(), null);
-  let error = angle_error(angle - robot.getAngle(), turnPID.turnDirection);
-  if (prevError$1 === null || prevRawError$1 === null) {
-    prevError$1 = error;
-    prevRawError$1 = rawError;
+function turnToAngle(robot, dt, angle, p) {
+  const raw_error = angle_error(angle - robot.getAngle(), null);
+  let error = angle_error(angle - robot.getAngle(), p.turn_direction);
+  if (start$5) {
+    prev_error$3 = error;
+    prev_raw_error$3 = raw_error;
+    turnPID$4 = new PID(p.kp, p.ki, p.kd, p.starti, p.settle_time, p.settle_error, p.timeout, p.min_voltage > 0 ? p.exit_error : 0);
+    start$5 = false;
   }
-  if (Math.sign(rawError) != Math.sign(prevRawError$1)) {
-    crossed$1 = true;
+  if (Math.sign(raw_error) != Math.sign(prev_raw_error$3)) {
+    crossed$3 = true;
   }
-  prevRawError$1 = rawError;
-  if (crossed$1) {
-    error = rawError;
+  prev_raw_error$3 = raw_error;
+  if (crossed$3) {
+    error = raw_error;
   } else {
-    error = angle_error(angle - robot.getAngle(), turnPID.turnDirection);
+    error = angle_error(angle - robot.getAngle(), p.turn_direction);
   }
-  if (turnPID.minSpeed != 0 && crossed$1 && Math.sign(error) != Math.sign(prevError$1)) {
-    resetTurnToAngle(turnPID);
+  if (p.min_voltage != 0 && crossed$3 && Math.sign(error) != Math.sign(prev_error$3)) {
+    resetTurnToAngle();
     return true;
   }
-  prevError$1 = error;
-  let output = turnPID.compute(error);
-  if (turnPID.isSettled()) {
-    resetTurnToAngle(turnPID);
+  prev_error$3 = error;
+  let output = turnPID$4.compute(error);
+  if (turnPID$4.isSettled()) {
+    resetTurnToAngle();
     return true;
   }
-  output = clamp(output, -turnPID.maxSpeed, turnPID.maxSpeed);
-  output = slew_scaling(output, prevOutput$1 ?? 0, turnPID.slew * (dt / 0.01), Math.abs(error) > turnPID.starti);
-  output = clamp_min_voltage(output, turnPID.minSpeed);
-  prevOutput$1 = output;
+  output = clamp(output, -p.maxSpeed, p.maxSpeed);
+  output = slew_scaling(output, prev_output$1 ?? 0, p.slew * (dt / 0.01), Math.abs(error) > p.starti);
+  output = clamp_min_voltage(output, p.min_voltage);
+  prev_output$1 = output;
   robot.tankDrive(output / kMikLibSpeed, -output / kMikLibSpeed, dt);
   return false;
 }
-let crossed = false;
-let prevError = null;
-let prevRawError = null;
-let prevOutput = null;
-function resetTurnToPoint(turnPID) {
-  crossed = false;
-  prevError = null;
-  prevOutput = null;
-  prevRawError = null;
-  turnPID.reset();
+let crossed$2 = false;
+let prev_error$2 = 0;
+let prev_raw_error$2 = 0;
+let prev_output = 0;
+let turnPID$3;
+let start$4 = true;
+function resetTurnToPoint() {
+  crossed$2 = false;
+  prev_error$2 = 0;
+  prev_output = 0;
+  prev_raw_error$2 = 0;
+  turnPID$3.reset();
+  start$4 = true;
 }
-function turnToPoint(robot, dt, x, y, offset, turnPID) {
-  const targetAngle = toDeg(Math.atan2(x - robot.getX(), y - robot.getY())) + offset;
-  const rawError = angle_error(targetAngle - robot.getAngle(), null);
-  let error = angle_error(targetAngle - robot.getAngle(), turnPID.turnDirection);
-  if (prevError === null || prevRawError === null) {
-    prevError = error;
-    prevRawError = rawError;
+function turnToPoint(robot, dt, x, y, offset, p) {
+  const angle = toDeg(Math.atan2(x - robot.getX(), y - robot.getY())) + offset;
+  const raw_error = angle_error(angle - robot.getAngle(), null);
+  let error = angle_error(angle - robot.getAngle(), p.turn_direction);
+  if (start$4) {
+    prev_error$2 = error;
+    prev_raw_error$2 = raw_error;
+    turnPID$3 = new PID(p.kp, p.ki, p.kd, p.starti, p.settle_time, p.settle_error, p.timeout, p.min_voltage > 0 ? p.exit_error : 0);
+    start$4 = false;
   }
-  if (Math.sign(rawError) != Math.sign(prevRawError)) {
-    crossed = true;
+  if (Math.sign(raw_error) != Math.sign(prev_raw_error$2)) {
+    crossed$2 = true;
   }
-  prevRawError = rawError;
-  if (crossed) {
-    error = rawError;
+  prev_raw_error$2 = raw_error;
+  if (crossed$2) {
+    error = raw_error;
   } else {
-    error = angle_error(targetAngle - robot.getAngle(), turnPID.turnDirection);
+    error = angle_error(angle - robot.getAngle(), p.turn_direction);
   }
-  if (turnPID.minSpeed != 0 && crossed && Math.sign(error) != Math.sign(prevError)) {
-    resetTurnToPoint(turnPID);
+  if (p.min_voltage != 0 && crossed$2 && Math.sign(error) != Math.sign(prev_error$2)) {
+    resetTurnToPoint();
     return true;
   }
-  prevError = error;
-  let output = turnPID.compute(error);
-  if (turnPID.isSettled()) {
-    resetTurnToPoint(turnPID);
+  prev_error$2 = error;
+  let output = turnPID$3.compute(error);
+  if (turnPID$3.isSettled()) {
+    resetTurnToPoint();
     return true;
   }
-  output = clamp(output, -turnPID.maxSpeed, turnPID.maxSpeed);
-  output = slew_scaling(output, prevOutput ?? 0, turnPID.slew * (dt / 0.01), Math.abs(error) > turnPID.starti);
-  output = clamp_min_voltage(output, turnPID.minSpeed);
-  prevOutput = output;
+  output = clamp(output, -p.maxSpeed, p.maxSpeed);
+  output = slew_scaling(output, prev_output ?? 0, p.slew * (dt / 0.01), Math.abs(error) > 15);
+  output = clamp_min_voltage(output, p.min_voltage);
+  prev_output = output;
   robot.tankDrive(output / kMikLibSpeed, -output / kMikLibSpeed, dt);
   return false;
-}
-class PID {
-  kp;
-  ki;
-  kd;
-  starti;
-  slew;
-  drift;
-  settleTime;
-  settleError;
-  timeout;
-  maxSpeed = 1;
-  minSpeed = 0;
-  lead = 0;
-  setback = 0;
-  swingDirection;
-  turnDirection;
-  driveDirection;
-  acculatedError = 0;
-  previousError = 0;
-  timeSpentSettled = 0;
-  timeSpentRunning = 0;
-  constructor(kPID) {
-    this.kp = kPID.kp ? kPID.kp : 0;
-    this.ki = kPID.ki ? kPID.ki : 0;
-    this.kd = kPID.kd ? kPID.kd : 0;
-    this.starti = kPID.starti ? kPID.starti : 0;
-    this.slew = kPID.slew ? kPID.slew : 0;
-    this.drift = kPID.drift ? kPID.drift : 0;
-    this.settleTime = kPID.settleTime ? kPID.settleTime : 0;
-    this.settleError = kPID.settleError ? kPID.settleError : 0;
-    this.timeout = kPID.timeout ? kPID.timeout : 0;
-    this.maxSpeed = kPID.maxSpeed ? kPID.maxSpeed : 0;
-    this.minSpeed = kPID.minSpeed ? kPID.minSpeed : 0;
-    this.lead = kPID.lead ? kPID.lead : 0;
-    this.setback = kPID.setback ? kPID.setback : 0;
-    this.swingDirection = kPID.swingDirection;
-    this.turnDirection = kPID.turnDirection;
-    this.driveDirection = kPID.driveDirection;
-  }
-  update(kPID) {
-    this.kp = kPID.kp ? kPID.kp : 0;
-    this.ki = kPID.ki ? kPID.ki : 0;
-    this.kd = kPID.kd ? kPID.kd : 0;
-    this.starti = kPID.starti ? kPID.starti : 0;
-    this.slew = kPID.slew ? kPID.slew : 0;
-    this.drift = kPID.drift ? kPID.drift : 0;
-    this.settleTime = kPID.settleTime ? kPID.settleTime : 0;
-    this.settleError = kPID.settleError ? kPID.settleError : 0;
-    this.timeout = kPID.timeout ? kPID.timeout : 0;
-    this.maxSpeed = kPID.maxSpeed ? kPID.maxSpeed : 0;
-    this.minSpeed = kPID.minSpeed ? kPID.minSpeed : 0;
-    this.lead = kPID.lead ? kPID.lead : 0;
-    this.setback = kPID.setback ? kPID.setback : 0;
-    this.swingDirection = kPID.swingDirection;
-    this.turnDirection = kPID.turnDirection;
-    this.driveDirection = kPID.driveDirection;
-  }
-  compute(error) {
-    if (Math.abs(error) < this.starti) {
-      this.acculatedError += error;
-    }
-    if (error > 0 && this.previousError < 0 || error < 0 && this.previousError > 0) {
-      this.acculatedError = 0;
-    }
-    const output = this.kp * error + this.ki * this.acculatedError + this.kd * (error - this.previousError);
-    this.previousError = error;
-    if (Math.abs(error) < this.settleError) {
-      this.timeSpentSettled += 1 / 60 * 1e3;
-    } else {
-      this.timeSpentSettled = 0;
-    }
-    this.timeSpentRunning += 1 / 60 * 1e3;
-    return output;
-  }
-  isSettled() {
-    if (this.timeSpentRunning > this.timeout && this.timeout != 0) {
-      return true;
-    }
-    if (this.timeSpentSettled > this.settleTime) {
-      return true;
-    }
-    return false;
-  }
-  reset() {
-    this.previousError = 0;
-    this.acculatedError = 0;
-    this.timeSpentRunning = 0;
-    this.timeSpentSettled = 0;
-  }
 }
 function to_relative(currentPose, referencePose) {
   const x_shift = (currentPose.x ?? 0) - (referencePose.x ?? 0);
@@ -15368,50 +17121,10 @@ const copysign1 = (v) => {
 const dist = (ax, ay, bx, by) => {
   return Math.hypot(ax - bx, ay - by);
 };
-const getBackwardsSnapPose = (path, idx) => {
-  const controls = path.segments;
-  for (let i = idx; i >= 0; i--) {
-    const c = controls[i];
-    if (c.pose.x !== null && c.pose.y !== null) {
-      return c.pose;
-    }
-  }
-  return null;
-};
-const getBackwardsSnapIdx = (path, idx) => {
-  const controls = path.segments;
-  for (let i = idx; i >= 0; i--) {
-    const c = controls[i];
-    if (c.pose.x !== null && c.pose.y !== null) {
-      return i;
-    }
-  }
-  return null;
-};
-function getForwardSnapPose(path, idx) {
-  const controls = path.segments;
-  for (let i = idx; i < controls.length; i++) {
-    const c = controls[i];
-    if (c.pose.x !== null && c.pose.y !== null) {
-      return c.pose;
-    }
-  }
-  return null;
-}
 SIM_CONSTANTS.seconds = 99;
 let currentPathTime = -2 / 60;
 let simComputed = 0;
 function mikLibToSim(path) {
-  const pointTurnPID = new PID(getDefaultConstants("mikLib", "pointTurn").turn);
-  const angleTurnPID = new PID(getDefaultConstants("mikLib", "angleTurn").turn);
-  const pointDrivePID = new PID(getDefaultConstants("mikLib", "pointDrive").drive);
-  const pointHeadingPID = new PID(getDefaultConstants("mikLib", "pointDrive").heading);
-  const poseDrivePID = new PID(getDefaultConstants("mikLib", "poseDrive").drive);
-  const poseHeadingPID = new PID(getDefaultConstants("mikLib", "poseDrive").heading);
-  const pointSwingPID = new PID(getDefaultConstants("mikLib", "pointSwing").swing);
-  const angleSwingPID = new PID(getDefaultConstants("mikLib", "angleSwing").swing);
-  const distanceDrivePID = new PID(getDefaultConstants("mikLib", "distanceDrive").drive);
-  const distanceHeadingPID = new PID(getDefaultConstants("mikLib", "distanceDrive").heading);
   const auton = [];
   currentPathTime = -2 / 60;
   DEBUG_printSimulationStart();
@@ -15420,152 +17133,156 @@ function mikLibToSim(path) {
     const x = control.pose.x ?? 0;
     const y = control.pose.y ?? 0;
     const angle = control.pose.angle ?? 0;
+    const k = control.constants;
     if (idx === 0) {
       auton.push(
         (robot, dt) => {
           DEBUG_printRobotState(robot, dt);
-          return robot.setPose(x, y, angle);
+          return [robot.setPose(x, y, angle), "start", 0];
         }
       );
       continue;
     }
     if (control.kind === "pointDrive") {
-      const { drive, heading } = control.constants;
+      const drive = k.drive;
+      const heading = k.heading;
       let started = false;
+      let targetDist = 0;
       auton.push(
         (robot, dt) => {
           if (!started) {
-            DEBUG_printSegmentStart(idx, control.kind);
+            DEBUG_printSegmentStart$1(idx, control.kind);
+            targetDist = Math.hypot(x - robot.getX(), y - robot.getY());
             started = true;
           }
           DEBUG_printRobotState(robot, dt);
-          pointDrivePID.update(drive);
-          pointHeadingPID.update(heading);
-          const output = driveToPoint(robot, dt, x, y, pointDrivePID, pointHeadingPID);
-          if (output) DEBUG_printSegmentEnd(idx, control.kind);
-          return output;
+          const output = driveToPoint(robot, dt, x, y, drive, heading);
+          if (output) DEBUG_printSegmentEnd$1(idx, control.kind);
+          return [output, "pointDrive", targetDist];
         }
       );
     }
     if (control.kind === "poseDrive") {
-      const { drive, heading } = control.constants;
+      const drive = k.drive;
+      const heading = k.heading;
       let started = false;
+      let targetDist = 0;
       auton.push(
         (robot, dt) => {
           if (!started) {
-            DEBUG_printSegmentStart(idx, control.kind);
+            DEBUG_printSegmentStart$1(idx, control.kind);
+            targetDist = Math.hypot(x - robot.getX(), y - robot.getY());
             started = true;
           }
           DEBUG_printRobotState(robot, dt);
-          poseDrivePID.update(drive);
-          poseHeadingPID.update(heading);
-          const output = driveToPose(robot, dt, x, y, angle, poseDrivePID, poseHeadingPID);
-          if (output) DEBUG_printSegmentEnd(idx, control.kind);
-          return output;
+          const output = driveToPose(robot, dt, x, y, angle, drive, heading);
+          if (output) DEBUG_printSegmentEnd$1(idx, control.kind);
+          return [output, "poseDrive", targetDist];
         }
       );
     }
     if (control.kind === "pointTurn") {
-      const previousPos = getBackwardsSnapPose(path, idx - 1);
-      const turnToPos = getForwardSnapPose(path, idx);
-      const pos = turnToPos ? { x: turnToPos.x ?? 0, y: turnToPos.y ?? 0 } : previousPos ? { x: previousPos.x ?? 0, y: (previousPos.y ?? 0) + 5 } : { x: 0, y: 5 };
-      const { turn } = control.constants;
+      const pos = findPointToFace(path, idx);
+      const turn = k.turn;
       let started = false;
+      let targetDist = 0;
       auton.push(
         (robot, dt) => {
           if (!started) {
-            DEBUG_printSegmentStart(idx, control.kind);
+            DEBUG_printSegmentStart$1(idx, control.kind);
+            const targetAngle = toDeg(Math.atan2(pos.x - robot.getX(), pos.y - robot.getY())) + angle;
+            targetDist = Math.abs(angle_error(targetAngle - robot.getAngle(), null));
             started = true;
           }
           DEBUG_printRobotState(robot, dt);
-          pointTurnPID.update(turn);
-          const output = turnToPoint(robot, dt, pos.x, pos.y, angle, pointTurnPID);
-          if (output) DEBUG_printSegmentEnd(idx, control.kind);
-          return output;
+          const output = turnToPoint(robot, dt, pos.x, pos.y, angle, turn);
+          if (output) DEBUG_printSegmentEnd$1(idx, control.kind);
+          return [output, "pointTurn", targetDist];
         }
       );
     }
     if (control.kind === "angleTurn") {
-      const { turn } = control.constants;
+      const turn = k.turn;
       let started = false;
+      let targetDist = 0;
       auton.push(
         (robot, dt) => {
           if (!started) {
-            DEBUG_printSegmentStart(idx, control.kind);
+            DEBUG_printSegmentStart$1(idx, control.kind);
+            targetDist = Math.abs(angle_error(angle - robot.getAngle(), null));
             started = true;
           }
           DEBUG_printRobotState(robot, dt);
-          angleTurnPID.update(turn);
-          const output = turnToAngle(robot, dt, angle, angleTurnPID);
-          if (output) DEBUG_printSegmentEnd(idx, control.kind);
-          return output;
+          const output = turnToAngle(robot, dt, angle, turn);
+          if (output) DEBUG_printSegmentEnd$1(idx, control.kind);
+          return [output, "angleTurn", targetDist];
         }
       );
     }
     if (control.kind === "pointSwing") {
-      const previousPos = getBackwardsSnapPose(path, idx - 1);
-      const turnToPos = getForwardSnapPose(path, idx);
-      const pos = turnToPos ? { x: turnToPos.x ?? 0, y: turnToPos.y ?? 0 } : previousPos ? { x: previousPos.x ?? 0, y: (previousPos.y ?? 0) + 5 } : { x: 0, y: 5 };
-      const { swing } = control.constants;
+      const pos = findPointToFace(path, idx);
+      const swing = k.swing;
       let started = false;
+      let targetDist = 0;
       auton.push(
         (robot, dt) => {
           if (!started) {
-            DEBUG_printSegmentStart(idx, control.kind);
+            DEBUG_printSegmentStart$1(idx, control.kind);
+            const targetAngle = toDeg(Math.atan2(pos.x - robot.getX(), pos.y - robot.getY())) + angle;
+            targetDist = Math.abs(angle_error(targetAngle - robot.getAngle(), null));
             started = true;
           }
           DEBUG_printRobotState(robot, dt);
-          pointSwingPID.update(swing);
-          const output = swingToPoint(robot, dt, pos.x, pos.y, angle, pointSwingPID);
-          if (output) DEBUG_printSegmentEnd(idx, control.kind);
-          return output;
+          const output = swingToPoint(robot, dt, pos.x, pos.y, angle, swing);
+          if (output) DEBUG_printSegmentEnd$1(idx, control.kind);
+          return [output, "pointSwing", targetDist];
         }
       );
     }
     if (control.kind === "angleSwing") {
-      const { swing } = control.constants;
+      const swing = k.swing;
       let started = false;
+      let targetDist = 0;
       auton.push(
         (robot, dt) => {
           if (!started) {
-            DEBUG_printSegmentStart(idx, control.kind);
+            DEBUG_printSegmentStart$1(idx, control.kind);
+            targetDist = Math.abs(angle_error(angle - robot.getAngle(), null));
             started = true;
           }
           DEBUG_printRobotState(robot, dt);
-          angleSwingPID.update(swing);
-          const output = swingToAngle(robot, dt, angle, angleSwingPID);
-          if (output) DEBUG_printSegmentEnd(idx, control.kind);
-          return output;
+          const output = swingToAngle(robot, dt, angle, swing);
+          if (output) DEBUG_printSegmentEnd$1(idx, control.kind);
+          return [output, "angleSwing", targetDist];
         }
       );
     }
     if (control.kind === "distanceDrive") {
       const previousPos = getBackwardsSnapPose(path, idx - 1);
       const distance = dist(previousPos?.x ?? 0, previousPos?.y ?? 0, x, y);
-      const { drive, heading } = control.constants;
+      const drive = k.drive;
+      const heading = k.heading;
       let started = false;
       auton.push(
         (robot, dt) => {
           if (!started) {
-            DEBUG_printSegmentStart(idx, control.kind);
+            DEBUG_printSegmentStart$1(idx, control.kind);
             started = true;
           }
           DEBUG_printRobotState(robot, dt);
-          distanceDrivePID.update(drive);
-          distanceHeadingPID.update(heading);
-          const output = driveDistance(robot, dt, distance, angle, distanceDrivePID, distanceHeadingPID);
-          if (output) DEBUG_printSegmentEnd(idx, control.kind);
-          return output;
+          const output = driveDistance(robot, dt, distance, angle, drive, heading);
+          if (output) DEBUG_printSegmentEnd$1(idx, control.kind);
+          return [output, "distanceDrive", distance];
         }
       );
     }
   }
   return auton;
 }
-function DEBUG_printSegmentStart(idx, kind) {
+function DEBUG_printSegmentStart$1(idx, kind) {
   console.log(`%cStarting ${getSegmentName("mikLib", kind)} ${idx}`, "color: lime; font-weight: bold");
 }
-function DEBUG_printSegmentEnd(idx, kind) {
+function DEBUG_printSegmentEnd$1(idx, kind) {
   console.log(`%cEnding ${getSegmentName("mikLib", kind)} ${idx}`, "color: #ff6b6b; font-weight: bold");
 }
 function DEBUG_printRobotState(robot, dt) {
@@ -15576,7 +17293,7 @@ function DEBUG_printSimulationStart() {
   simComputed += 1;
   console.log(`%cSTARTING SIMULATION COMPUTE #${simComputed}`, "color: violet; font-weight: bold");
 }
-const roundOff$1 = (val, digits) => {
+const roundOff$2 = (val, digits) => {
   if (val === null || val === void 0 || typeof val === "string") return "";
   return trimZeros(val.toFixed(digits));
 };
@@ -15584,89 +17301,96 @@ const keyToMikLibConstant = (key, value, constantType) => {
   if (constantType === "Drive") {
     switch (key) {
       case "kp":
-        return `.drive_k.p = ${roundOff$1(value, 3)}`;
+        return `.drive_k.p = ${roundOff$2(value, 3)}`;
       case "ki":
-        return `.drive_k.i = ${roundOff$1(value, 5)}`;
+        return `.drive_k.i = ${roundOff$2(value, 5)}`;
       case "kd":
-        return `.drive_k.d = ${roundOff$1(value, 3)}`;
+        return `.drive_k.d = ${roundOff$2(value, 3)}`;
       case "starti":
-        return `.drive_k.starti = ${roundOff$1(value, 2)}`;
+        return `.drive_k.starti = ${roundOff$2(value, 2)}`;
       case "maxSpeed":
-        return `.max_voltage = ${roundOff$1(value, 1)}`;
-      case "driveDirection":
-        return value === null ? "" : `.drive_direction = mik::${value === "forward" ? "fwd" : "rev"}`;
+        return `.max_voltage = ${roundOff$2(value, 1)}`;
+      case "drift":
+        return `.drift = ${roundOff$2(value, 2)}`;
     }
   } else if (constantType === "Heading") {
     switch (key) {
       case "kp":
-        return `.heading_k.p = ${roundOff$1(value, 3)}`;
+        return `.heading_k.p = ${roundOff$2(value, 3)}`;
       case "ki":
-        return `.heading_k.i = ${roundOff$1(value, 5)}`;
+        return `.heading_k.i = ${roundOff$2(value, 5)}`;
       case "kd":
-        return `.heading_k.d = ${roundOff$1(value, 3)}`;
+        return `.heading_k.d = ${roundOff$2(value, 3)}`;
       case "starti":
-        return `.heading_k.starti = ${roundOff$1(value, 2)}`;
+        return `.heading_k.starti = ${roundOff$2(value, 2)}`;
       case "maxSpeed":
-        return `.heading_max_voltage = ${roundOff$1(value, 1)}`;
+        return `.heading_max_voltage = ${roundOff$2(value, 1)}`;
     }
   } else if (constantType === "Turn") {
     switch (key) {
       case "kp":
-        return `.k.p = ${roundOff$1(value, 3)}`;
+        return `.k.p = ${roundOff$2(value, 3)}`;
       case "ki":
-        return `.k.i = ${roundOff$1(value, 5)}`;
+        return `.k.i = ${roundOff$2(value, 5)}`;
       case "kd":
-        return `.k.d = ${roundOff$1(value, 3)}`;
+        return `.k.d = ${roundOff$2(value, 3)}`;
       case "starti":
-        return `.k.starti = ${roundOff$1(value, 2)}`;
+        return `.k.starti = ${roundOff$2(value, 2)}`;
       case "maxSpeed":
-        return `.max_voltage = ${roundOff$1(value, 1)}`;
-      case "turnDirection":
+        return `.max_voltage = ${roundOff$2(value, 1)}`;
+      case "turn_direction":
         return value === null ? "" : `.turn_direction = mik::${value === "clockwise" ? "cw" : "ccw"}`;
     }
   }
   switch (key) {
-    case "minSpeed":
-      return `.min_voltage = ${roundOff$1(value, 1)}`;
-    case "settleTime":
-      return `.settle_time = ${roundOff$1(value, 0)}`;
-    case "settleError":
-      return `.settle_error = ${roundOff$1(value, 2)}`;
+    case "min_voltage":
+      return `.min_voltage = ${roundOff$2(value, 1)}`;
+    case "settle_time":
+      return `.settle_time = ${roundOff$2(value, 0)}`;
+    case "settle_error":
+      return `.settle_error = ${roundOff$2(value, 2)}`;
     case "timeout":
-      return `.timeout = ${roundOff$1(value, 0)}`;
+      return `.timeout = ${roundOff$2(value, 0)}`;
     case "lead":
-      return `.lead = ${roundOff$1(value, 2)}`;
-    case "setback":
-      return `.setback = ${roundOff$1(value, 2)}`;
+      return `.lead = ${roundOff$2(value, 2)}`;
   }
   return "";
 };
+const getConstantList$1 = (constants, constantType) => {
+  const constantsList = [];
+  for (const k of Object.keys(constants)) {
+    const value = constants[k];
+    if (value === void 0) continue;
+    const c = keyToMikLibConstant(k, value, constantType);
+    if (c !== "") constantsList.push(c);
+  }
+  return constantsList;
+};
 function mikLibToString(path, selected = false) {
   let pathString = "";
+  const kDefault = {
+    angleTurn: getDefaultConstants("mikLib", "angleTurn"),
+    pointTurn: getDefaultConstants("mikLib", "pointTurn"),
+    angleSwing: getDefaultConstants("mikLib", "angleSwing"),
+    pointSwing: getDefaultConstants("mikLib", "pointSwing"),
+    pointDrive: getDefaultConstants("mikLib", "pointDrive"),
+    poseDrive: getDefaultConstants("mikLib", "poseDrive")
+  };
   for (let idx = 0; idx < path.segments.length; idx++) {
     const control = path.segments[idx];
     if (selected && !control.selected) continue;
     const kind = control.kind;
-    const x = roundOff$1(control.pose.x, 2);
-    const y = roundOff$1(control.pose.y, 2);
-    const angle = roundOff$1(control.pose.angle, 2);
-    const commandName = control.command.name;
-    const commandPercent = roundOff$1(control.command.percent, 0);
+    const k = control.constants;
+    const x = roundOff$2(control.pose.x, 2);
+    const y = roundOff$2(control.pose.y, 2);
+    const angle = roundOff$2(control.pose.angle, 2);
     if (idx === 0) {
       pathString += `    chassis.set_coordinates(${x}, ${y}, ${angle});`;
       continue;
     }
     if (kind === "angleTurn") {
-      const constants = getUnequalPIDConstants(getDefaultConstants("mikLib", kind).turn, control.constants.turn);
-      const constantsList = [];
-      for (const k of Object.keys(constants)) {
-        const c = keyToMikLibConstant(k, constants[k], "Turn");
-        if (c !== "") constantsList.push(c);
-      }
-      if (commandName !== "") {
-        constantsList.push(`.callback = [](){ ${commandName} }`);
-        if (Number(commandPercent) !== 0) constantsList.push(`.callback_after_percent = ${commandPercent}`);
-      }
+      const { turn } = k;
+      const constantsList = getConstantList$1(getUnequalmikConstants(kDefault.angleTurn.turn, turn), "Turn");
       const formattedConstants = constantsList.map((c) => `        ${c}`).join(",\n");
       pathString += constantsList.length === 0 ? `
     chassis.turn_to_angle(${angle});` : constantsList.length === 1 ? `
@@ -15676,22 +17400,12 @@ ${formattedConstants}
     });`;
     }
     if (kind === "pointTurn") {
-      const constants = getUnequalPIDConstants(getDefaultConstants("mikLib", kind).turn, control.constants.turn);
-      const constantsList = [];
-      if (Number(angle) !== 0) constantsList.push(`.angle_offset = ${angle}`);
-      for (const k of Object.keys(constants)) {
-        const c = keyToMikLibConstant(k, constants[k], "Turn");
-        if (c !== "") constantsList.push(c);
-      }
-      const previousPos = getBackwardsSnapPose(path, idx - 1);
-      const turnToPos = getForwardSnapPose(path, idx);
-      const pos = turnToPos ? { x: turnToPos.x ?? 0, y: turnToPos.y ?? 0 } : previousPos ? { x: previousPos.x ?? 0, y: (previousPos.y ?? 0) + 5 } : { x: 0, y: 5 };
-      const turnX = roundOff$1(pos.x, 2);
-      const turnY = roundOff$1(pos.y, 2);
-      if (commandName !== "") {
-        constantsList.push(`.callback = [](){ ${commandName} }`);
-        if (Number(commandPercent) !== 0) constantsList.push(`.callback_after_percent = ${commandPercent}`);
-      }
+      const { turn } = k;
+      const constantsList = getConstantList$1(getUnequalmikConstants(kDefault.pointTurn.turn, turn), "Turn");
+      if (Number(angle) !== 0) constantsList.unshift(`.angle_offset = ${angle}`);
+      const pos = findPointToFace(path, idx);
+      const turnX = roundOff$2(pos.x, 2);
+      const turnY = roundOff$2(pos.y, 2);
       const formattedConstants = constantsList.map((c) => `        ${c}`).join(",\n");
       pathString += constantsList.length === 0 ? `
     chassis.turn_to_point(${turnX}, ${turnY});` : constantsList.length === 1 ? `
@@ -15701,67 +17415,37 @@ ${formattedConstants}
     });`;
     }
     if (kind === "angleSwing") {
-      const constants = getUnequalPIDConstants(getDefaultConstants("mikLib", kind).swing, control.constants.swing);
-      const constantsList = [];
-      for (const k of Object.keys(constants)) {
-        const c = keyToMikLibConstant(k, constants[k], "Turn");
-        if (c !== "") constantsList.push(c);
-      }
-      if (commandName !== "") {
-        constantsList.push(`.callback = [](){ ${commandName} }`);
-        if (Number(commandPercent) !== 0) constantsList.push(`.callback_after_percent = ${commandPercent}`);
-      }
+      const { swing } = k;
+      const constantsList = getConstantList$1(getUnequalmikConstants(kDefault.angleSwing.swing, swing), "Turn");
       const formattedConstants = constantsList.map((c) => `        ${c}`).join(",\n");
-      const direction = control.constants.swing.swingDirection;
       pathString += constantsList.length === 0 ? `
-    chassis.${direction}_swing_to_angle(${angle});` : constantsList.length === 1 ? `
-    chassis.${direction}_swing_to_angle(${angle}, { ${constantsList[0]} });` : `
-    chassis.${direction}_swing_to_angle(${angle}, {
+    chassis.${swing.swing_direction}_swing_to_angle(${angle});` : constantsList.length === 1 ? `
+    chassis.${swing.swing_direction}_swing_to_angle(${angle}, { ${constantsList[0]} });` : `
+    chassis.${swing.swing_direction}_swing_to_angle(${angle}, {
 ${formattedConstants}
     });`;
     }
     if (kind === "pointSwing") {
-      const constants = getUnequalPIDConstants(getDefaultConstants("mikLib", kind).swing, control.constants.swing);
-      const constantsList = [];
-      if (Number(angle) !== 0) constantsList.push(`.angle_offset = ${angle}`);
-      for (const k of Object.keys(constants)) {
-        const c = keyToMikLibConstant(k, constants[k], "Turn");
-        if (c !== "") constantsList.push(c);
-      }
-      const previousPos = getBackwardsSnapPose(path, idx - 1);
-      const turnToPos = getForwardSnapPose(path, idx);
-      const pos = turnToPos ? { x: turnToPos.x ?? 0, y: turnToPos.y ?? 0 } : previousPos ? { x: previousPos.x ?? 0, y: (previousPos.y ?? 0) + 5 } : { x: 0, y: 5 };
-      const turnX = roundOff$1(pos.x, 2);
-      const turnY = roundOff$1(pos.y, 2);
-      if (commandName !== "") {
-        constantsList.push(`.callback = [](){ ${commandName} }`);
-        if (Number(commandPercent) !== 0) constantsList.push(`.callback_after_percent = ${commandPercent}`);
-      }
+      const { swing } = k;
+      const constantsList = getConstantList$1(getUnequalmikConstants(kDefault.pointSwing.swing, swing), "Turn");
+      if (Number(angle) !== 0) constantsList.unshift(`.angle_offset = ${angle}`);
+      const pos = findPointToFace(path, idx);
+      const turnX = roundOff$2(pos.x, 2);
+      const turnY = roundOff$2(pos.y, 2);
       const formattedConstants = constantsList.map((c) => `        ${c}`).join(",\n");
-      const direction = control.constants.swing.swingDirection;
       pathString += constantsList.length === 0 ? `
-    chassis.${direction}_swing_to_point(${turnX}, ${turnY});` : constantsList.length === 1 ? `
-    chassis.${direction}_swing_to_point(${turnX}, ${turnY}, { ${constantsList[0]} });` : `
-    chassis.${direction}_swing_to_point(${turnX}, ${turnY}, {
+    chassis.${swing.swing_direction}_swing_to_point(${turnX}, ${turnY});` : constantsList.length === 1 ? `
+    chassis.${swing.swing_direction}_swing_to_point(${turnX}, ${turnY}, { ${constantsList[0]} });` : `
+    chassis.${swing.swing_direction}_swing_to_point(${turnX}, ${turnY}, {
 ${formattedConstants}
     });`;
     }
     if (kind === "pointDrive") {
-      const driveConstants = getUnequalPIDConstants(getDefaultConstants("mikLib", kind).drive, control.constants.drive);
-      const headingConstants = getUnequalPIDConstants(getDefaultConstants("mikLib", kind).heading, control.constants.heading);
-      const constantsList = [];
-      for (const k of Object.keys(driveConstants)) {
-        const driveC = keyToMikLibConstant(k, driveConstants[k], "Drive");
-        if (driveC !== "") constantsList.push(driveC);
-      }
-      for (const k of Object.keys(headingConstants)) {
-        const headingC = keyToMikLibConstant(k, headingConstants[k], "Heading");
-        if (headingC !== "") constantsList.push(headingC);
-      }
-      if (commandName !== "") {
-        constantsList.push(`.callback = [](){ ${commandName} }`);
-        if (Number(commandPercent) !== 0) constantsList.push(`.callback_after_percent = ${commandPercent}`);
-      }
+      const { drive, heading } = k;
+      const constantsList = [
+        ...getConstantList$1(getUnequalmikConstants(kDefault.pointDrive.drive, drive), "Drive"),
+        ...getConstantList$1(getUnequalmikConstants(kDefault.pointDrive.heading, heading), "Heading")
+      ];
       const formattedConstants = constantsList.map((c) => `        ${c}`).join(",\n");
       pathString += constantsList.length === 0 ? `
     chassis.drive_to_point(${x}, ${y});` : constantsList.length === 1 ? `
@@ -15771,21 +17455,11 @@ ${formattedConstants}
     });`;
     }
     if (kind === "poseDrive") {
-      const driveConstants = getUnequalPIDConstants(getDefaultConstants("mikLib", kind).drive, control.constants.drive);
-      const headingConstants = getUnequalPIDConstants(getDefaultConstants("mikLib", kind).heading, control.constants.heading);
-      const constantsList = [];
-      for (const k of Object.keys(driveConstants)) {
-        const driveC = keyToMikLibConstant(k, driveConstants[k], "Drive");
-        if (driveC !== "") constantsList.push(driveC);
-      }
-      for (const k of Object.keys(headingConstants)) {
-        const headingC = keyToMikLibConstant(k, headingConstants[k], "Heading");
-        if (headingC !== "") constantsList.push(headingC);
-      }
-      if (commandName !== "") {
-        constantsList.push(`.callback = [](){ ${commandName} }`);
-        if (Number(commandPercent) !== 0) constantsList.push(`.callback_after_percent = ${commandPercent}`);
-      }
+      const { drive, heading } = k;
+      const constantsList = [
+        ...getConstantList$1(getUnequalmikConstants(kDefault.poseDrive.drive, drive), "Drive"),
+        ...getConstantList$1(getUnequalmikConstants(kDefault.poseDrive.heading, heading), "Heading")
+      ];
       const formattedConstants = constantsList.map((c) => `        ${c}`).join(",\n");
       pathString += constantsList.length === 0 ? `
     chassis.drive_to_pose(${x}, ${y}, ${angle});` : constantsList.length === 1 ? `
@@ -16198,22 +17872,34 @@ function reveilLibToSim(path) {
     const angle = control.pose.angle ?? 0;
     if (idx === 0) {
       auton.push((robot, dt) => {
-        return robot.setPose(x, y, angle);
+        return [robot.setPose(x, y, angle), "start", 0];
       });
       continue;
     }
     if (control.kind === "pointDrive") {
       const kPilon2 = cloneKRev(control.constants.drive);
       cleanupPilonsSegment();
+      let started = false;
+      let targetDist = 0;
       auton.push((robot, dt) => {
-        return pilonsSegment(robot, dt, x, y, kPilon2);
+        if (!started) {
+          targetDist = Math.hypot(x - robot.getX(), y - robot.getY());
+          started = true;
+        }
+        return [pilonsSegment(robot, dt, x, y, kPilon2), "pointDrive", targetDist];
       });
     }
     if (control.kind === "poseDrive") {
       const kBoomerang2 = cloneKRev(control.constants.drive);
       cleanupBoomerangSegment();
+      let started = false;
+      let targetDist = 0;
       auton.push((robot, dt) => {
-        return boomerangSegment(robot, dt, x, y, angle, kBoomerang2);
+        if (!started) {
+          targetDist = Math.hypot(x - robot.getX(), y - robot.getY());
+          started = true;
+        }
+        return [boomerangSegment(robot, dt, x, y, angle, kBoomerang2), "poseDrive", targetDist];
       });
     }
     if (control.kind === "pointTurn" || control.kind === "pointSwing") {
@@ -16221,25 +17907,42 @@ function reveilLibToSim(path) {
       const turnToPos = getForwardSnapPose(path, idx);
       const pos = turnToPos ? { x: turnToPos.x ?? 0, y: turnToPos.y ?? 0 } : previousPos ? { x: previousPos.x ?? 0, y: (previousPos.y ?? 0) + 5 } : { x: 0, y: 5 };
       const kLook = cloneKRev(control.constants.turn);
+      const kind = control.kind;
       cleanUplookAt();
+      let started = false;
+      let targetDist = 0;
       auton.push((robot, dt) => {
-        return lookAt(robot, dt, pos.x, pos.y, angle ?? 0, kLook);
+        if (!started) {
+          const targetAngle = wrapDeg180(toDeg(Math.atan2(pos.x - robot.getX(), pos.y - robot.getY())) + angle);
+          targetDist = Math.abs(wrapDeg180(targetAngle - robot.getAngle()));
+          started = true;
+        }
+        return [lookAt(robot, dt, pos.x, pos.y, angle ?? 0, kLook), kind, targetDist];
       });
     }
     if (control.kind === "angleTurn" || control.kind === "pointSwing") {
       const kTurn2 = cloneKRev(control.constants.turn);
+      const kind = control.kind;
       cleanupTurnSegment();
+      let started = false;
+      let targetDist = 0;
       auton.push((robot, dt) => {
-        return turnSegment(robot, dt, angle, kTurn2);
+        if (!started) {
+          targetDist = Math.abs(wrapDeg180(angle - robot.getAngle()));
+          started = true;
+        }
+        return [turnSegment(robot, dt, angle, kTurn2), kind, targetDist];
       });
     }
   }
   return auton;
 }
-const roundOff = (val, digits) => {
+const roundOff$1 = (val, digits) => {
   if (val === null || val === void 0 || typeof val === "string") return "";
   return trimZeros(val.toFixed(digits));
 };
+const MOVE_DEFAULTS = { speed: 0.75, min: 0.25, correction: 2, error: 0.5, coast: 300, harsh: 80 };
+const TURN_DEFAULTS = { speed: 0.75, min: 0.25, coast: 300, harsh: 80, time: 200 };
 function revToString(path, selected = false) {
   let pathString = "";
   for (let idx = 0; idx < path.segments.length; idx++) {
@@ -16247,28 +17950,26 @@ function revToString(path, selected = false) {
     if (selected && !control.selected) continue;
     const kind = control.kind;
     const revCoords = toRevCoordinate(control.pose.x ?? 0, control.pose.y ?? 0);
-    const x = roundOff(revCoords.x, 2);
-    const y = roundOff(revCoords.y, 2);
-    const angle = roundOff(control.pose.angle, 2);
+    const x = roundOff$1(revCoords.x, 2);
+    const y = roundOff$1(revCoords.y, 2);
+    const angle = roundOff$1(control.pose.angle, 2);
     if (idx === 0) {
       pathString += `  set_pose(${x}, ${y}, ${angle});`;
       continue;
     }
     if (kind === "angleTurn") {
       const k = control.constants.turn;
-      const defaults = getDefaultConstants("ReveilLib", "angleTurn").turn;
-      const diff = getUnequalRevConstants(defaults, k);
       const params = [];
-      if (diff.maxSpeed != null)
-        params.push(`.speed = ${roundOff(diff.maxSpeed, 2)}`);
-      if (diff.stopCoastPower != null)
-        params.push(`.min = ${roundOff(diff.stopCoastPower, 2)}`);
-      if (diff.stopCoastThreshold != null)
-        params.push(`.coast = ${roundOff(diff.stopCoastThreshold, 0)}`);
-      if (diff.stopHarshThreshold != null)
-        params.push(`.harsh = ${roundOff(diff.stopHarshThreshold, 0)}`);
-      if (diff.brakeTime != null)
-        params.push(`.time = ${roundOff(diff.brakeTime, 0)}`);
+      if (k.maxSpeed !== null && k.maxSpeed !== TURN_DEFAULTS.speed)
+        params.push(`.speed = ${roundOff$1(k.maxSpeed, 2)}`);
+      if (k.stopCoastPower !== null && k.stopCoastPower !== TURN_DEFAULTS.min)
+        params.push(`.min = ${roundOff$1(k.stopCoastPower, 2)}`);
+      if (k.stopCoastThreshold !== null && k.stopCoastThreshold !== TURN_DEFAULTS.coast)
+        params.push(`.coast = ${roundOff$1(k.stopCoastThreshold, 0)}`);
+      if (k.stopHarshThreshold !== null && k.stopHarshThreshold !== TURN_DEFAULTS.harsh)
+        params.push(`.harsh = ${roundOff$1(k.stopHarshThreshold, 0)}`);
+      if (k.brakeTime !== null && k.brakeTime !== TURN_DEFAULTS.time)
+        params.push(`.time = ${roundOff$1(k.brakeTime, 0)}`);
       pathString += params.length === 0 ? `
   turn(${angle});` : params.length === 1 ? `
   turn(${angle}, { ${params[0]} });` : `
@@ -16278,27 +17979,25 @@ ${params.map((p) => `    ${p}`).join(",\n")}
     }
     if (kind === "pointTurn") {
       const k = control.constants.turn;
-      const defaults = getDefaultConstants("ReveilLib", "pointTurn").turn;
-      const diff = getUnequalRevConstants(defaults, k);
       const params = [];
       const previousPos = getBackwardsSnapPose(path, idx - 1);
       const turnToPos = getForwardSnapPose(path, idx);
       turnToPos ? { x: turnToPos.x ?? 0, y: turnToPos.y ?? 0 } : previousPos ? { x: previousPos.x ?? 0, y: (previousPos.y ?? 0) + 5 } : {};
       const revCoords2 = toRevCoordinate(turnToPos?.x ?? 0, turnToPos?.y ?? 0);
-      const turnX = roundOff(revCoords2.x, 2);
-      const turnY = roundOff(revCoords2.y, 2);
-      if (angle !== null && Number(angle) !== 0)
+      const turnX = roundOff$1(revCoords2.x, 2);
+      const turnY = roundOff$1(revCoords2.y, 2);
+      if (angle !== null)
         params.push(`.offset = ${angle}`);
-      if (diff.maxSpeed != null)
-        params.push(`.speed = ${roundOff(diff.maxSpeed, 2)}`);
-      if (diff.stopCoastPower != null)
-        params.push(`.min = ${roundOff(diff.stopCoastPower, 2)}`);
-      if (diff.stopCoastThreshold != null)
-        params.push(`.coast = ${roundOff(diff.stopCoastThreshold, 0)}`);
-      if (diff.stopHarshThreshold != null)
-        params.push(`.harsh = ${roundOff(diff.stopHarshThreshold, 0)}`);
-      if (diff.brakeTime != null)
-        params.push(`.time = ${roundOff(diff.brakeTime, 0)}`);
+      if (k.maxSpeed !== null && k.maxSpeed !== TURN_DEFAULTS.speed)
+        params.push(`.speed = ${roundOff$1(k.maxSpeed, 2)}`);
+      if (k.stopCoastPower !== null && k.stopCoastPower !== TURN_DEFAULTS.min)
+        params.push(`.min = ${roundOff$1(k.stopCoastPower, 2)}`);
+      if (k.stopCoastThreshold !== null && k.stopCoastThreshold !== TURN_DEFAULTS.coast)
+        params.push(`.coast = ${roundOff$1(k.stopCoastThreshold, 0)}`);
+      if (k.stopHarshThreshold !== null && k.stopHarshThreshold !== TURN_DEFAULTS.harsh)
+        params.push(`.harsh = ${roundOff$1(k.stopHarshThreshold, 0)}`);
+      if (k.brakeTime !== null && k.brakeTime !== TURN_DEFAULTS.time)
+        params.push(`.time = ${roundOff$1(k.brakeTime, 0)}`);
       pathString += params.length === 0 ? `
   look(${turnX}, ${turnY});` : params.length === 1 ? `
   look(${turnX}, ${turnY}, { ${params[0]} });` : `
@@ -16308,27 +18007,491 @@ ${params.map((p) => `    ${p}`).join(",\n")}
     }
     if (kind === "pointDrive") {
       const k = control.constants.drive;
-      const defaults = getDefaultConstants("ReveilLib", "pointDrive").drive;
-      const diff = getUnequalRevConstants(defaults, k);
       const params = [];
-      if (diff.maxSpeed != null)
-        params.push(`.speed = ${roundOff(diff.maxSpeed, 2)}`);
-      if (diff.stopCoastPower != null)
-        params.push(`.min = ${roundOff(diff.stopCoastPower, 2)}`);
-      if (diff.kCorrection != null)
-        params.push(`.correction = ${roundOff(diff.kCorrection, 1)}`);
-      if (diff.maxError != null)
-        params.push(`.error = ${roundOff(diff.maxError, 2)}`);
-      if (diff.stopCoastThreshold != null)
-        params.push(`.coast = ${roundOff(diff.stopCoastThreshold, 0)}`);
-      if (diff.stopHarshThreshold != null)
-        params.push(`.harsh = ${roundOff(diff.stopHarshThreshold, 0)}`);
+      if (k.maxSpeed !== null && k.maxSpeed !== MOVE_DEFAULTS.speed)
+        params.push(`.speed = ${roundOff$1(k.maxSpeed, 2)}`);
+      if (k.stopCoastPower !== null && k.stopCoastPower !== MOVE_DEFAULTS.min)
+        params.push(`.min = ${roundOff$1(k.stopCoastPower, 2)}`);
+      if (k.kCorrection !== null && k.kCorrection !== MOVE_DEFAULTS.correction)
+        params.push(`.correction = ${roundOff$1(k.kCorrection, 1)}`);
+      if (k.maxError !== null && k.maxError !== MOVE_DEFAULTS.error)
+        params.push(`.error = ${roundOff$1(k.maxError, 2)}`);
+      if (k.stopCoastThreshold !== null && k.stopCoastThreshold !== MOVE_DEFAULTS.coast)
+        params.push(`.coast = ${roundOff$1(k.stopCoastThreshold, 0)}`);
+      if (k.stopHarshThreshold !== null && k.stopHarshThreshold !== MOVE_DEFAULTS.harsh)
+        params.push(`.harsh = ${roundOff$1(k.stopHarshThreshold, 0)}`);
       pathString += params.length === 0 ? `
   move(${x}, ${y});` : params.length === 1 ? `
   move(${x}, ${y}, { ${params[0]} });` : `
   move(${x}, ${y}, {
 ${params.map((p) => `    ${p}`).join(",\n")}
   });`;
+    }
+  }
+  if (selected) pathString = pathString.startsWith("\n") ? pathString.slice(1) : pathString;
+  return pathString;
+}
+let drivePID$1;
+let turnPID$2;
+let prev_line_settled$1 = false;
+let start_angle = 0;
+let start$3 = true;
+let telemetry_log = "";
+function resetMecanumDriveToPose() {
+  console.log(telemetry_log);
+  telemetry_log = "";
+  drivePID$1.reset();
+  turnPID$2.reset();
+  prev_line_settled$1 = false;
+  start_angle = 0;
+  start$3 = true;
+}
+function mecanumDriveToPose(robot, dt, x, y, angle, drive_p, heading_p) {
+  if (start$3) {
+    drivePID$1 = new PID(drive_p.kp, drive_p.ki, drive_p.kd, drive_p.starti, drive_p.settle_time, drive_p.settle_error, drive_p.timeout, 0);
+    turnPID$2 = new PID(heading_p.kp, heading_p.ki, heading_p.kd, heading_p.starti, heading_p.settle_time, heading_p.settle_error, drive_p.timeout, 0);
+    start_angle = robot.getAngle();
+    start$3 = false;
+  }
+  if (drivePID$1.isSettled() && turnPID$2.isSettled()) {
+    resetMecanumDriveToPose();
+    return true;
+  }
+  const desired_heading2 = toDeg(Math.atan2(x - robot.getX(), y - robot.getY()));
+  const line_settled = is_line_settled(x, y, desired_heading2, robot.getX(), robot.getY(), drive_p.exit_error);
+  if (!(line_settled === prev_line_settled$1) && drive_p.min_voltage > 0) {
+    resetMecanumDriveToPose();
+    return true;
+  }
+  prev_line_settled$1 = line_settled;
+  const drive_error = Math.hypot(x - robot.getX(), y - robot.getY());
+  if (drive_error > drive_p.start_turn && drive_p.start_turn > 0) {
+    angle = start_angle;
+  }
+  const turn_error = reduce_negative_180_to_180(angle - robot.getAngle());
+  let drive_output = drivePID$1.compute(drive_error);
+  let turn_output = turnPID$2.compute(turn_error);
+  drive_output = clamp(drive_output, -drive_p.maxSpeed, drive_p.maxSpeed);
+  turn_output = clamp(turn_output, -heading_p.maxSpeed, heading_p.maxSpeed);
+  drive_output = clamp_min_voltage(drive_output, drive_p.min_voltage);
+  turn_output = clamp_min_voltage(turn_output, heading_p.min_voltage);
+  const heading_error = Math.atan2(y - robot.getY(), x - robot.getX());
+  const angle_to_target = reduce_negative_180_to_180(desired_heading2 - robot.getAngle());
+  const heading_scale_factor = Math.cos(toRad(angle_to_target));
+  let left_center_voltage = clamp(drive_output * heading_scale_factor, -Math.abs(heading_scale_factor) * drive_p.maxSpeed, Math.abs(heading_scale_factor) * drive_p.maxSpeed);
+  let right_center_voltage = clamp(drive_output * heading_scale_factor, -Math.abs(heading_scale_factor) * drive_p.maxSpeed, Math.abs(heading_scale_factor) * drive_p.maxSpeed);
+  left_center_voltage = 0;
+  right_center_voltage = 0;
+  const left_front_output = (drive_output * Math.cos(toRad(robot.getAngle()) + heading_error - Math.PI / 4) + turn_output) / kMikLibSpeed;
+  const left_back_output = (drive_output * Math.cos(-toRad(robot.getAngle()) - heading_error + 3 * Math.PI / 4) + turn_output) / kMikLibSpeed;
+  const right_back_output = (drive_output * Math.cos(toRad(robot.getAngle()) + heading_error - Math.PI / 4) - turn_output) / kMikLibSpeed;
+  const right_front_output = (drive_output * Math.cos(-toRad(robot.getAngle()) - heading_error + 3 * Math.PI / 4) - turn_output) / kMikLibSpeed;
+  telemetry_log += `current_x: ${robot.getX()} | current_y: ${robot.getY()} | current_heading_deg: ${robot.getAngle()} | drive_error: ${drive_error} | turn_error_deg: ${turn_error} | drive_output: ${drive_output} | turn_output: ${turn_output} | desired_heading_deg: ${desired_heading2} | angle_to_target_deg: ${angle_to_target} | heading_scale_factor: ${heading_scale_factor} | center_output: ${drive_output * heading_scale_factor} | center_max_speed: ${Math.abs(heading_scale_factor) * drive_p.maxSpeed} | left_front_output: ${left_front_output} | right_front_output: ${right_front_output} | left_back_output: ${left_back_output} | right_back_output: ${right_back_output} | left_center_voltage: ${left_center_voltage} | right_center_voltage: ${right_center_voltage}
+`;
+  robot.asteriskDrive(left_front_output, right_front_output, left_center_voltage, right_center_voltage, left_back_output, right_back_output, dt);
+  return false;
+}
+let desired_heading = 0;
+let prev_line_settled = false;
+let heading_locked = false;
+let locked_heading = 0;
+let drivePID;
+let headingPID;
+let start$2 = true;
+function resetMecanumDriveToPoint() {
+  drivePID.reset();
+  headingPID.reset();
+  desired_heading = 0;
+  prev_line_settled = false;
+  heading_locked = false;
+  locked_heading = 0;
+  start$2 = true;
+}
+function mecanumDriveToPoint(robot, dt, x, y, drive_p, heading_p) {
+  if (start$2) {
+    drivePID = new PID(drive_p.kp, drive_p.ki, drive_p.kd, drive_p.starti, drive_p.settle_time, drive_p.settle_error, drive_p.timeout, 0);
+    headingPID = new PID(heading_p.kp, heading_p.ki, heading_p.kd, heading_p.starti, heading_p.settle_time, heading_p.settle_error, heading_p.timeout, 0);
+    desired_heading = toDeg(Math.atan2(x - robot.getX(), y - robot.getY()));
+    start$2 = false;
+  }
+  if (drivePID.isSettled()) {
+    resetMecanumDriveToPoint();
+    return true;
+  }
+  const line_settled = is_line_settled(x, y, desired_heading, robot.getX(), robot.getY(), drive_p.exit_error);
+  if (!(line_settled === prev_line_settled) && drive_p.min_voltage > 0) {
+    resetMecanumDriveToPoint();
+    return true;
+  }
+  prev_line_settled = line_settled;
+  desired_heading = toDeg(Math.atan2(x - robot.getX(), y - robot.getY()));
+  const drive_error = Math.hypot(x - robot.getX(), y - robot.getY());
+  let heading_error = reduce_negative_180_to_180(desired_heading - robot.getAngle());
+  let drive_output = drivePID.compute(drive_error);
+  const heading_scale_factor = Math.cos(toRad(heading_error));
+  drive_output *= heading_scale_factor;
+  if (drive_error < 6) {
+    if (!heading_locked) {
+      locked_heading = desired_heading;
+      heading_locked = true;
+    }
+    heading_error = reduce_negative_180_to_180(locked_heading - robot.getAngle());
+  }
+  heading_error = reduce_negative_90_to_90(heading_error);
+  let heading_output = headingPID.compute(heading_error);
+  drive_output = clamp(drive_output, -Math.abs(heading_scale_factor) * drive_p.maxSpeed, Math.abs(heading_scale_factor) * drive_p.maxSpeed);
+  heading_output = clamp(heading_output, -heading_p.maxSpeed, heading_p.maxSpeed);
+  drive_output = clamp_min_voltage(drive_output, drive_p.min_voltage);
+  const left_output = left_voltage_scaling(drive_output, heading_output) / kMikLibSpeed;
+  const right_output = right_voltage_scaling(drive_output, heading_output) / kMikLibSpeed;
+  robot.asteriskDrive(left_output, right_output, left_output, right_output, left_output, right_output, dt);
+  return false;
+}
+let crossed$1 = false;
+let prev_error$1 = 0;
+let prev_raw_error$1 = 0;
+let turnPID$1;
+let start$1 = true;
+function resetMecanumTurnToPoint() {
+  crossed$1 = false;
+  prev_error$1 = 0;
+  prev_raw_error$1 = 0;
+  turnPID$1.reset();
+  start$1 = true;
+}
+function mecanumTurnToPoint(robot, dt, x, y, offset, p) {
+  const angle = toDeg(Math.atan2(x - robot.getX(), y - robot.getY())) + offset;
+  const raw_error = angle_error(angle - robot.getAngle(), null);
+  let error = angle_error(angle - robot.getAngle(), p.turn_direction);
+  if (start$1) {
+    prev_error$1 = error;
+    prev_raw_error$1 = raw_error;
+    turnPID$1 = new PID(p.kp, p.ki, p.kd, p.starti, p.settle_time, p.settle_error, p.timeout, p.min_voltage > 0 ? p.exit_error : 0);
+    start$1 = false;
+  }
+  if (Math.sign(raw_error) != Math.sign(prev_raw_error$1)) {
+    crossed$1 = true;
+  }
+  prev_raw_error$1 = raw_error;
+  if (crossed$1) {
+    error = raw_error;
+  } else {
+    error = angle_error(angle - robot.getAngle(), p.turn_direction);
+  }
+  if (p.min_voltage != 0 && crossed$1 && Math.sign(error) != Math.sign(prev_error$1)) {
+    resetMecanumTurnToPoint();
+    return true;
+  }
+  prev_error$1 = error;
+  let output = turnPID$1.compute(error);
+  if (turnPID$1.isSettled()) {
+    resetMecanumTurnToPoint();
+    return true;
+  }
+  output = clamp(output, -p.maxSpeed, p.maxSpeed);
+  output = clamp_min_voltage(output, p.min_voltage) / kMikLibSpeed;
+  robot.mecanumDrive(output, -output, output, -output, dt);
+  return false;
+}
+let crossed = false;
+let prev_error = 0;
+let prev_raw_error = 0;
+let turnPID;
+let start = true;
+function resetMecanumTurnToAngle() {
+  crossed = false;
+  prev_error = 0;
+  prev_raw_error = 0;
+  turnPID.reset();
+  start = true;
+}
+function mecanumTurnToAngle(robot, dt, angle, p) {
+  const raw_error = angle_error(angle - robot.getAngle(), null);
+  let error = angle_error(angle - robot.getAngle(), p.turn_direction);
+  if (start) {
+    prev_error = error;
+    prev_raw_error = raw_error;
+    turnPID = new PID(p.kp, p.ki, p.kd, p.starti, p.settle_time, p.settle_error, p.timeout, p.min_voltage > 0 ? p.exit_error : 0);
+    start = false;
+  }
+  if (Math.sign(raw_error) != Math.sign(prev_raw_error)) {
+    crossed = true;
+  }
+  prev_raw_error = raw_error;
+  if (crossed) {
+    error = raw_error;
+  } else {
+    error = angle_error(angle - robot.getAngle(), p.turn_direction);
+  }
+  if (p.min_voltage != 0 && crossed && Math.sign(error) != Math.sign(prev_error)) {
+    resetMecanumTurnToAngle();
+    return true;
+  }
+  prev_error = error;
+  let output = turnPID.compute(error);
+  if (turnPID.isSettled()) {
+    resetMecanumTurnToAngle();
+    return true;
+  }
+  output = clamp(output, -p.maxSpeed, p.maxSpeed);
+  output = clamp_min_voltage(output, p.min_voltage) / kMikLibSpeed;
+  robot.mecanumDrive(output, -output, output, -output, dt);
+  return false;
+}
+SIM_CONSTANTS.seconds = 99;
+function RevMecanumToSim(path) {
+  const auton = [];
+  for (let idx = 0; idx < path.segments.length; idx++) {
+    const control = path.segments[idx];
+    const x = control.pose.x ?? 0;
+    const y = control.pose.y ?? 0;
+    const angle = control.pose.angle ?? 0;
+    const k = control.constants;
+    if (idx === 0) {
+      auton.push(
+        (robot, dt) => {
+          return [robot.setPose(x, y, angle), "start", 0];
+        }
+      );
+      continue;
+    }
+    if (control.kind === "pointDrive") {
+      const drive = k.drive;
+      const heading = k.turn;
+      let started = false;
+      let targetDist = 0;
+      auton.push(
+        (robot, dt) => {
+          if (!started) {
+            DEBUG_printSegmentStart(idx, control.kind);
+            targetDist = Math.hypot(x - robot.getX(), y - robot.getY());
+            started = true;
+          }
+          const output = mecanumDriveToPoint(robot, dt, x, y, drive, heading);
+          if (output) DEBUG_printSegmentEnd(idx, control.kind);
+          return [output, "pointDrive", targetDist];
+        }
+      );
+    }
+    if (control.kind === "poseDrive") {
+      const drive = k.drive;
+      const heading = k.turn;
+      let started = false;
+      let targetDist = 0;
+      auton.push(
+        (robot, dt) => {
+          if (!started) {
+            DEBUG_printSegmentStart(idx, control.kind);
+            targetDist = Math.hypot(x - robot.getX(), y - robot.getY());
+            started = true;
+          }
+          const output = mecanumDriveToPose(robot, dt, x, y, angle, drive, heading);
+          if (output) DEBUG_printSegmentEnd(idx, control.kind);
+          return [output, "poseDrive", targetDist];
+        }
+      );
+    }
+    if (control.kind === "pointTurn") {
+      const pos = findPointToFace(path, idx);
+      const turn = k.turn;
+      let started = false;
+      let targetDist = 0;
+      auton.push(
+        (robot, dt) => {
+          if (!started) {
+            DEBUG_printSegmentStart(idx, control.kind);
+            const targetAngle = toDeg(Math.atan2(pos.x - robot.getX(), pos.y - robot.getY())) + angle;
+            targetDist = Math.abs(angle_error(targetAngle - robot.getAngle(), null));
+            started = true;
+          }
+          const output = mecanumTurnToPoint(robot, dt, pos.x, pos.y, angle, turn);
+          if (output) DEBUG_printSegmentEnd(idx, control.kind);
+          return [output, "pointTurn", targetDist];
+        }
+      );
+    }
+    if (control.kind === "angleTurn") {
+      const turn = k.turn;
+      let started = false;
+      let targetDist = 0;
+      auton.push(
+        (robot, dt) => {
+          if (!started) {
+            DEBUG_printSegmentStart(idx, control.kind);
+            targetDist = Math.abs(angle_error(angle - robot.getAngle(), null));
+            started = true;
+          }
+          const output = mecanumTurnToAngle(robot, dt, angle, turn);
+          if (output) DEBUG_printSegmentEnd(idx, control.kind);
+          return [output, "angleTurn", targetDist];
+        }
+      );
+    }
+  }
+  return auton;
+}
+function DEBUG_printSegmentStart(idx, kind) {
+  console.log(`%cStarting ${getSegmentName("RevMecanum", kind)} ${idx}`, "color: lime; font-weight: bold");
+}
+function DEBUG_printSegmentEnd(idx, kind) {
+  console.log(`%cEnding ${getSegmentName("RevMecanum", kind)} ${idx}`, "color: #ff6b6b; font-weight: bold");
+}
+const roundOff = (val, digits) => {
+  if (val === null || val === void 0 || typeof val === "string") return "";
+  return trimZeros(val.toFixed(digits));
+};
+const keyToRevMecanumConstant = (key, value, constantType) => {
+  if (constantType === "Drive") {
+    switch (key) {
+      case "kp":
+        return `.drive_k.p = ${roundOff(value, 3)}`;
+      case "ki":
+        return `.drive_k.i = ${roundOff(value, 5)}`;
+      case "kd":
+        return `.drive_k.d = ${roundOff(value, 3)}`;
+      case "starti":
+        return `.drive_k.starti = ${roundOff(value, 2)}`;
+      case "maxSpeed":
+        return `.max_speed = ${roundOff(value, 1)}`;
+      case "min_voltage":
+        return `.min_speed = ${roundOff(value, 1)}`;
+      case "center_max_speed":
+        return `.center_max_speed = ${roundOff(value, 1)}`;
+      case "settle_error":
+        return `.drive_settle.settle_error = ${roundOff(value, 2)}_in`;
+      case "settle_time":
+        return `.drive_settle.settle_time = ${roundOff(value, 0)}_ms`;
+      case "timeout":
+        return `.timeout = ${roundOff(value, 0)}_ms`;
+      case "exit_error":
+        return `.exit_error = ${roundOff(value, 2)}_in`;
+    }
+  } else if (constantType === "TurnInDrive") {
+    switch (key) {
+      case "kp":
+        return `.turn_k.p = ${roundOff(value, 3)}`;
+      case "ki":
+        return `.turn_k.i = ${roundOff(value, 5)}`;
+      case "kd":
+        return `.turn_k.d = ${roundOff(value, 3)}`;
+      case "starti":
+        return `.turn_k.starti = ${roundOff(value, 2)}`;
+      case "maxSpeed":
+        return `.turn_max_speed = ${roundOff(value, 1)}`;
+      case "settle_error":
+        return `.turn_settle.settle_error = ${roundOff(value, 2)}_deg`;
+      case "settle_time":
+        return `.turn_settle.settle_time = ${roundOff(value, 0)}_ms`;
+    }
+  } else if (constantType === "Turn") {
+    switch (key) {
+      case "kp":
+        return `.turn_k.p = ${roundOff(value, 3)}`;
+      case "ki":
+        return `.turn_k.i = ${roundOff(value, 5)}`;
+      case "kd":
+        return `.turn_k.d = ${roundOff(value, 3)}`;
+      case "starti":
+        return `.turn_k.starti = ${roundOff(value, 2)}`;
+      case "maxSpeed":
+        return `.max_speed = ${roundOff(value, 1)}`;
+      case "min_voltage":
+        return `.min_speed = ${roundOff(value, 1)}`;
+      case "settle_error":
+        return `.turn_settle.settle_error = ${roundOff(value, 2)}_deg`;
+      case "settle_time":
+        return `.turn_settle.settle_time = ${roundOff(value, 0)}_ms`;
+      case "timeout":
+        return `.timeout = ${roundOff(value, 0)}_ms`;
+      case "exit_error":
+        return `.exit_error = ${roundOff(value, 2)}_deg`;
+    }
+  }
+  return "";
+};
+const getConstantList = (constants, constantType) => {
+  const constantsList = [];
+  for (const k of Object.keys(constants)) {
+    const value = constants[k];
+    if (value === void 0) continue;
+    const c = keyToRevMecanumConstant(k, value, constantType);
+    if (c !== "") constantsList.push(c);
+  }
+  return constantsList;
+};
+function RevMecanumToString(path, selected = false) {
+  let pathString = "";
+  const kDefault = {
+    angleTurn: getDefaultConstants("RevMecanum", "angleTurn"),
+    pointTurn: getDefaultConstants("RevMecanum", "pointTurn"),
+    pointDrive: getDefaultConstants("RevMecanum", "pointDrive"),
+    poseDrive: getDefaultConstants("RevMecanum", "poseDrive")
+  };
+  for (let idx = 0; idx < path.segments.length; idx++) {
+    const control = path.segments[idx];
+    if (selected && !control.selected) continue;
+    const kind = control.kind;
+    const k = control.constants;
+    const x = roundOff(control.pose.x, 2);
+    const y = roundOff(control.pose.y, 2);
+    const angle = roundOff(control.pose.angle, 2);
+    if (idx === 0) {
+      pathString += `    odom->set_position({${x}_in, ${y}_in, ${angle}_deg});`;
+      continue;
+    }
+    if (kind === "angleTurn") {
+      const { turn } = k;
+      const constantsList = getConstantList(getUnequalRevMecanumConstants(kDefault.angleTurn.turn, turn), "Turn");
+      const formattedConstants = constantsList.map((c) => `        ${c}`).join(",\n");
+      pathString += constantsList.length === 0 ? `
+    turn(${angle}_deg);` : constantsList.length === 1 ? `
+    turn(${angle}_deg, { ${constantsList[0]} });` : `
+    turn(${angle}_deg, {
+${formattedConstants}
+    });`;
+    }
+    if (kind === "pointTurn") {
+      const { turn } = k;
+      const constantsList = getConstantList(getUnequalRevMecanumConstants(kDefault.pointTurn.turn, turn), "Turn");
+      if (Number(angle) !== 0) constantsList.unshift(`.offset = ${angle}_deg`);
+      const pos = findPointToFace(path, idx);
+      const turnX = roundOff(pos.x, 2);
+      const turnY = roundOff(pos.y, 2);
+      const formattedConstants = constantsList.map((c) => `        ${c}`).join(",\n");
+      pathString += constantsList.length === 0 ? `
+    turn(${turnX}_in, ${turnY}_in);` : constantsList.length === 1 ? `
+    turn(${turnX}_in, ${turnY}_in, { ${constantsList[0]} });` : `
+    turn(${turnX}_in, ${turnY}_in, {
+${formattedConstants}
+    });`;
+    }
+    if (kind === "pointDrive") {
+      const { drive, turn } = k;
+      const constantsList = [
+        ...getConstantList(getUnequalRevMecanumConstants(kDefault.pointDrive.drive, drive), "Drive"),
+        ...getConstantList(getUnequalRevMecanumConstants(kDefault.pointDrive.turn, turn), "TurnInDrive")
+      ];
+      const formattedConstants = constantsList.map((c) => `        ${c}`).join(",\n");
+      pathString += constantsList.length === 0 ? `
+    drive(${x}_in, ${y}_in);` : constantsList.length === 1 ? `
+    drive(${x}_in, ${y}_in, { ${constantsList[0]} });` : `
+    drive(${x}_in, ${y}_in, {
+${formattedConstants}
+    });`;
+    }
+    if (kind === "poseDrive") {
+      const { drive, turn } = k;
+      const constantsList = [
+        ...getConstantList(getUnequalRevMecanumConstants(kDefault.poseDrive.drive, drive), "Drive"),
+        ...getConstantList(getUnequalRevMecanumConstants(kDefault.poseDrive.turn, turn), "TurnInDrive")
+      ];
+      const formattedConstants = constantsList.map((c) => `        ${c}`).join(",\n");
+      pathString += constantsList.length === 0 ? `
+    drive(${x}_in, ${y}_in, ${angle}_deg);` : constantsList.length === 1 ? `
+    drive(${x}_in, ${y}_in, ${angle}_deg, { ${constantsList[0]} });` : `
+    drive(${x}_in, ${y}_in, ${angle}_deg, {
+${formattedConstants}
+    });`;
     }
   }
   if (selected) pathString = pathString.startsWith("\n") ? pathString.slice(1) : pathString;
@@ -16342,6 +18505,14 @@ function convertPathToSim(path, format) {
     const out = reveilLibToSim(path);
     return out;
   }
+  if (format === "LemLib") {
+    const out = LemLibToSim(path);
+    return out;
+  }
+  if (format === "RevMecanum") {
+    const out = RevMecanumToSim(path);
+    return out;
+  }
   const emptyAuton = [];
   return emptyAuton;
 }
@@ -16351,6 +18522,12 @@ function convertPathToString(path, format, selected = false) {
   }
   if (format === "ReveilLib") {
     return revToString(path, selected);
+  }
+  if (format === "LemLib") {
+    return LemLibToString(path, selected);
+  }
+  if (format === "RevMecanum") {
+    return RevMecanumToString(path, selected);
   }
 }
 function pointerToSvg(evt, svg) {
@@ -16384,6 +18561,14 @@ const getPreciseSegmentLines = (idx, img) => {
   }
   return points.join(" ");
 };
+function getLead(m) {
+  const lead1 = m?.constants?.drive?.lead;
+  const lead2 = m?.constants?.lateral?.lead;
+  if (lead1) return lead1;
+  if (lead2) return lead2;
+  console.log(lead1, lead2);
+  return 0;
+}
 const getSegmentLines = (idx, path, img, precise = false) => {
   if (idx <= 0) return null;
   if (precise) {
@@ -16398,8 +18583,7 @@ const getSegmentLines = (idx, path, img, precise = false) => {
   if (m.kind === "pointDrive" || m.kind === "distanceDrive") {
     return `${pStart.x},${pStart.y} ${pEnd.x},${pEnd.y}`;
   }
-  if (m.constants?.drive === void 0) return "";
-  const lead = m.constants.drive.lead ?? 0;
+  const lead = getLead(m);
   if (m.kind !== "poseDrive") return "";
   const ΘEnd = m.pose.angle ?? 0;
   const h = Math.sqrt(
@@ -16440,40 +18624,26 @@ function FieldMacros() {
           ...c,
           pose: {
             ...c.pose,
-            x: c.pose.x !== null ? clamp(
-              c.pose.x + xScale,
-              MIN_FIELD_X,
-              MAX_FIELD_X
-            ) : c.pose.x,
-            y: c.pose.y !== null ? clamp(
-              c.pose.y + yScale,
-              MIN_FIELD_Y,
-              MAX_FIELD_Y
-            ) : c.pose.y
+            x: c.pose.x !== null ? clamp(c.pose.x + xScale, MIN_FIELD_X, MAX_FIELD_X) : c.pose.x,
+            y: c.pose.y !== null ? clamp(c.pose.y + yScale, MIN_FIELD_Y, MAX_FIELD_Y) : c.pose.y
           }
         } : c
       );
-      AddToUndoHistory({ path: { ...prev, segments: newSegments } });
-      return {
-        ...prev,
-        segments: newSegments
-      };
+      return { ...prev, segments: newSegments };
     });
-    setPath((prev) => ({
-      ...prev
-    }));
   }
   let bigAccum = 0;
   let smallAccum = 0;
   let bigLocked = false;
   let bigIdleTimer = null;
-  function moveHeading(evt, setPath) {
+  function moveHeading(evt, path, setPath) {
     const BASE_STEP = 90;
     const SMALL_STEP = 5;
     const BIG_TICK_PX = 10;
     const SMALL_TICK_PX = 20;
     const BIG_IDLE_MS = 50;
     if (!evt.shiftKey) return;
+    if (path.segments.filter((c) => c.selected).every((c) => c.pose.angle === null)) return false;
     evt.preventDefault();
     let dy = evt.deltaY;
     if (evt.deltaMode === 1) dy *= 16;
@@ -16490,33 +18660,30 @@ function FieldMacros() {
             }
           } : c
         );
-        AddToUndoHistory({ path: { ...prev, segments: newSegments } });
-        return {
-          ...prev,
-          segments: newSegments
-        };
+        return { ...prev, segments: newSegments };
       });
     };
     if (evt.ctrlKey) {
       smallAccum += dy;
-      if (Math.abs(smallAccum) < SMALL_TICK_PX) return;
+      if (Math.abs(smallAccum) < SMALL_TICK_PX) return false;
       const dir2 = smallAccum < 0 ? 1 : -1;
       smallAccum = 0;
       apply(dir2 * SMALL_STEP);
-      return;
+      return true;
     }
     if (bigIdleTimer) clearTimeout(bigIdleTimer);
     bigIdleTimer = setTimeout(() => {
       bigLocked = false;
       bigAccum = 0;
     }, BIG_IDLE_MS);
-    if (bigLocked) return;
+    if (bigLocked) return false;
     bigAccum += dy;
-    if (Math.abs(bigAccum) < BIG_TICK_PX) return;
+    if (Math.abs(bigAccum) < BIG_TICK_PX) return false;
     const dir = bigAccum < 0 ? 1 : -1;
     bigAccum = 0;
     bigLocked = true;
     apply(dir * BASE_STEP);
+    return true;
   }
   function unselectPath(evt, setPath) {
     if (evt.key === "Escape") {
@@ -16856,6 +19023,7 @@ function AddSegmentButton() {
     addAngleTurnSegment,
     addAngleSwingSegment,
     addPointSwingSegment,
+    addDistanceSegment,
     addSegmentGroup
   } = FieldMacros();
   reactExports.useEffect(() => {
@@ -16897,6 +19065,17 @@ function AddSegmentButton() {
           children: [
             /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "text-[16px]", children: getSegmentName(format, "poseDrive") }),
             /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "text-lightgray text-[14px]", children: "Ctrl+LMB" })
+          ]
+        }
+      ),
+      segmentAllowed(format, "distanceDrive") && /* @__PURE__ */ jsxRuntimeExports.jsxs(
+        "button",
+        {
+          onClick: () => addDistanceSegment(format, { x: 0, y: 0, angle: 0 }, setPath),
+          className: "flex pr-1 pl-2 py-0.5 items-center justify-between hover:bg-blackgrayhover cursor-pointer rounded-sm",
+          children: [
+            /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "text-[16px]", children: getSegmentName(format, "distanceDrive") }),
+            /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "text-lightgray text-[14px]", children: "Alt+LMB" })
           ]
         }
       ),
@@ -17006,8 +19185,8 @@ function CopyPathButton() {
   } = FieldMacros();
   reactExports.useEffect(() => {
     const handleKeyDown = (evt) => {
-      const target = evt.target;
-      if (target?.isContentEditable || target?.tagName === "INPUT") return;
+      const target2 = evt.target;
+      if (target2?.isContentEditable || target2?.tagName === "INPUT") return;
       copyAllPath(evt, pathRef.current, formatRef.current, triggerFlash);
       copySelectedPath(evt, pathRef.current, formatRef.current, triggerFlash);
     };
@@ -17097,7 +19276,7 @@ function CopyPathButton() {
     }
   );
 }
-function PathConfigHeader({ name, isOpen, setOpen }) {
+function PathConfigHeader({ name, isOpen, setOpen, isTelemetryOpen, onTelemetryToggle }) {
   const [isEyeOpen, setEyeOpen] = reactExports.useState(false);
   const [, setPathVisibility] = usePathVisibility();
   const handleOpenOnClick = () => {
@@ -17127,24 +19306,13 @@ function PathConfigHeader({ name, isOpen, setOpen }) {
           )
         }
       ),
+      /* @__PURE__ */ jsxRuntimeExports.jsx("button", { className: "cursor-pointer", onClick: onTelemetryToggle, children: /* @__PURE__ */ jsxRuntimeExports.jsx("img", { className: "w-[20px] h-[22px]", src: isTelemetryOpen ? clockClose : clockOpen }) }),
       /* @__PURE__ */ jsxRuntimeExports.jsx(
         "button",
         {
           onClick: handleOpenOnClick,
           className: "hover:bg-medgray_hover px-1 py-1 rounded-sm",
-          children: isOpen ? /* @__PURE__ */ jsxRuntimeExports.jsx(
-            "img",
-            {
-              className: `w-[15px] h-[15px] rotate-180`,
-              src: downArrow
-            }
-          ) : /* @__PURE__ */ jsxRuntimeExports.jsx(
-            "img",
-            {
-              className: `w-[15px] h-[15px] rotate-0`,
-              src: downArrow
-            }
-          )
+          children: /* @__PURE__ */ jsxRuntimeExports.jsx("img", { className: `w-[15px] h-[15px] transition-transform duration-200 ${isOpen ? "rotate-180" : "rotate-0"}`, src: downArrow })
         }
       ),
       /* @__PURE__ */ jsxRuntimeExports.jsx(AddSegmentButton, {})
@@ -17153,154 +19321,14 @@ function PathConfigHeader({ name, isOpen, setOpen }) {
 }
 const filterOn = "data:image/svg+xml,%3csvg%20width='20'%20height='20'%20viewBox='0%200%2020%2020'%20fill='none'%20xmlns='http://www.w3.org/2000/svg'%3e%3cpath%20d='M16.6666%204.66673C16.6666%204.20002%2016.6663%203.96649%2016.5755%203.78823C16.4956%203.63143%2016.3686%203.50404%2016.2118%203.42414C16.0336%203.33331%2015.7997%203.33331%2015.333%203.33331H4.66632C4.19961%203.33331%203.96649%203.33331%203.78823%203.42414C3.63143%203.50404%203.50404%203.63143%203.42414%203.78823C3.33331%203.96649%203.33331%204.20002%203.33331%204.66673V5.28111C3.33331%205.48494%203.33331%205.58692%203.35634%205.68283C3.37675%205.76786%203.4105%205.84909%203.4562%205.92365C3.50771%206.00771%203.5799%206.0799%203.72394%206.22394L7.94289%2010.4429C8.087%2010.587%208.15868%2010.6586%208.21021%2010.7428C8.2559%2010.8173%208.29011%2010.8988%208.31053%2010.9839C8.33331%2011.0788%208.33331%2011.1796%208.33331%2011.3793V15.3425C8.33331%2016.0568%208.33331%2016.4142%208.48373%2016.6293C8.61515%2016.8171%208.81781%2016.9425%209.04456%2016.976C9.30423%2017.0143%209.6239%2016.8547%2010.2628%2016.5353L10.9295%2016.202C11.1971%2016.0682%2011.3305%2016.0011%2011.4282%2015.9012C11.5146%2015.813%2011.5808%2015.7071%2011.6211%2015.5903C11.6666%2015.4582%2011.6666%2015.3083%2011.6666%2015.0091V11.3855C11.6666%2011.1816%2011.6666%2011.0798%2011.6896%2010.9839C11.7101%2010.8988%2011.7438%2010.8173%2011.7896%2010.7428C11.8407%2010.6592%2011.9122%2010.5877%2012.0544%2010.4456L12.0573%2010.4429L16.2762%206.22394C16.4203%206.07981%2016.492%206.00775%2016.5436%205.92365C16.5892%205.84909%2016.6235%205.76786%2016.6439%205.68283C16.6666%205.5879%2016.6666%205.48701%2016.6666%205.28731V4.66673Z'%20stroke='white'%20stroke-width='1.5'%20stroke-linecap='round'%20stroke-linejoin='round'/%3e%3c/svg%3e";
 const filterOff = "data:image/svg+xml,%3csvg%20width='20'%20height='20'%20viewBox='0%200%2020%2020'%20fill='none'%20xmlns='http://www.w3.org/2000/svg'%3e%3cpath%20d='M10.8333%203.33331H15.3333C15.8001%203.33331%2016.0341%203.33331%2016.2123%203.42414C16.3691%203.50404%2016.4956%203.63143%2016.5755%203.78823C16.6663%203.96649%2016.6666%204.20002%2016.6666%204.66673V5.28731C16.6666%205.48701%2016.6666%205.5879%2016.6439%205.68283C16.6235%205.76786%2016.5893%205.84909%2016.5436%205.92365C16.4921%206.00774%2016.4202%206.07981%2016.2761%206.22394L15%207.50008M6.24965%203.33331H4.66632C4.19961%203.33331%203.96649%203.33331%203.78823%203.42414C3.63143%203.50404%203.50404%203.63143%203.42414%203.78823C3.33331%203.96649%203.33331%204.20002%203.33331%204.66673V5.28111C3.33331%205.48494%203.33331%205.58692%203.35634%205.68283C3.37675%205.76786%203.4105%205.84909%203.4562%205.92365C3.50771%206.00771%203.5799%206.0799%203.72394%206.22394L7.94289%2010.4429C8.087%2010.587%208.15868%2010.6586%208.21021%2010.7428C8.2559%2010.8173%208.29011%2010.8988%208.31053%2010.9839C8.33331%2011.0788%208.33331%2011.1796%208.33331%2011.3793V15.3425C8.33331%2016.0568%208.33331%2016.4142%208.48373%2016.6293C8.61515%2016.8171%208.81781%2016.9425%209.04456%2016.976C9.30423%2017.0143%209.6239%2016.8547%2010.2628%2016.5353L10.9295%2016.202C11.1971%2016.0682%2011.3305%2016.0011%2011.4282%2015.9012C11.5146%2015.813%2011.5808%2015.7071%2011.6211%2015.5902C11.6666%2015.4582%2011.6666%2015.3083%2011.6666%2015.0091V11.3855C11.6666%2011.1816%2011.6666%2011.0798%2011.6896%2010.9839C11.7101%2010.8988%2011.7438%2010.8174%2011.7896%2010.7429C11.8409%2010.6591%2011.9126%2010.5873%2012.0557%2010.4442L12.0573%2010.4428L12.9167%209.5834M12.9167%209.5834L4.16665%200.833313M12.9167%209.5834L15.8333%2012.5'%20stroke='white'%20stroke-width='1.5'%20stroke-linecap='round'%20stroke-linejoin='round'/%3e%3c/svg%3e";
-function getGroupInsertMeta(segments, groupHeaderId, draggedId) {
-  const headerIdx = segments.findIndex((s) => s.id === groupHeaderId);
-  if (headerIdx === -1) return null;
-  const groupSeg = segments[headerIdx];
-  if (!groupSeg || groupSeg.kind !== "group") return null;
-  const gid = groupSeg.groupId ?? groupSeg.id;
-  const topInsertIndex = headerIdx + 1;
-  let bottomInsertIndex = headerIdx + 1;
-  for (let i = segments.length - 1; i >= 0; i--) {
-    const s = segments[i];
-    if (s.id === draggedId) continue;
-    if (s.groupId === gid && s.kind !== "group" && s.id !== groupHeaderId) {
-      bottomInsertIndex = i + 1;
-      break;
-    }
-  }
-  return { gid, headerIdx, topInsertIndex, bottomInsertIndex };
-}
-const moveSegment = (setPath, fromId, toIndex, opts) => {
-  if (!fromId) return;
-  setPath((prev) => {
-    const original = prev.segments;
-    const fromIdx = original.findIndex((s) => s.id === fromId);
-    if (fromIdx === -1) return prev;
-    const draggedSeg = original[fromIdx];
-    if (fromIdx === 0) return prev;
-    if (draggedSeg.kind === "group" && toIndex === 0) return prev;
-    if (fromIdx === toIndex) return prev;
-    const dropTarget = toIndex >= 0 && toIndex < original.length ? original[toIndex] : null;
-    const droppedOnGroupHeader = !opts?.skipGroupHandling && dropTarget?.kind === "group";
-    const groupHeaderId = droppedOnGroupHeader ? dropTarget.id : null;
-    const segments = [...original];
-    const [rawSeg] = segments.splice(fromIdx, 1);
-    if (!rawSeg) return prev;
-    const seg = {
-      ...rawSeg,
-      pose: rawSeg.pose ? { ...rawSeg.pose } : rawSeg.pose
-    };
-    let insertIdx = toIndex;
-    if (fromIdx < toIndex) {
-      insertIdx = toIndex - 1;
-    }
-    if (insertIdx < 1) insertIdx = 1;
-    if (insertIdx > segments.length) insertIdx = segments.length;
-    if (seg.kind !== "group") {
-      if (opts?.skipGroupHandling) {
-        seg.groupId = void 0;
-      } else if (groupHeaderId) {
-        const meta = getGroupInsertMeta(segments, groupHeaderId, fromId);
-        if (meta) {
-          seg.groupId = meta.gid;
-          const mode = opts?.headerDrop ?? "bottom";
-          if (mode === "top") {
-            insertIdx = meta.topInsertIndex;
-          } else {
-            insertIdx = meta.bottomInsertIndex;
-          }
-        }
-      } else if (opts?.targetGroupId) {
-        seg.groupId = opts.targetGroupId;
-      } else if (dropTarget?.groupId != null && dropTarget?.kind !== "group") {
-        seg.groupId = dropTarget.groupId;
-      } else {
-        seg.groupId = void 0;
-      }
-    }
-    if (insertIdx < 1) insertIdx = 1;
-    if (insertIdx > segments.length) insertIdx = segments.length;
-    segments.splice(insertIdx, 0, seg);
-    const next = { ...prev, segments };
-    AddToUndoHistory({ path: next });
-    return next;
-  });
-};
-const moveMultipleSegments = (setPath, fromIds, toIndex, opts) => {
-  if (!fromIds || fromIds.length === 0) return;
-  if (fromIds.length === 1) {
-    moveSegment(setPath, fromIds[0], toIndex, opts);
-    return;
-  }
-  setPath((prev) => {
-    const original = prev.segments;
-    const fromIndices = fromIds.map((id) => original.findIndex((s) => s.id === id));
-    if (fromIndices.some((idx) => idx === -1)) return prev;
-    if (fromIndices.some((idx) => idx === 0)) return prev;
-    const sortedIndices = [...fromIndices].sort((a, b) => a - b);
-    const hasGroup = sortedIndices.some((idx) => original[idx].kind === "group");
-    if (hasGroup && toIndex === 0) return prev;
-    const fromIdSet = new Set(fromIds);
-    const dropTarget = toIndex >= 0 && toIndex < original.length ? original[toIndex] : null;
-    if (dropTarget && fromIdSet.has(dropTarget.id)) return prev;
-    const droppedOnGroupHeader = !opts?.skipGroupHandling && dropTarget?.kind === "group";
-    const groupHeaderId = droppedOnGroupHeader ? dropTarget.id : null;
-    const segmentsToMove = sortedIndices.map((idx) => {
-      const rawSeg = original[idx];
-      return {
-        ...rawSeg,
-        pose: rawSeg.pose ? { ...rawSeg.pose } : rawSeg.pose
-      };
-    });
-    const segments = original.filter((s) => !fromIdSet.has(s.id));
-    let insertIdx = toIndex;
-    const removedBefore = sortedIndices.filter((idx) => idx < toIndex).length;
-    insertIdx -= removedBefore;
-    if (insertIdx < 1) insertIdx = 1;
-    if (insertIdx > segments.length) insertIdx = segments.length;
-    segmentsToMove.forEach((seg) => {
-      if (seg.kind !== "group") {
-        if (opts?.skipGroupHandling) {
-          seg.groupId = void 0;
-        } else if (groupHeaderId) {
-          const meta = getGroupInsertMeta(segments, groupHeaderId, null);
-          if (meta) {
-            seg.groupId = meta.gid;
-          }
-        } else if (opts?.targetGroupId) {
-          seg.groupId = opts.targetGroupId;
-        } else if (dropTarget?.groupId != null && dropTarget?.kind !== "group") {
-          seg.groupId = dropTarget.groupId;
-        } else {
-          seg.groupId = void 0;
-        }
-      }
-    });
-    if (groupHeaderId) {
-      const meta = getGroupInsertMeta(segments, groupHeaderId, null);
-      if (meta) {
-        const mode = opts?.headerDrop ?? "bottom";
-        if (mode === "top") {
-          insertIdx = meta.topInsertIndex;
-        } else {
-          insertIdx = meta.bottomInsertIndex;
-        }
-      }
-    }
-    if (insertIdx < 1) insertIdx = 1;
-    if (insertIdx > segments.length) insertIdx = segments.length;
-    segments.splice(insertIdx, 0, ...segmentsToMove);
-    const next = { ...prev, segments };
-    AddToUndoHistory({ path: next });
-    return next;
-  });
-};
+const lockClose = "data:image/svg+xml,%3c?xml%20version='1.0'%20encoding='utf-8'?%3e%3c!--%20Uploaded%20to:%20SVG%20Repo,%20www.svgrepo.com,%20Generator:%20SVG%20Repo%20Mixer%20Tools%20--%3e%3csvg%20width='800px'%20height='800px'%20viewBox='0%200%2024%2024'%20fill='none'%20xmlns='http://www.w3.org/2000/svg'%3e%3cpath%20d='M13%2015C13%2015.5523%2012.5523%2016%2012%2016C11.4477%2016%2011%2015.5523%2011%2015C11%2014.4477%2011.4477%2014%2012%2014C12.5523%2014%2013%2014.4477%2013%2015Z'%20stroke='%23FFFFFF'%20stroke-width='2'/%3e%3cpath%20d='M15%209C16.8856%209%2017.8284%209%2018.4142%209.58579C19%2010.1716%2019%2011.1144%2019%2013L19%2015L19%2017C19%2018.8856%2019%2019.8284%2018.4142%2020.4142C17.8284%2021%2016.8856%2021%2015%2021L12%2021L9%2021C7.11438%2021%206.17157%2021%205.58579%2020.4142C5%2019.8284%205%2018.8856%205%2017L5%2015L5%2013C5%2011.1144%205%2010.1716%205.58579%209.58579C6.17157%209%207.11438%209%209%209L12%209L15%209Z'%20stroke='%23FFFFFF'%20stroke-width='2'%20stroke-linejoin='round'/%3e%3cpath%20d='M9%209V5C9%203.89543%209.89543%203%2011%203H13C14.1046%203%2015%203.89543%2015%205V9'%20stroke='%23FFFFFF'%20stroke-width='2'%20stroke-linecap='round'%20stroke-linejoin='round'/%3e%3c/svg%3e";
+const lockOpen = "data:image/svg+xml,%3c?xml%20version='1.0'%20encoding='utf-8'?%3e%3c!--%20Uploaded%20to:%20SVG%20Repo,%20www.svgrepo.com,%20Generator:%20SVG%20Repo%20Mixer%20Tools%20--%3e%3csvg%20width='800px'%20height='800px'%20viewBox='0%200%2024%2024'%20fill='none'%20xmlns='http://www.w3.org/2000/svg'%3e%3cpath%20d='M13%2015C13%2015.5523%2012.5523%2016%2012%2016C11.4477%2016%2011%2015.5523%2011%2015C11%2014.4477%2011.4477%2014%2012%2014C12.5523%2014%2013%2014.4477%2013%2015Z'%20stroke='%23FFFFFF'%20stroke-width='2'/%3e%3cpath%20d='M15%209C16.8856%209%2017.8284%209%2018.4142%209.58579C19%2010.1716%2019%2011.1144%2019%2013L19%2015L19%2017C19%2018.8856%2019%2019.8284%2018.4142%2020.4142C17.8284%2021%2016.8856%2021%2015%2021L12%2021L9%2021C7.11438%2021%206.17157%2021%205.58579%2020.4142C5%2019.8284%205%2018.8856%205%2017L5%2015L5%2013C5%2011.1144%205%2010.1716%205.58579%209.58579C6.17157%209%207.11438%209%209%209L12%209L15%209Z'%20stroke='%23FFFFFF'%20stroke-width='2'%20stroke-linejoin='round'/%3e%3cpath%20d='M9%209V5C9%203.89543%209.89543%203%2011%203H13.0625C14.1326%203%2015%203.86745%2015%204.9375V4.9375V5'%20stroke='%23FFFFFF'%20stroke-width='2'%20stroke-linecap='round'%20stroke-linejoin='round'/%3e%3c/svg%3e";
 const useSimulateGroup = createSharedState([]);
 function GroupList({
   name,
   segmentId,
   isOpenGlobal,
+  isTelemetryOpenGlobal,
   draggable = false,
   onDragStart,
   onDragEnd,
@@ -17320,13 +19348,7 @@ function GroupList({
   });
   const [localOverIndex, setLocalOverIndex] = reactExports.useState(null);
   const startChildDragging = (childId) => {
-    const child = path.segments.find((s) => s.id === childId);
-    if (child?.selected) {
-      const selectedIds = path.segments.filter((s, idx) => s.selected && idx > 0).map((s) => s.id);
-      setGlobalDraggingIds(selectedIds.length > 0 ? selectedIds : [childId]);
-    } else {
-      setGlobalDraggingIds([childId]);
-    }
+    setGlobalDraggingIds(buildDraggingIds(path.segments, childId));
   };
   const groupKey = segment.groupId ?? segment.id;
   const indexById = new Map(path.segments.map((s, i) => [s.id, i]));
@@ -17361,14 +19383,14 @@ function GroupList({
     });
   };
   const handleOnClick = (evt) => {
-    setPath((prev) => {
-      const selectedState = segment.selected;
-      const next = {
+    if (segment.selected) {
+      setOpen((prev) => !prev);
+    } else {
+      setPath((prev) => ({
         ...prev,
-        segments: prev.segments.map((s) => s.groupId === groupKey || s.id === segmentId ? { ...s, selected: !selectedState } : { ...s, selected: false })
-      };
-      return next;
-    });
+        segments: prev.segments.map((s) => s.groupId === groupKey || s.id === segmentId ? { ...s, selected: true } : { ...s, selected: false })
+      }));
+    }
     evt.preventDefault();
     evt.stopPropagation();
   };
@@ -17391,7 +19413,17 @@ function GroupList({
     evt.stopPropagation();
   };
   const handleLockOnClick = (evt) => {
-    toggleSegment((s) => ({ ...s, locked: !segment.locked }));
+    const newLocked = !segment.locked;
+    setPath((prev) => {
+      const next = {
+        ...prev,
+        segments: prev.segments.map(
+          (s) => s.id === segmentId || s.groupId === groupKey ? { ...s, locked: newLocked } : s
+        )
+      };
+      AddToUndoHistory({ path: next });
+      return next;
+    });
     evt.stopPropagation();
   };
   const handleGroupOnHoverStart = (evt) => {
@@ -17427,16 +19459,7 @@ function GroupList({
     if (y > height * 0.66) return "below";
     return "into";
   };
-  const handleHeaderDragOver = (e) => {
-    e.preventDefault();
-    e.stopPropagation();
-    if (draggingIds.includes(segmentId)) return;
-    const zone = getDropZone(e);
-    if (onHeaderDropZoneChange) {
-      onHeaderDropZoneChange(zone);
-    }
-  };
-  const handleHeaderDragEnter = (e) => {
+  const handleHeaderDragActive = (e) => {
     e.preventDefault();
     e.stopPropagation();
     if (draggingIds.includes(segmentId)) return;
@@ -17542,15 +19565,9 @@ function GroupList({
           "button",
           {
             ref: headerRef,
-            draggable,
+            draggable: draggable && !segment.locked,
             onDragStart: (e) => {
-              if (e.dataTransfer) {
-                e.dataTransfer.setData("text/plain", segmentId);
-                e.dataTransfer.effectAllowed = "move";
-                const emptyImg = new Image();
-                emptyImg.src = "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7";
-                e.dataTransfer.setDragImage(emptyImg, 0, 0);
-              }
+              setupDragTransfer(e, segmentId);
               if (onDragStart) onDragStart(e);
             },
             onDragEnd: (e) => {
@@ -17558,8 +19575,8 @@ function GroupList({
               setLocalOverIndex(null);
               if (onHeaderDropZoneChange) onHeaderDropZoneChange(null);
             },
-            onDragOver: handleHeaderDragOver,
-            onDragEnter: handleHeaderDragEnter,
+            onDragOver: handleHeaderDragActive,
+            onDragEnter: handleHeaderDragActive,
             onDrop: handleHeaderDrop,
             onDragLeave: handleHeaderDragLeave,
             onClick: (evt) => {
@@ -17569,6 +19586,7 @@ function GroupList({
             onMouseEnter: handleGroupOnHoverStart,
             onMouseLeave: handleGroupOnHoverEnd,
             className: `${isHoveringInto ? "bg-medlightgray brightness-125" : segment.selected ? "bg-medlightgray" : "bg-medgray"}
+                    ${segment.locked ? "opacity-70" : ""}
                     flex flex-row justify-start items-center
                     w-[450px] h-[35px] gap-[12px]
                     hover:brightness-95
@@ -17611,11 +19629,8 @@ function GroupList({
                     }, 0);
                   },
                   onClick: (e) => {
-                    if (isEditing) {
-                      e.stopPropagation();
-                    } else {
-                      e.preventDefault();
-                    }
+                    e.stopPropagation();
+                    if (!isEditing) e.preventDefault();
                   },
                   onBlur: () => {
                     setIsEditing(false);
@@ -17708,53 +19723,17 @@ function GroupList({
                         }
                       ),
                       showDropZone && /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "absolute -top-1 left-2 w-[390px] h-[1px] bg-white rounded-full pointer-events-none z-10" }),
-                      (c.kind === "pointDrive" || c.kind === "poseDrive") && /* @__PURE__ */ jsxRuntimeExports.jsx(
+                      MOTION_KIND_SET.has(c.kind) && /* @__PURE__ */ jsxRuntimeExports.jsx(
                         MotionList,
                         {
-                          name: "Drive",
+                          name: getSegmentName(format, c.kind),
                           speedScale,
                           field: constantsFields,
                           directionField: directionFields,
                           segmentId: c.id,
+                          index: globalIdx,
                           isOpenGlobal,
-                          draggable: true,
-                          onDragStart: () => startChildDragging(c.id),
-                          onDragEnd: () => {
-                            setGlobalDraggingIds([]);
-                            setLocalOverIndex(null);
-                          },
-                          draggingIds,
-                          shrink: true
-                        }
-                      ),
-                      (c.kind === "angleTurn" || c.kind === "pointTurn") && /* @__PURE__ */ jsxRuntimeExports.jsx(
-                        MotionList,
-                        {
-                          name: "Turn",
-                          speedScale,
-                          field: constantsFields,
-                          directionField: directionFields,
-                          segmentId: c.id,
-                          isOpenGlobal,
-                          draggable: true,
-                          onDragStart: () => startChildDragging(c.id),
-                          onDragEnd: () => {
-                            setGlobalDraggingIds([]);
-                            setLocalOverIndex(null);
-                          },
-                          draggingIds,
-                          shrink: true
-                        }
-                      ),
-                      (c.kind === "pointSwing" || c.kind === "angleSwing") && /* @__PURE__ */ jsxRuntimeExports.jsx(
-                        MotionList,
-                        {
-                          name: "Swing",
-                          speedScale,
-                          field: constantsFields,
-                          directionField: directionFields,
-                          segmentId: c.id,
-                          isOpenGlobal,
+                          isTelemetryOpenGlobal,
                           draggable: true,
                           onDragStart: () => startChildDragging(c.id),
                           onDragEnd: () => {
@@ -17783,6 +19762,7 @@ function PathConfig() {
   const [draggingIds, setDraggingIds] = reactExports.useState([]);
   const [overIndex, setOverIndex] = reactExports.useState(null);
   const [isOpen, setOpen] = reactExports.useState(false);
+  const [isTelemetryOpen, setTelemetryOpen] = reactExports.useState(false);
   const [format] = useFormat();
   const [activeGroupDropZone, setActiveGroupDropZone] = reactExports.useState(null);
   const [, forceUpdate] = reactExports.useState({});
@@ -17798,13 +19778,7 @@ function PathConfig() {
     }
   }, [draggingIds]);
   const startDragging = (segmentId) => {
-    const segment = path.segments.find((s) => s.id === segmentId);
-    if (segment?.selected) {
-      const selectedIds = path.segments.filter((s, idx) => s.selected && idx > 0).map((s) => s.id);
-      setDraggingIds(selectedIds.length > 0 ? selectedIds : [segmentId]);
-    } else {
-      setDraggingIds([segmentId]);
-    }
+    setDraggingIds(buildDraggingIds(path.segments, segmentId));
   };
   const stopDragging = () => {
     setDraggingIds([]);
@@ -17822,11 +19796,11 @@ function PathConfig() {
     }
   };
   return /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "bg-medgray w-[500px] h-[650px] rounded-lg p-[15px] flex flex-col", children: [
-    /* @__PURE__ */ jsxRuntimeExports.jsx(PathConfigHeader, { name, isOpen, setOpen }),
+    /* @__PURE__ */ jsxRuntimeExports.jsx(PathConfigHeader, { name, isOpen, setOpen, isTelemetryOpen, onTelemetryToggle: () => setTelemetryOpen((p) => !p) }),
     /* @__PURE__ */ jsxRuntimeExports.jsxs(
       "div",
       {
-        className: "mt-[10px] flex-1 min-h-2 overflow-y-auto\n        flex-col items-center overflow-x-hidden space-y-2 relative",
+        className: "mt-[10px] flex-1 min-h-2 overflow-y-auto scrollbar-thin\n        flex-col items-center overflow-x-hidden space-y-2 relative",
         onDrop: (e) => {
           if (draggingIds.length === 0) return;
           if (overIndex !== null && overIndex > 0) {
@@ -17877,6 +19851,7 @@ function PathConfig() {
                       name: c.constants,
                       segmentId: c.id,
                       isOpenGlobal: isOpen,
+                      isTelemetryOpenGlobal: isTelemetryOpen,
                       draggable: true,
                       onDragStart: () => startDragging(c.id),
                       onDragEnd: stopDragging,
@@ -17887,47 +19862,17 @@ function PathConfig() {
                       onHeaderDropZoneChange: handleGroupDropZoneChange(c.id)
                     }
                   ),
-                  idx > 0 && ((c.kind === "pointDrive" || c.kind === "poseDrive") && c.groupId == void 0) && /* @__PURE__ */ jsxRuntimeExports.jsx(
+                  idx > 0 && MOTION_KIND_SET.has(c.kind) && c.groupId == void 0 && /* @__PURE__ */ jsxRuntimeExports.jsx(
                     MotionList,
                     {
-                      name: "Drive",
+                      name: getSegmentName(format, c.kind),
                       speedScale,
                       field: constantsFields,
                       directionField: directionFields,
                       segmentId: c.id,
+                      index: idx,
                       isOpenGlobal: isOpen,
-                      draggable: true,
-                      onDragStart: () => startDragging(c.id),
-                      onDragEnd: stopDragging,
-                      onDragEnter: () => setOverIndex(idx),
-                      draggingIds
-                    }
-                  ),
-                  idx > 0 && ((c.kind === "angleTurn" || c.kind === "pointTurn") && c.groupId == void 0) && /* @__PURE__ */ jsxRuntimeExports.jsx(
-                    MotionList,
-                    {
-                      name: "Turn",
-                      speedScale,
-                      field: constantsFields,
-                      directionField: directionFields,
-                      segmentId: c.id,
-                      isOpenGlobal: isOpen,
-                      draggable: true,
-                      onDragStart: () => startDragging(c.id),
-                      onDragEnd: stopDragging,
-                      onDragEnter: () => setOverIndex(idx),
-                      draggingIds
-                    }
-                  ),
-                  idx > 0 && ((c.kind === "pointSwing" || c.kind === "angleSwing") && c.groupId == void 0) && /* @__PURE__ */ jsxRuntimeExports.jsx(
-                    MotionList,
-                    {
-                      name: "Swing",
-                      speedScale,
-                      field: constantsFields,
-                      directionField: directionFields,
-                      segmentId: c.id,
-                      isOpenGlobal: isOpen,
+                      isTelemetryOpenGlobal: isTelemetryOpen,
                       draggable: true,
                       onDragStart: () => startDragging(c.id),
                       onDragEnd: stopDragging,
@@ -17943,6 +19888,7 @@ function PathConfig() {
                       field: [],
                       directionField: [],
                       segmentId: c.id,
+                      index: idx,
                       isOpenGlobal: isOpen,
                       start: true,
                       draggable: false,
@@ -18050,7 +19996,7 @@ const savedRobotPosition = localStorage.getItem("robotPosition");
 const initialRobotsPosition = savedRobotPosition === null ? false : savedRobotPosition === "true";
 const savedPrecisePath = localStorage.getItem("precisePath");
 const initialPrecisePath = savedPrecisePath === null ? false : savedPrecisePath === "true";
-const savedNumberedPath = localStorage.getItem("precisePath");
+const savedNumberedPath = localStorage.getItem("numberedPath");
 const initialNumberedPath = savedNumberedPath === null ? false : savedNumberedPath === "true";
 const useSettings = createSharedState({
   ghostRobots: initialGhostRobots,
@@ -18059,7 +20005,7 @@ const useSettings = createSharedState({
   numberedPath: initialNumberedPath
 });
 function createRobot() {
-  const { width, height, speed, accel, lateralFriction } = robotConstantsStore.getState();
+  const { width, height, speed, lateralTau, angularTau, isOmni, cogOffsetX, cogOffsetY, expansionFront, expansionLeft, expansionRight, expansionRear } = robotConstantsStore.getState();
   return new Robot(
     0,
     // Start x
@@ -18073,14 +20019,18 @@ function createRobot() {
     // Height (inches)
     speed,
     // Speed (ft/s)
-    width,
-    // Track Width (inches)
-    accel,
-    // Max Accel (ft/s^2)
-    accel,
-    // Max Decel (ft/s^2)
-    lateralFriction
+    cogOffsetX,
+    // CoG lateral offset (inches)
+    cogOffsetY,
+    // CoG longitudinal offset (inches)
+    expansionFront,
+    expansionLeft,
+    expansionRight,
+    expansionRear,
+    isOmni,
     // Lateral Friction (higher = less drift)
+    lateralTau,
+    angularTau
   );
 }
 function PathSimulator() {
@@ -18119,7 +20069,9 @@ function PathSimulator() {
       totalTime,
       trajectory: rebasedTrajectory,
       endTrajectory: culledEnds,
-      segmentTrajectorys: sim.segmentTrajectorys
+      segmentTrajectorys: sim.segmentTrajectorys,
+      segmentCumulativeDists: sim.segmentCumulativeDists,
+      timeOffset
     };
   };
   reactExports.useEffect(() => {
@@ -18136,17 +20088,18 @@ function PathSimulator() {
     const fullSim = precomputePath(createRobot(), convertPathToSim(path, format));
     const pathSim = cullSimulatedPath(fullSim);
     computedPathStore.setState(pathSim);
-    setRobotPose(computedPath.endTrajectory);
+    setRobotPose(pathSim.endTrajectory);
     if (!robotVisible) {
       setPlaying(false);
       return;
     }
-    if (!computedPath.trajectory.length || computedPath.totalTime <= 0) return;
-    const clampedTime = clamp(time, 0, computedPath.totalTime);
+    if (!pathSim.trajectory.length || pathSim.totalTime <= 0) return;
+    const clampedTime = clamp(time, 0, pathSim.totalTime);
     if (clampedTime !== time) setTime(clampedTime);
-    if (robotVisible) forceSnapTime(computedPath, clampedTime);
-    setValue(clampedTime / computedPath.totalTime * 100);
-  }, [changes.length, path, robotk, robotVisible]);
+    if (robotVisible) forceSnapTime(pathSim, clampedTime);
+    skip.current = true;
+    setValue(clampedTime / pathSim.totalTime * 100);
+  }, [changes.length, robotk, robotVisible, simulatedGroups]);
   reactExports.useEffect(() => {
     if (skip.current) {
       skip.current = false;
@@ -18160,9 +20113,33 @@ function PathSimulator() {
     skip.current = true;
   }, [path]);
   reactExports.useEffect(() => {
+    const segs = computedPath.segmentTrajectorys;
+    const cumDists = computedPath.segmentCumulativeDists;
+    const telemetry = pathTelemetry.getState();
+    if (!telemetry.length) return;
+    const dt = SIM_CONSTANTS.dt;
+    const adjustedTime = time + computedPath.timeOffset;
+    const updated = telemetry.map((tel, i) => {
+      const seg = segs[i];
+      const cumDist = cumDists[i];
+      if (!seg?.length || !cumDist?.length) return tel;
+      const startT = seg[0].t;
+      const endT = seg[seg.length - 1].t;
+      if (adjustedTime <= startT) return { ...tel, progressRaw: 0, progressPercent: 0 };
+      if (adjustedTime >= endT) return { ...tel, progressRaw: tel.totalDistance, progressPercent: 100 };
+      const idx = Math.min(Math.floor((adjustedTime - startT) / dt), cumDist.length - 1);
+      const progressRaw = cumDist[idx];
+      const progressPercent = tel.totalDistance > 0 ? progressRaw / tel.totalDistance * 100 : 0;
+      return { ...tel, progressRaw, progressPercent };
+    });
+    pathTelemetry.setState(updated);
+    const activeIdx = updated.findIndex((tel) => tel.progressPercent > 0 && tel.progressPercent < 100);
+    activeSimSegmentStore.setState(activeIdx);
+  }, [time, computedPath]);
+  reactExports.useEffect(() => {
     const handleKeyDown = (evt) => {
-      const target = evt.target;
-      if (target?.isContentEditable || target?.tagName === "INPUT") return;
+      const target2 = evt.target;
+      if (target2?.isContentEditable || target2?.tagName === "INPUT") return;
       pauseSimulator(evt, setPlaying, setRobotVisibility);
       scrubSimulator(evt, setValue, setPlaying, setRobotVisibility, skip, computedPath, 1 / 60, 0.25);
     };
@@ -18281,7 +20258,14 @@ function MirrorControl({
   src,
   mirrorDirection
 }) {
-  const [, setPath] = usePath();
+  const [path, setPath] = usePath();
+  const undoRef = reactExports.useRef(false);
+  reactExports.useEffect(() => {
+    if (undoRef.current) {
+      AddToUndoHistory({ path });
+      undoRef.current = false;
+    }
+  }, [path]);
   const mirrorX = () => {
     setPath((prev) => ({
       ...prev,
@@ -18296,6 +20280,9 @@ function MirrorControl({
         } : c
       )
     }));
+    if (path.segments.filter((m) => m.selected).length > 0) {
+      undoRef.current = true;
+    }
   };
   const mirrorY = () => {
     setPath((prev) => ({
@@ -18311,6 +20298,9 @@ function MirrorControl({
         } : c
       )
     }));
+    if (path.segments.filter((m) => m.selected).length > 0) {
+      undoRef.current = true;
+    }
   };
   const handleOnClick = () => {
     if (mirrorDirection === "x") {
@@ -18429,8 +20419,8 @@ function ControlConfig() {
             width: 80,
             height: 40,
             fontSize: 18,
-            setValue: format === "ReveilLib" ? updateYValue : updateXValue,
-            value: format === "ReveilLib" ? getYValue() : getXValue(),
+            setValue: format === "ReveilLib" || format === "RevMecanum" ? updateYValue : updateXValue,
+            value: format === "ReveilLib" || format === "RevMecanum" ? getYValue() : getXValue(),
             stepSize: 1,
             roundTo: 2,
             bounds: [-999, 999],
@@ -18451,8 +20441,8 @@ function ControlConfig() {
             fontSize: 18,
             stepSize: 1,
             roundTo: 2,
-            setValue: format === "ReveilLib" ? updateXValue : updateYValue,
-            value: format === "ReveilLib" ? getXValue() : getYValue(),
+            setValue: format === "ReveilLib" || format === "RevMecanum" ? updateXValue : updateYValue,
+            value: format === "ReveilLib" || format === "RevMecanum" ? getXValue() : getYValue(),
             bounds: [-999, 999],
             units: "in",
             addToHistory: () => {
@@ -18776,18 +20766,29 @@ function useGetFileFormat() {
   const defaults = globalDefaultsStore.getState()[format];
   const [path] = usePath();
   const robot = robotConstantsStore.getState();
-  const [commands] = useCommand();
   const next = {
     format,
     field,
     defaults,
     path,
-    robot,
-    commands
+    robot
   };
   return next;
 }
 const SAVED_SNAPSHOT_KEY = "savedSnapshot";
+const FILE_VERSION = "mikGen v1.0.0";
+function serializeFile(fileFormat) {
+  return FILE_VERSION + "\n" + JSON.stringify(fileFormat);
+}
+function deserializeFile(content) {
+  const newline = content.indexOf("\n");
+  const firstLine = newline === -1 ? content : content.slice(0, newline);
+  if (firstLine.trim() !== FILE_VERSION) {
+    alert("mikGen has been updated, and you are using an old format. Please contact me on discord @ethanmik so I can fix your file");
+    throw new Error("Unsupported file version");
+  }
+  return JSON.parse(content.slice(newline + 1));
+}
 function getSaveableSnapshot(fileFormat) {
   const stripped = {
     ...fileFormat,
@@ -18800,7 +20801,6 @@ function getSaveableSnapshot(fileFormat) {
         locked: segment.locked,
         visible: segment.visible,
         pose: segment.pose,
-        command: segment.command,
         format: segment.format,
         kind: segment.kind,
         constants: segment.constants
@@ -18874,8 +20874,7 @@ function FileButton() {
       field,
       defaults: INITIAL_DEFAULTS[format],
       path: { segments: [], name: "" },
-      robot: defaultRobotConstants,
-      commands: DEFAULT_COMMANDS[format]
+      robot: defaultRobotConstants
     };
     setFileFormat(newFileFormat);
     AddToUndoHistory(structuredClone(newFileFormat));
@@ -18919,7 +20918,7 @@ function FileButton() {
       const file = await handle.getFile();
       const content = await file.text();
       const fileName = handle.name.replace(/\.[^/.]+$/, "");
-      const parsed = JSON.parse(content);
+      const parsed = deserializeFile(content);
       const newFileFormat = {
         ...parsed,
         path: {
@@ -18944,7 +20943,7 @@ function FileButton() {
       const reader = new FileReader();
       reader.onload = (e) => {
         const content = e.target?.result;
-        const parsed = JSON.parse(content);
+        const parsed = deserializeFile(content);
         const newFileFormat = {
           ...parsed,
           path: {
@@ -18970,7 +20969,7 @@ function FileButton() {
     try {
       if (fileHandleRef.current) {
         const writable = await fileHandleRef.current.createWritable();
-        await writable.write(JSON.stringify(fileText));
+        await writable.write(serializeFile(fileText));
         await writable.close();
         const snapshot = getSaveableSnapshot(fileText);
         savedSnapshotRef.current = snapshot;
@@ -19018,7 +21017,7 @@ function FileButton() {
         name: savedFileName
       }));
       const writable = await handle.createWritable();
-      await writable.write(JSON.stringify(fileText));
+      await writable.write(serializeFile(fileText));
       await writable.close();
       const snapshot = getSaveableSnapshot(fileText);
       savedSnapshotRef.current = snapshot;
@@ -19040,7 +21039,7 @@ function FileButton() {
     URL.revokeObjectURL(url);
   };
   const handleDownload = () => {
-    downloadText(JSON.stringify(fileText), `${getFileName()}.txt`);
+    downloadText(serializeFile(fileText), `${getFileName()}.txt`);
     setOpen(false);
     const snapshot = getSaveableSnapshot(fileText);
     savedSnapshotRef.current = snapshot;
@@ -19052,7 +21051,7 @@ function FileButton() {
     setLabel("Download As:");
     const name = await requestFileName();
     if (name === null) return;
-    downloadText(JSON.stringify(fileText), `${getFileName(name)}.txt`);
+    downloadText(serializeFile(fileText), `${getFileName(name)}.txt`);
     const snapshot = getSaveableSnapshot(fileText);
     savedSnapshotRef.current = snapshot;
     localStorage.setItem(SAVED_SNAPSHOT_KEY, snapshot);
@@ -19284,233 +21283,6 @@ function SettingsButton() {
     ] }) })
   ] });
 }
-function RemoveCommandButton({ commandId }) {
-  const [, setCommand] = useCommand();
-  const handleDeleteOnClick = () => {
-    setCommand((prev) => prev.filter((c) => c.id !== commandId));
-  };
-  return /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "w-[25px] h-[25px]", children: /* @__PURE__ */ jsxRuntimeExports.jsx(
-    "button",
-    {
-      onClick: handleDeleteOnClick,
-      className: "cursor-pointer rounded-sm hover:bg-blackgrayhover",
-      children: /* @__PURE__ */ jsxRuntimeExports.jsx(
-        "img",
-        {
-          src: cross
-        }
-      )
-    }
-  ) });
-}
-function CommmandInput({
-  width,
-  height
-}) {
-  const [value, SetValue] = reactExports.useState("");
-  const [edit, setEdit] = reactExports.useState(null);
-  const [commands, setCommand] = useCommand();
-  const display = edit !== null ? edit : value;
-  const resetValue = () => {
-    setEdit("");
-  };
-  const executeInput = () => {
-    if (edit === null || edit === "" || commands.find((c) => c.name === edit)) return;
-    SetValue(edit);
-    setCommand((prev) => [...prev, createCommand(edit)]);
-    cancel();
-  };
-  const handleChange = (evt) => {
-    setEdit(evt.target.value);
-  };
-  const handleKeyDown = (evt) => {
-    if (evt.key === "Enter" || evt.key == "Tab") {
-      executeInput();
-    }
-  };
-  const handleOnClick = () => {
-    executeInput();
-  };
-  const cancel = () => {
-    resetValue();
-  };
-  return /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex flex-row gap-3", children: [
-    /* @__PURE__ */ jsxRuntimeExports.jsx(
-      "input",
-      {
-        className: `bg-blackgray
-                outline-2 outline-transparent rounded-lg text-center text-white
-                hover:outline-lightgray
-                `,
-        maxLength: 20,
-        style: {
-          fontSize: "16px",
-          width,
-          height
-        },
-        type: "text",
-        value: display,
-        onChange: handleChange,
-        onKeyDown: handleKeyDown
-      }
-    ),
-    /* @__PURE__ */ jsxRuntimeExports.jsx(
-      "button",
-      {
-        className: "hover:bg-blackgrayhover rounded-sm cursor-pointer",
-        onClick: handleOnClick,
-        children: /* @__PURE__ */ jsxRuntimeExports.jsx("img", { src: enter })
-      }
-    )
-  ] });
-}
-var reactDomExports = requireReactDom();
-const ScaleContext = reactExports.createContext(1);
-const useScale = () => reactExports.useContext(ScaleContext);
-const palette = [
-  "#a02007",
-  "#f3722c",
-  "#f8961e",
-  "#ffd043",
-  "#7fc96b",
-  "#43aa8b",
-  "#0095ac",
-  "#1566bd",
-  "#66418a"
-];
-function CommandColorMenu({
-  width = 20,
-  height = 20
-}) {
-  const [open, setOpen] = reactExports.useState(false);
-  const [menuPos, setMenuPos] = reactExports.useState({ top: 0, left: 0 });
-  const menuRef = reactExports.useRef(null);
-  const scale = useScale();
-  const handleToggleMenu = () => {
-    if (!open && menuRef.current) {
-      const rect = menuRef.current.getBoundingClientRect();
-      setMenuPos({ top: rect.bottom, left: rect.left });
-    }
-    setOpen((prev) => !prev);
-  };
-  reactExports.useEffect(() => {
-    const handleClickOutside = (event) => {
-      if (menuRef.current && !menuRef.current.contains(event.target)) {
-        setOpen(false);
-      }
-    };
-    document.addEventListener("mousedown", handleClickOutside);
-    return () => {
-      document.removeEventListener("mousedown", handleClickOutside);
-    };
-  }, []);
-  return /* @__PURE__ */ jsxRuntimeExports.jsxs(
-    "div",
-    {
-      ref: menuRef,
-      className: "relative",
-      children: [
-        /* @__PURE__ */ jsxRuntimeExports.jsx(
-          "button",
-          {
-            onClick: handleToggleMenu,
-            className: "\n                bg-green-400 cursor-pointer\n                rounded-sm\n                hover:brightness-75\n                ",
-            style: {
-              width: `${width}px`,
-              height: `${height}px`
-            }
-          }
-        ),
-        open && reactDomExports.createPortal(
-          /* @__PURE__ */ jsxRuntimeExports.jsx(
-            "div",
-            {
-              className: "fixed bg-medgray p-2 rounded-sm z-50",
-              style: {
-                top: menuPos.top,
-                left: menuPos.left,
-                transform: `scale(${scale})`,
-                transformOrigin: "top left"
-              },
-              children: /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "grid grid-cols-3 grid-rows-3 gap-1", children: palette.map((c) => /* @__PURE__ */ jsxRuntimeExports.jsx(
-                "div",
-                {
-                  className: "rounded-sm cursor-pointer hover:brightness-75",
-                  style: {
-                    width: `${width}px`,
-                    height: `${height}px`,
-                    backgroundColor: c
-                  }
-                },
-                c
-              )) })
-            }
-          ),
-          document.body
-        )
-      ]
-    }
-  );
-}
-function CommandButton() {
-  const [isOpen, setOpen] = reactExports.useState(false);
-  const [commands] = useCommand();
-  const menuRef = reactExports.useRef(null);
-  const handleToggleMenu = () => {
-    setOpen((prev) => !prev);
-  };
-  reactExports.useEffect(() => {
-    const handleClickOutside = (event) => {
-      if (menuRef.current && !menuRef.current.contains(event.target)) {
-        setOpen(false);
-      }
-    };
-    document.addEventListener("mousedown", handleClickOutside);
-    return () => {
-      document.removeEventListener("mousedown", handleClickOutside);
-    };
-  }, []);
-  const splitCommand = (commandText) => {
-    const tokens = commandText.split(/(\(|\)|[^a-zA-Z0-9()]+)/).filter((t) => t.length > 0);
-    let balance = 0;
-    for (const token of tokens) {
-      if (token === "(") balance++;
-      if (token === ")") balance--;
-    }
-    const isBalanced = balance === 0;
-    const cmdStr = tokens.map((token) => {
-      if (token === "(" || token === ")") {
-        return { name: token, color: isBalanced ? "#569cd6" : "#ff4444" };
-      }
-      const builtIn = builtInCommands.find((cmd) => cmd.name === token);
-      if (builtIn) {
-        return { name: token, color: builtIn.color };
-      }
-      return { name: token, color: "#cccccc" };
-    });
-    return cmdStr;
-  };
-  return /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { ref: menuRef, className: `relative ${isOpen ? "bg-medgray_hover" : "bg-none"} hover:bg-medgray_hover rounded-sm`, children: [
-    /* @__PURE__ */ jsxRuntimeExports.jsx("button", { onClick: handleToggleMenu, className: "px-2 py-1 cursor-pointer", children: /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "text-[20px]", children: "Commands" }) }),
-    isOpen && /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "absolute shadow-xs mt-1 shadow-black left-0 top-full w-60 \n                    rounded-sm bg-medgray_hover min-h-2", children: /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex flex-col mt-2 pl-2 mb-2 gap-2", children: [
-      /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "flex flex-col max-h-40 overflow-y-auto", children: commands.map((c) => /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex flex-row items-center justify-between pr-3", children: [
-        /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex flex-row items-center gap-2", children: [
-          /* @__PURE__ */ jsxRuntimeExports.jsx(CommandColorMenu, {}),
-          /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "text-[16px]", children: splitCommand(c.name).map((n) => /* @__PURE__ */ jsxRuntimeExports.jsx(
-            "span",
-            {
-              style: { color: n.color },
-              children: n.name
-            },
-            n.name
-          )) })
-        ] }),
-        /* @__PURE__ */ jsxRuntimeExports.jsx(RemoveCommandButton, { commandId: c.id })
-      ] })) }),
-      /* @__PURE__ */ jsxRuntimeExports.jsx(CommmandInput, { width: 175, height: 30 })
-    ] }) })
-  ] });
-}
 const imageCache = {};
 async function preloadImage(src) {
   if (!src) return new Image();
@@ -19614,7 +21386,7 @@ function FieldButton() {
           {
             className: "absolute shadow-xs mt-1 shadow-black left-0 top-full w-50 rounded-sm bg-medgray_hover min-h-2",
             onMouseLeave: handleLeaveMenu,
-            children: /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "mt-2 pl-2 pr-2 mb-2 gap-1 flex flex-col max-h-40 overflow-y-auto", children: fieldMap.map((c) => /* @__PURE__ */ jsxRuntimeExports.jsxs(jsxRuntimeExports.Fragment, { children: [
+            children: /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "mt-2 pl-2 pr-2 mb-2 gap-1 flex flex-col max-h-40 overflow-y-auto scrollbar-thin", children: fieldMap.map((c) => /* @__PURE__ */ jsxRuntimeExports.jsxs(jsxRuntimeExports.Fragment, { children: [
               c.name !== "" && /* @__PURE__ */ jsxRuntimeExports.jsxs(
                 "button",
                 {
@@ -19647,15 +21419,14 @@ function FieldButton() {
 }
 const FORMATS = [
   { name: "mikLib v1.2.4", format: "mikLib" },
+  { name: "LemLib v0.5.6", format: "LemLib" },
   { name: "ReveilLib v2.1.0", format: "ReveilLib" },
-  { name: "JAR-Template [SOON]", format: "JAR-Template" },
-  { name: "LemLib [SOON]", format: "LemLib" }
+  { name: "JAR-Template [SOON]", format: "JAR-Template" }
 ];
 function FormatButton() {
   const [isOpen, setOpen] = reactExports.useState(false);
   const [format, setFormat] = useFormat();
   const [, setPath] = usePath();
-  const [commands, setCommands] = useCommand();
   const menuRef = reactExports.useRef(null);
   const prevFormatRef = reactExports.useRef(format);
   const handleToggleMenu = () => setOpen((prev) => !prev);
@@ -19674,20 +21445,13 @@ function FormatButton() {
         AddToUndoHistory({
           format: format2,
           defaults: structuredClone(globalDefaultsStore.getState()[format2]),
-          path: newPath,
-          commands
+          path: newPath
         });
       }
       return {
         ...newPath
       };
     });
-    const oldDefaults = DEFAULT_COMMANDS[prevFormatRef.current];
-    const newDefaults = DEFAULT_COMMANDS[format2];
-    const customCommands = commands.filter(
-      (cmd) => !oldDefaults.some((def) => def.name === cmd.name)
-    );
-    setCommands([...newDefaults, ...customCommands]);
     prevFormatRef.current = format2;
   };
   reactExports.useEffect(() => {
@@ -19710,7 +21474,7 @@ function FormatButton() {
           "div",
           {
             className: "absolute shadow-xs mt-1 shadow-black left-0 top-full w-55 rounded-sm bg-medgray_hover min-h-2",
-            children: /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "mt-2 pl-2 pr-2 mb-2 gap-1 flex flex-col max-h-40 overflow-y-auto", children: FORMATS.map((c) => /* @__PURE__ */ jsxRuntimeExports.jsxs(jsxRuntimeExports.Fragment, { children: [
+            children: /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "mt-2 pl-2 pr-2 mb-2 gap-1 flex flex-col max-h-40 overflow-y-auto scrollbar-thin", children: FORMATS.map((c) => /* @__PURE__ */ jsxRuntimeExports.jsxs(jsxRuntimeExports.Fragment, { children: [
               c.name !== "" && /* @__PURE__ */ jsxRuntimeExports.jsxs(
                 "button",
                 {
@@ -19741,18 +21505,15 @@ function FormatButton() {
   );
 }
 function RobotButton() {
+  const [, setPath] = usePath();
+  const [format, setFormat] = useFormat();
   const [isOpen, setOpen] = reactExports.useState(false);
   const menuRef = reactExports.useRef(null);
+  const prevFormatRef = reactExports.useRef(format);
   const robot = robotConstantsStore.useStore();
-  const [holonomic, setHolonomic] = reactExports.useState(false);
-  const [allOmnis, setAllOmnis] = reactExports.useState(false);
-  reactExports.useEffect(() => {
-    if (allOmnis) {
-      robotConstantsStore.merge({ lateralFriction: 10 });
-    } else {
-      robotConstantsStore.merge({ lateralFriction: 50 });
-    }
-  }, [allOmnis]);
+  const updateOmnis = (omni) => {
+    robotConstantsStore.merge({ isOmni: omni });
+  };
   const updateWidth = (width) => {
     if (width !== null) {
       robotConstantsStore.merge({ width });
@@ -19768,10 +21529,29 @@ function RobotButton() {
       robotConstantsStore.merge({ speed });
     }
   };
-  const updateAccel = (accel) => {
-    if (accel !== null) {
-      robotConstantsStore.merge({ accel });
-    }
+  const updateLateralTau = (v) => {
+    if (v !== null) robotConstantsStore.merge({ lateralTau: v });
+  };
+  const updateAngularTau = (v) => {
+    if (v !== null) robotConstantsStore.merge({ angularTau: v });
+  };
+  const updateCogOffsetX = (v) => {
+    if (v !== null) robotConstantsStore.merge({ cogOffsetX: v });
+  };
+  const updateCogOffsetY = (v) => {
+    if (v !== null) robotConstantsStore.merge({ cogOffsetY: v });
+  };
+  const updateExpansionFront = (v) => {
+    if (v !== null) robotConstantsStore.merge({ expansionFront: v });
+  };
+  const updateExpansionLeft = (v) => {
+    if (v !== null) robotConstantsStore.merge({ expansionLeft: v });
+  };
+  const updateExpansionRight = (v) => {
+    if (v !== null) robotConstantsStore.merge({ expansionRight: v });
+  };
+  const updateExpansionRear = (v) => {
+    if (v !== null) robotConstantsStore.merge({ expansionRear: v });
   };
   const handleToggleMenu = () => {
     setOpen((prev) => !prev);
@@ -19794,9 +21574,34 @@ function RobotButton() {
       document.removeEventListener("keydown", handleClose);
     };
   }, []);
+  const changeFormat = (format2) => {
+    setFormat(format2);
+    setPath((prev) => {
+      const newPath = {
+        ...prev,
+        segments: prev.segments.map((s) => ({
+          ...s,
+          format: format2,
+          constants: getDefaultConstants(format2, s.kind)
+        }))
+      };
+      if (prevFormatRef.current !== format2) {
+        AddToUndoHistory({
+          format: format2,
+          defaults: structuredClone(globalDefaultsStore.getState()[format2]),
+          path: newPath
+        });
+      }
+      return {
+        ...newPath
+      };
+    });
+    prevFormatRef.current = format2;
+  };
   return /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { ref: menuRef, className: `relative ${isOpen ? "bg-medgray_hover" : "bg-none"} hover:bg-medgray_hover rounded-sm`, children: [
     /* @__PURE__ */ jsxRuntimeExports.jsx("button", { onClick: handleToggleMenu, className: "px-2 py-1 cursor-pointer", children: /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "text-[20px]", children: "Robot" }) }),
-    isOpen && /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "absolute shadow-xs mt-1 shadow-black left-0 top-full w-40 z-40\n                    rounded-sm bg-medgray_hover min-h-2", children: /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "flex flex-col mt-3 pl-3 pr-3 mb-1 gap-3", children: /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex flex-col gap-2", children: [
+    /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: `absolute shadow-xs mt-1 shadow-black left-0 top-full w-43 z-40
+                    rounded-sm bg-medgray_hover min-h-2 max-h-47 overflow-y-auto scrollbar-thin ${isOpen ? "" : "hidden"}`, children: /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "flex flex-col mt-3 pl-3 pr-4 mb-1 gap-3", children: /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex flex-col gap-2", children: [
       /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex flex-row items-center justify-between", children: [
         /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "text-[16px]", children: "Width" }),
         /* @__PURE__ */ jsxRuntimeExports.jsx(
@@ -19851,32 +21656,141 @@ function RobotButton() {
           }
         )
       ] }),
-      /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex flex-row items-center justify-between", children: [
-        /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "text-[16px]", children: "Accel" }),
-        /* @__PURE__ */ jsxRuntimeExports.jsx(
-          NumberInput,
-          {
-            width: 60,
-            height: 35,
-            fontSize: 16,
-            bounds: [0, 100],
-            stepSize: 1,
-            roundTo: 2,
-            units: "ft/s²",
-            value: robot.accel,
-            setValue: updateAccel,
-            addToHistory: (accel) => AddToUndoHistory({ robot: { ...robot, accel } })
-          }
-        )
+      /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "mt-0.5 flex flex-col gap-2", children: [
+        /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex items-center gap-2", children: [
+          /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "text-[13px] text-gray-400 whitespace-nowrap", children: "Time Constant (Accel)" }),
+          /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "flex-1 border-t border-gray-500/40" })
+        ] }),
+        /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex flex-row items-center justify-between", children: [
+          /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "text-[16px]", children: "Drive" }),
+          /* @__PURE__ */ jsxRuntimeExports.jsx(
+            NumberInput,
+            {
+              width: 60,
+              height: 35,
+              fontSize: 16,
+              bounds: [0, 2],
+              stepSize: 0.05,
+              roundTo: 2,
+              units: "s",
+              value: robot.lateralTau,
+              setValue: updateLateralTau,
+              addToHistory: (v) => AddToUndoHistory({ robot: { ...robot, lateralTau: v } })
+            }
+          )
+        ] }),
+        /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex flex-row items-center justify-between", children: [
+          /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "text-[16px]", children: "Turn" }),
+          /* @__PURE__ */ jsxRuntimeExports.jsx(
+            NumberInput,
+            {
+              width: 60,
+              height: 35,
+              fontSize: 16,
+              bounds: [0, 2],
+              stepSize: 0.05,
+              roundTo: 2,
+              units: "s",
+              value: robot.angularTau,
+              setValue: updateAngularTau,
+              addToHistory: (v) => AddToUndoHistory({ robot: { ...robot, angularTau: v } })
+            }
+          )
+        ] })
       ] }),
-      /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "mt-0.5 pt-2 border-t border-gray-500/40 flex flex-col gap-0", children: [
-        /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex flex-row items-center justify-between h-[35px]", children: [
-          /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "text-[16px]", children: "All Omnis" }),
-          /* @__PURE__ */ jsxRuntimeExports.jsx("label", { className: "flex items-center gap-2 cursor-pointer select-none", children: /* @__PURE__ */ jsxRuntimeExports.jsx(Checkbox, { checked: allOmnis, setChecked: setAllOmnis }) })
+      /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "mt-0.5 flex flex-col gap-2", children: [
+        /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex items-center gap-2", children: [
+          /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "text-[13px] text-gray-400 whitespace-nowrap", children: "CoG Offset" }),
+          /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "flex-1 border-t border-gray-500/40" })
+        ] }),
+        /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex flex-row items-center justify-between", children: [
+          /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "text-[16px]", children: "Lateral" }),
+          /* @__PURE__ */ jsxRuntimeExports.jsx(
+            NumberInput,
+            {
+              width: 60,
+              height: 35,
+              fontSize: 16,
+              bounds: [-15, 15],
+              stepSize: 0.5,
+              roundTo: 2,
+              units: "in",
+              value: robot.cogOffsetX,
+              setValue: updateCogOffsetX,
+              addToHistory: (v) => AddToUndoHistory({ robot: { ...robot, cogOffsetX: v } })
+            }
+          )
+        ] }),
+        /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex flex-row items-center justify-between", children: [
+          /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "text-[16px]", children: "Forward" }),
+          /* @__PURE__ */ jsxRuntimeExports.jsx(
+            NumberInput,
+            {
+              width: 60,
+              height: 35,
+              fontSize: 16,
+              bounds: [-15, 15],
+              stepSize: 0.5,
+              roundTo: 2,
+              units: "in",
+              value: robot.cogOffsetY,
+              setValue: updateCogOffsetY,
+              addToHistory: (v) => AddToUndoHistory({ robot: { ...robot, cogOffsetY: v } })
+            }
+          )
+        ] })
+      ] }),
+      /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "mt-0.5 flex flex-col gap-2", children: [
+        /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex items-center gap-2", children: [
+          /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "text-[13px] text-gray-400 whitespace-nowrap", children: "Expansion" }),
+          /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "flex-1 border-t border-gray-500/40" })
+        ] }),
+        ["Front", "Left", "Right", "Rear"].map((side) => {
+          const key = `expansion${side}`;
+          const updater = { Front: updateExpansionFront, Left: updateExpansionLeft, Right: updateExpansionRight, Rear: updateExpansionRear }[side];
+          return /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex flex-row items-center justify-between", children: [
+            /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "text-[16px]", children: side }),
+            /* @__PURE__ */ jsxRuntimeExports.jsx(
+              NumberInput,
+              {
+                width: 60,
+                height: 35,
+                fontSize: 16,
+                bounds: [0, 30],
+                stepSize: 0.5,
+                roundTo: 2,
+                units: "in",
+                value: robot[key],
+                setValue: updater,
+                addToHistory: (v) => AddToUndoHistory({ robot: { ...robot, [key]: v } })
+              }
+            )
+          ] }, side);
+        })
+      ] }),
+      /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "mt-0.5 flex flex-col gap-2", children: [
+        /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex items-center gap-2", children: [
+          /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "text-[13px] text-gray-400 whitespace-nowrap", children: "Lateral Friction" }),
+          /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "flex-1 border-t border-gray-500/40" })
         ] }),
         /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex flex-row items-center justify-between h-[35px]", children: [
-          /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "text-[16px] line-through", children: "Holonomic" }),
-          /* @__PURE__ */ jsxRuntimeExports.jsx("label", { className: "flex items-center gap-2 cursor-pointer select-none", children: /* @__PURE__ */ jsxRuntimeExports.jsx(Checkbox, { checked: holonomic, setChecked: setHolonomic }) })
+          /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "text-[16px]", children: "All Omnis" }),
+          /* @__PURE__ */ jsxRuntimeExports.jsx("label", { className: "flex items-center gap-2 cursor-pointer select-none", children: /* @__PURE__ */ jsxRuntimeExports.jsx(Checkbox, { checked: robot.isOmni, setChecked: (checked) => {
+            updateOmnis(checked);
+            AddToUndoHistory({ robot: { ...robot, isOmni: checked } });
+          } }) })
+        ] })
+      ] }),
+      (format === "ReveilLib" || format === "RevMecanum") && /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "mt-0.5 flex flex-col gap-2", children: [
+        /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex items-center gap-2", children: [
+          /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "text-[13px] text-gray-400 whitespace-nowrap", children: "Robot Type" }),
+          /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "flex-1 border-t border-gray-500/40" })
+        ] }),
+        /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex flex-row items-center justify-between h-[35px]", children: [
+          /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "text-[16px]", children: "Mecanum" }),
+          /* @__PURE__ */ jsxRuntimeExports.jsx("label", { className: "flex items-center gap-2 cursor-pointer select-none", children: /* @__PURE__ */ jsxRuntimeExports.jsx(Checkbox, { checked: format === "RevMecanum", setChecked: (checked) => {
+            changeFormat(checked ? "RevMecanum" : "ReveilLib");
+          } }) })
         ] })
       ] })
     ] }) }) })
@@ -19888,7 +21802,6 @@ function Config() {
     /* @__PURE__ */ jsxRuntimeExports.jsx(FieldButton, {}),
     /* @__PURE__ */ jsxRuntimeExports.jsx(FormatButton, {}),
     /* @__PURE__ */ jsxRuntimeExports.jsx(RobotButton, {}),
-    /* @__PURE__ */ jsxRuntimeExports.jsx(CommandButton, {}),
     /* @__PURE__ */ jsxRuntimeExports.jsx(SettingsButton, {})
   ] });
 }
@@ -19899,7 +21812,8 @@ function useLocalStorageSync() {
     localStorage.setItem("ghostRobots", settings.ghostRobots ? "true" : "false");
     localStorage.setItem("robotPosition", settings.robotPosition ? "true" : "false");
     localStorage.setItem("precisePath", settings.precisePath ? "true" : "false");
-  }, [settings.ghostRobots, settings.robotPosition, settings.precisePath]);
+    localStorage.setItem("numberedPath", settings.numberedPath ? "true" : "false");
+  }, [settings.ghostRobots, settings.robotPosition, settings.precisePath, settings.numberedPath]);
   const skipFirstState = reactExports.useRef(true);
   reactExports.useEffect(() => {
     if (skipFirstState.current) {
@@ -19927,21 +21841,33 @@ function RobotView({
   angle,
   width,
   height,
-  bg
+  bg,
+  bgTransparency,
+  expansionTransparency,
+  frontExpansion,
+  leftExpansion,
+  rightExpansion,
+  rearExpansion
 }) {
   const pxWidth = toPxWidth(img.w, width);
   const pxHeight = toPxHeight(img.h, height);
   const pos = toPX({ x, y }, FIELD_REAL_DIMENSIONS, img);
   const normAngle = normalizeDeg(angle);
+  const pxFrontExpansion = toPxHeight(img.h, frontExpansion ?? 0);
+  const pxRearExpansion = toPxHeight(img.h, rearExpansion ?? 0);
+  const pxLeftExpansion = toPxWidth(img.w, leftExpansion ?? 0);
+  const pxRightExpansion = toPxWidth(img.w, rightExpansion ?? 0);
+  const robotX = -pxWidth / 2;
+  const robotY = -pxHeight / 2;
   return /* @__PURE__ */ jsxRuntimeExports.jsxs("g", { transform: `translate(${pos.x} ${pos.y}) rotate(${normAngle})`, children: [
     /* @__PURE__ */ jsxRuntimeExports.jsx(
       "rect",
       {
-        fill: bg ?? "rgba(150, 150, 150, 0.4)",
+        fill: `rgba(${[...bg, bgTransparency].join(", ")})`,
         stroke: "black",
         strokeWidth: 0.5,
-        x: -pxWidth / 2,
-        y: -pxHeight / 2,
+        x: robotX,
+        y: robotY,
         width: pxWidth,
         height: pxHeight
       }
@@ -19956,11 +21882,66 @@ function RobotView({
         stroke: "black",
         strokeWidth: 1
       }
+    ),
+    /* @__PURE__ */ jsxRuntimeExports.jsx(
+      "rect",
+      {
+        fill: `rgba(${[...bg, expansionTransparency].join(", ")})`,
+        stroke: "rgb(0, 0, 0)",
+        strokeWidth: 0.5,
+        x: robotX,
+        y: robotY - pxFrontExpansion,
+        width: pxWidth,
+        height: pxFrontExpansion
+      }
+    ),
+    /* @__PURE__ */ jsxRuntimeExports.jsx(
+      "rect",
+      {
+        fill: `rgba(${[...bg, expansionTransparency].join(", ")})`,
+        stroke: "rgb(0, 0, 0)",
+        strokeWidth: 0.5,
+        x: robotX,
+        y: robotY + pxHeight,
+        width: pxWidth,
+        height: pxRearExpansion
+      }
+    ),
+    /* @__PURE__ */ jsxRuntimeExports.jsx(
+      "rect",
+      {
+        fill: `rgba(${[...bg, expansionTransparency].join(", ")})`,
+        stroke: "rgb(0, 0, 0)",
+        strokeWidth: 0.5,
+        x: robotX - pxLeftExpansion,
+        y: robotY,
+        width: pxLeftExpansion,
+        height: pxHeight
+      }
+    ),
+    /* @__PURE__ */ jsxRuntimeExports.jsx(
+      "rect",
+      {
+        fill: `rgba(${[...bg, expansionTransparency].join(", ")})`,
+        stroke: "rgb(0, 0, 0)",
+        strokeWidth: 0.5,
+        x: robotX + pxWidth,
+        y: robotY,
+        width: pxRightExpansion,
+        height: pxHeight
+      }
     )
   ] });
 }
 function RobotLayer({ img, pose, robotPose, robotConstants, visible, path }) {
   const [settings] = useSettings();
+  const [format] = useFormat();
+  const mecnumColor = [29, 100, 8];
+  const tankColor = [150, 150, 150];
+  const expansionTransparency = 0.18;
+  const ghostTransparency = 0.05;
+  const bgColor = format === "RevMecanum" ? mecnumColor : tankColor;
+  const bgTransparency = 0.4;
   return /* @__PURE__ */ jsxRuntimeExports.jsxs(jsxRuntimeExports.Fragment, { children: [
     pose && visible && /* @__PURE__ */ jsxRuntimeExports.jsx(
       RobotView,
@@ -19970,7 +21951,14 @@ function RobotLayer({ img, pose, robotPose, robotConstants, visible, path }) {
         y: pose.y ?? 0,
         angle: pose.angle ?? 0,
         width: robotConstants.width,
-        height: robotConstants.height
+        height: robotConstants.height,
+        bg: bgColor,
+        expansionTransparency,
+        bgTransparency,
+        frontExpansion: robotConstants.expansionFront,
+        leftExpansion: robotConstants.expansionLeft,
+        rightExpansion: robotConstants.expansionRight,
+        rearExpansion: robotConstants.expansionRear
       }
     ),
     !visible && settings.ghostRobots && robotPose.map((p, idx) => /* @__PURE__ */ jsxRuntimeExports.jsx(React.Fragment, { children: path.segments[idx]?.visible && /* @__PURE__ */ jsxRuntimeExports.jsx(
@@ -19982,12 +21970,18 @@ function RobotLayer({ img, pose, robotPose, robotConstants, visible, path }) {
         angle: p.angle ?? 0,
         width: robotConstants.width,
         height: robotConstants.height,
-        bg: "rgba(150, 150, 150, 0.05)"
+        bg: bgColor,
+        bgTransparency: ghostTransparency,
+        expansionTransparency: ghostTransparency,
+        frontExpansion: robotConstants.expansionFront,
+        leftExpansion: robotConstants.expansionLeft,
+        rightExpansion: robotConstants.expansionRight,
+        rearExpansion: robotConstants.expansionRear
       }
     ) }, `ghost-${idx}`))
   ] });
 }
-function PathLayer({ path, img, visible, precise }) {
+function PathLayer({ path, img, visible, precise, colors }) {
   if (visible || path.segments.length < 2) return null;
   const imgDefaultSize = (FIELD_IMG_DIMENSIONS.w + FIELD_IMG_DIMENSIONS.h) / 2;
   const imgRealSize = (img.w + img.h) / 2;
@@ -20000,7 +21994,7 @@ function PathLayer({ path, img, visible, precise }) {
       {
         points: segPts,
         fill: "none",
-        stroke: control.hovered ? "rgba(180, 50, 11, 1)" : "rgba(21, 96, 189, 1)",
+        stroke: control.hovered ? colors.path.strokeHovered : colors.path.stroke,
         strokeDasharray: `${10 * scale}, ${7 * scale}`,
         strokeWidth: control.hovered ? 3 * scale : 2 * scale,
         strokeLinecap: "round"
@@ -20009,7 +22003,7 @@ function PathLayer({ path, img, visible, precise }) {
     );
   }) });
 }
-function ControlsLayer({ path, img, radius, format, onPointerDown }) {
+function ControlsLayer({ path, img, radius, format, colors, onPointerDown }) {
   const imgDefaultSize = (FIELD_IMG_DIMENSIONS.w + FIELD_IMG_DIMENSIONS.h) / 2;
   const imgRealSize = (img.w + img.h) / 2;
   const scale = imgRealSize / imgDefaultSize;
@@ -20029,13 +22023,12 @@ function ControlsLayer({ path, img, radius, format, onPointerDown }) {
       control.pose.x !== null && control.pose.y !== null && /* @__PURE__ */ jsxRuntimeExports.jsx(
         "circle",
         {
-          className: "stroke-[#1560BD]",
-          style: control.locked ? { cursor: "not-allowed" } : { cursor: "grab" },
+          style: { stroke: colors.node.stroke, ...control.locked ? { cursor: "not-allowed" } : { cursor: "grab" } },
           id: control.id,
           cx: toPX({ x: control.pose.x, y: control.pose.y }, FIELD_REAL_DIMENSIONS, img).x,
           cy: toPX({ x: control.pose.x, y: control.pose.y }, FIELD_REAL_DIMENSIONS, img).y,
           r: control.hovered ? radius * 1.1 : radius,
-          fill: control.selected ? "rgba(180, 50, 11, .75)" : "rgba(160, 32, 7, .5)",
+          fill: control.selected ? colors.node.fillSelected : colors.node.fill,
           strokeWidth: idx === snap ? 1.1 * scale : 0
         }
       ),
@@ -20047,7 +22040,7 @@ function ControlsLayer({ path, img, radius, format, onPointerDown }) {
         const reduced = control.kind === "poseDrive" || control.kind === "start" ? 0.8 : 1;
         const r = active ? radius * (1.3 * reduced) : hovered ? radius * (1.2 * reduced) : radius;
         const thickness = active ? 5 : hovered ? 4 : 2;
-        const baseStroke = control.pose.x !== null ? "#1560BDB8" : active ? "rgba(160, 50, 11, .9)" : "#451717";
+        const baseStroke = control.pose.x !== null ? colors.indicator.strokeWithPos : active ? colors.indicator.strokeSelected : colors.indicator.stroke;
         const basePx = toPX({ x: snapPose.x, y: snapPose.y }, FIELD_REAL_DIMENSIONS, img);
         let angle = control.pose.angle ?? 0;
         if (control.kind === "pointTurn") {
@@ -20085,7 +22078,7 @@ function ControlsLayer({ path, img, radius, format, onPointerDown }) {
         const hovered = control.hovered;
         const r = active ? radius * 1.3 : hovered ? radius * 1.2 : radius;
         const thickness = active ? 5 : hovered ? 4 : 2;
-        const baseStroke = active ? "rgba(160, 50, 11, .9)" : "#451717";
+        const baseStroke = active ? colors.indicator.strokeSelected : colors.indicator.stroke;
         let angle = control.pose.angle ?? 0;
         if (control.kind === "pointSwing") {
           const desiredPos = getForwardSnapPose(path, idx);
@@ -20135,7 +22128,7 @@ function ControlsLayer({ path, img, radius, format, onPointerDown }) {
           textAnchor: "middle",
           dominantBaseline: "central",
           fontSize: radius * 0.9,
-          fill: "#a0a0a06c",
+          fill: colors.numberLabel,
           children: num
         },
         `num-${control.id}`
@@ -20143,39 +22136,35 @@ function ControlsLayer({ path, img, radius, format, onPointerDown }) {
     })
   ] });
 }
-function CommandLayer({ path, img, visible }) {
-  if (visible || !path) return null;
-  return /* @__PURE__ */ jsxRuntimeExports.jsx("g", { children: path.segments.map((control, idx) => {
-    if (!control.visible || control.pose.x === null || control.pose.y === null || control.command.name === "") {
-      return null;
-    }
-    const snapPose = getBackwardsSnapPose(path, idx - 1);
-    if (snapPose === null || snapPose.y === null || snapPose.x === null) return null;
-    let posPx = toPX(interpolatePoses(control.pose, snapPose, control.command.percent / 100), FIELD_REAL_DIMENSIONS, img);
-    const pts = getSegmentLines(idx, path, img)?.split(" ");
-    if (control.kind === "poseDrive" && pts !== void 0) {
-      const ptsIdx = Math.floor(control.command.percent / 100 * (pts?.length - 1));
-      const coord = pts[ptsIdx].split(",");
-      posPx = { x: Number(coord[0]), y: Number(coord[1]) };
-    }
-    return /* @__PURE__ */ jsxRuntimeExports.jsx(
-      "circle",
-      {
-        fill: "#1566bdBF",
-        r: 8,
-        cx: posPx.x,
-        cy: posPx.y
-      },
-      `cmd-${control.id}`
-    );
-  }) });
-}
 const useClipboard = createSharedState([]);
 function Field() {
+  const primary = toRGBA("#a02007", 0.5);
+  const secondary = toRGBA("#1560BD", 0.75);
+  const colors = {
+    node: {
+      fill: primary,
+      fillSelected: "rgba(180, 50, 11, .75)",
+      stroke: secondary
+    },
+    indicator: {
+      stroke: "#451717",
+      strokeSelected: "rgba(160, 50, 11, .9)",
+      strokeWithPos: secondary
+    },
+    numberLabel: "#a0a0a06c",
+    path: {
+      stroke: secondary,
+      strokeHovered: "rgba(180, 50, 11, 1)"
+    }
+  };
   const [img, setImg] = reactExports.useState({ x: 0, y: 0, w: 575, h: 575 });
   const [fieldKey] = useField();
   const svgRef = reactExports.useRef(null);
+  const pathRef = reactExports.useRef(null);
+  const headingHistoryTimerRef = reactExports.useRef(null);
+  const moveHistoryTimerRef = reactExports.useRef(null);
   const [path, setPath] = usePath();
+  pathRef.current = path;
   const [pose] = usePose();
   const [robotPose] = useRobotPose();
   const robot = reactExports.useSyncExternalStore(robotConstantsStore.subscribe, robotConstantsStore.getState);
@@ -20222,11 +22211,17 @@ function Field() {
   const { toggleRobotVisibility } = PathSimMacros();
   reactExports.useEffect(() => {
     const handleKeyDown = (evt) => {
-      const target = evt.target;
-      if (target?.isContentEditable || target?.tagName === "INPUT") return;
+      const target2 = evt.target;
+      if (target2?.isContentEditable || target2?.tagName === "INPUT") return;
       if (evt.ctrlKey && evt.key.toLowerCase() === "r") return;
       unselectPath(evt, setPath);
       moveControl(evt, setPath);
+      if (["ArrowUp", "ArrowDown", "ArrowLeft", "ArrowRight"].includes(evt.key)) {
+        if (moveHistoryTimerRef.current) clearTimeout(moveHistoryTimerRef.current);
+        moveHistoryTimerRef.current = setTimeout(() => {
+          if (pathRef.current) AddToUndoHistory({ path: pathRef.current });
+        }, 400);
+      }
       cut(evt, path, setClipboard, setPath);
       copy(evt, path, setClipboard);
       paste(evt, setPath, clipboard);
@@ -20238,9 +22233,14 @@ function Field() {
       toggleRobotVisibility(evt, setRobotVisibility);
     };
     const handleWheelDown = (evt) => {
-      const target = evt.target;
-      if (target?.isContentEditable || target?.tagName === "INPUT") return;
-      moveHeading(evt, setPath);
+      const target2 = evt.target;
+      if (target2?.isContentEditable || target2?.tagName === "INPUT") return;
+      if (moveHeading(evt, path, setPath)) {
+        if (headingHistoryTimerRef.current) clearTimeout(headingHistoryTimerRef.current);
+        headingHistoryTimerRef.current = setTimeout(() => {
+          if (pathRef.current) AddToUndoHistory({ path: pathRef.current });
+        }, 400);
+      }
     };
     document.addEventListener("keydown", handleKeyDown);
     document.addEventListener("wheel", handleWheelDown, { passive: false });
@@ -20298,10 +22298,10 @@ function Field() {
     if (!drag.dragging || !svgRef.current) return;
     const posSvg = pointerToSvg(evt, svgRef.current);
     const posInch = toInch(posSvg, FIELD_REAL_DIMENSIONS, img);
-    const start = dragStartPointerInch.current;
-    if (!start) return;
-    const dx = posInch.x - start.x;
-    const dy = posInch.y - start.y;
+    const start2 = dragStartPointerInch.current;
+    if (!start2) return;
+    const dx = posInch.x - start2.x;
+    const dy = posInch.y - start2.y;
     const ctrlHeld = evt.ctrlKey;
     if (!ctrlHeld && dx === lastAppliedDelta.current.dx && dy === lastAppliedDelta.current.dy) {
       return;
@@ -20440,7 +22440,7 @@ function Field() {
         },
         children: [
           /* @__PURE__ */ jsxRuntimeExports.jsx("image", { href: getFieldSrcFromKey(fieldKey), x: img.x, y: img.y, width: img.w, height: img.h }),
-          /* @__PURE__ */ jsxRuntimeExports.jsx(PathLayer, { path, img, visible: pathVisible, precise: settings.precisePath }),
+          /* @__PURE__ */ jsxRuntimeExports.jsx(PathLayer, { path, img, visible: pathVisible, precise: settings.precisePath, colors }),
           /* @__PURE__ */ jsxRuntimeExports.jsx(
             RobotLayer,
             {
@@ -20452,7 +22452,6 @@ function Field() {
               path
             }
           ),
-          /* @__PURE__ */ jsxRuntimeExports.jsx(CommandLayer, { path, img, visible: pathVisible }),
           !pathVisible && /* @__PURE__ */ jsxRuntimeExports.jsx(
             ControlsLayer,
             {
@@ -20460,6 +22459,7 @@ function Field() {
               img,
               radius,
               format,
+              colors,
               onPointerDown: handleControlPointerDown
             }
           )
@@ -20487,14 +22487,12 @@ function useFileOpenSync() {
   const [format, setFormat] = useFormat();
   const [, setField] = useField();
   const [, setPath] = usePath();
-  const [, setCommands] = useCommand();
   reactExports.useEffect(() => {
     const file = fileFormat;
     console.log(file);
     if ("format" in file && file.format !== void 0) setFormat(file.format);
     if ("field" in file && file.field !== void 0) setField(file.field);
     if ("path" in file && file.path !== void 0) setPath(file.path);
-    if ("commands" in file && file.commands !== void 0) setCommands(file.commands);
     if ("robot" in file && file.robot !== void 0) robotConstantsStore.merge(file.robot);
     if ("defaults" in file && file.defaults !== void 0) {
       const targetFormat = file.format ?? format;
@@ -20502,6 +22500,7 @@ function useFileOpenSync() {
     }
   }, [fileFormat]);
 }
+const ScaleContext = reactExports.createContext(1);
 function App() {
   useLocalStorageSync();
   useFileOpenSync();
@@ -20536,7 +22535,7 @@ function App() {
       window.removeEventListener("resize", compute);
     };
   }, []);
-  return /* @__PURE__ */ jsxRuntimeExports.jsx(ScaleContext.Provider, { value: scale, children: /* @__PURE__ */ jsxRuntimeExports.jsx("div", { ref: viewportRef, className: "w-screen h-screen", children: /* @__PURE__ */ jsxRuntimeExports.jsxs(
+  return /* @__PURE__ */ jsxRuntimeExports.jsx(ScaleContext.Provider, { value: scale, children: /* @__PURE__ */ jsxRuntimeExports.jsx("div", { ref: viewportRef, className: "w-screen h-screen overflow-hidden", children: /* @__PURE__ */ jsxRuntimeExports.jsxs(
     "div",
     {
       ref: contentRef,
@@ -20559,4 +22558,4 @@ function App() {
 clientExports.createRoot(document.getElementById("root")).render(
   /* @__PURE__ */ jsxRuntimeExports.jsx(reactExports.StrictMode, { children: /* @__PURE__ */ jsxRuntimeExports.jsx(App, {}) })
 );
-//# sourceMappingURL=index-D1w1F_Ex.js.map
+//# sourceMappingURL=index-DWMBTTlw.js.map
