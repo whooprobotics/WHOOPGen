@@ -16599,7 +16599,7 @@ const keyToLemConstant = (key, value) => {
   }
   return "";
 };
-const getConstantList$2 = (constants) => {
+const getConstantList$1 = (constants) => {
   const constantsList = [];
   for (const k of Object.keys(constants)) {
     const value = constants[k];
@@ -16629,14 +16629,14 @@ function LemLibToString(path, selected = false) {
       continue;
     }
     if (kind === "angleTurn") {
-      const constantsList = getConstantList$2(kUnequalAngular);
+      const constantsList = getConstantList$1(kUnequalAngular);
       const formattedConstants = constantsList.map((c) => ` ${c}`).join(", ");
       pathString += constantsList.length === 0 ? `
     chassis.turnToHeading(${angle}, ${roundOff$3(kAngular.timeout, 0)});` : `
     chassis.turnToHeading(${angle}, ${roundOff$3(kAngular.timeout, 0)}, {${formattedConstants}});`;
     }
     if (kind === "pointTurn") {
-      const constantsList = getConstantList$2(kUnequalAngular);
+      const constantsList = getConstantList$1(kUnequalAngular);
       const formattedConstants = constantsList.map((c) => ` ${c}`).join(", ");
       const point = findPointToFace(path, idx);
       pathString += constantsList.length === 0 ? `
@@ -16644,14 +16644,14 @@ function LemLibToString(path, selected = false) {
     chassis.turnToPoint(${roundOff$3(point.x, 2)}, ${roundOff$3(point.y, 2)}, ${roundOff$3(kAngular.timeout, 0)}, {${formattedConstants}});`;
     }
     if (kind === "angleSwing") {
-      const constantsList = getConstantList$2(kUnequalAngular);
+      const constantsList = getConstantList$1(kUnequalAngular);
       const formattedConstants = constantsList.map((c) => ` ${c}`).join(", ");
       pathString += constantsList.length === 0 ? `
     chassis.swingToHeading(${angle}, ${lockedSideToString(kAngular.lockedSide)}, ${roundOff$3(kAngular.timeout, 0)});` : `
     chassis.swingToHeading(${angle}, ${lockedSideToString(kAngular.lockedSide)}, ${roundOff$3(kAngular.timeout, 0)}, {${formattedConstants}});`;
     }
     if (kind === "pointSwing") {
-      const constantsList = getConstantList$2(kUnequalAngular);
+      const constantsList = getConstantList$1(kUnequalAngular);
       const formattedConstants = constantsList.map((c) => ` ${c}`).join(", ");
       const point = findPointToFace(path, idx);
       pathString += constantsList.length === 0 ? `
@@ -16659,14 +16659,14 @@ function LemLibToString(path, selected = false) {
     chassis.swingToPoint(${roundOff$3(point.x, 2)}, ${roundOff$3(point.y, 2)}, ${lockedSideToString(kAngular.lockedSide)}, ${roundOff$3(kAngular.timeout, 0)}, {${formattedConstants}});`;
     }
     if (kind === "pointDrive") {
-      const constantsList = getConstantList$2(kUnequalLateral);
+      const constantsList = getConstantList$1(kUnequalLateral);
       const formattedConstants = constantsList.map((c) => ` ${c}`).join(", ");
       pathString += constantsList.length === 0 ? `
     chassis.moveToPoint(${x}, ${y}, ${roundOff$3(kLateral.timeout, 0)});` : `
     chassis.moveToPoint(${x}, ${y}, ${roundOff$3(kLateral.timeout, 0)}, {${formattedConstants}});`;
     }
     if (kind === "poseDrive") {
-      const constantsList = getConstantList$2(kUnequalLateral);
+      const constantsList = getConstantList$1(kUnequalLateral);
       const formattedConstants = constantsList.map((c) => ` ${c}`).join(", ");
       pathString += constantsList.length === 0 ? `
     chassis.moveToPose(${x}, ${y}, ${angle}, ${roundOff$3(kLateral.timeout, 0)});` : `
@@ -17356,7 +17356,7 @@ const keyToMikLibConstant = (key, value, constantType) => {
   }
   return "";
 };
-const getConstantList$1 = (constants, constantType) => {
+const getConstantList = (constants, constantType) => {
   const constantsList = [];
   for (const k of Object.keys(constants)) {
     const value = constants[k];
@@ -17390,7 +17390,7 @@ function mikLibToString(path, selected = false) {
     }
     if (kind === "angleTurn") {
       const { turn } = k;
-      const constantsList = getConstantList$1(getUnequalmikConstants(kDefault.angleTurn.turn, turn), "Turn");
+      const constantsList = getConstantList(getUnequalmikConstants(kDefault.angleTurn.turn, turn), "Turn");
       const formattedConstants = constantsList.map((c) => `        ${c}`).join(",\n");
       pathString += constantsList.length === 0 ? `
     chassis.turn_to_angle(${angle});` : constantsList.length === 1 ? `
@@ -17401,7 +17401,7 @@ ${formattedConstants}
     }
     if (kind === "pointTurn") {
       const { turn } = k;
-      const constantsList = getConstantList$1(getUnequalmikConstants(kDefault.pointTurn.turn, turn), "Turn");
+      const constantsList = getConstantList(getUnequalmikConstants(kDefault.pointTurn.turn, turn), "Turn");
       if (Number(angle) !== 0) constantsList.unshift(`.angle_offset = ${angle}`);
       const pos = findPointToFace(path, idx);
       const turnX = roundOff$2(pos.x, 2);
@@ -17416,7 +17416,7 @@ ${formattedConstants}
     }
     if (kind === "angleSwing") {
       const { swing } = k;
-      const constantsList = getConstantList$1(getUnequalmikConstants(kDefault.angleSwing.swing, swing), "Turn");
+      const constantsList = getConstantList(getUnequalmikConstants(kDefault.angleSwing.swing, swing), "Turn");
       const formattedConstants = constantsList.map((c) => `        ${c}`).join(",\n");
       pathString += constantsList.length === 0 ? `
     chassis.${swing.swing_direction}_swing_to_angle(${angle});` : constantsList.length === 1 ? `
@@ -17427,7 +17427,7 @@ ${formattedConstants}
     }
     if (kind === "pointSwing") {
       const { swing } = k;
-      const constantsList = getConstantList$1(getUnequalmikConstants(kDefault.pointSwing.swing, swing), "Turn");
+      const constantsList = getConstantList(getUnequalmikConstants(kDefault.pointSwing.swing, swing), "Turn");
       if (Number(angle) !== 0) constantsList.unshift(`.angle_offset = ${angle}`);
       const pos = findPointToFace(path, idx);
       const turnX = roundOff$2(pos.x, 2);
@@ -17443,8 +17443,8 @@ ${formattedConstants}
     if (kind === "pointDrive") {
       const { drive, heading } = k;
       const constantsList = [
-        ...getConstantList$1(getUnequalmikConstants(kDefault.pointDrive.drive, drive), "Drive"),
-        ...getConstantList$1(getUnequalmikConstants(kDefault.pointDrive.heading, heading), "Heading")
+        ...getConstantList(getUnequalmikConstants(kDefault.pointDrive.drive, drive), "Drive"),
+        ...getConstantList(getUnequalmikConstants(kDefault.pointDrive.heading, heading), "Heading")
       ];
       const formattedConstants = constantsList.map((c) => `        ${c}`).join(",\n");
       pathString += constantsList.length === 0 ? `
@@ -17457,8 +17457,8 @@ ${formattedConstants}
     if (kind === "poseDrive") {
       const { drive, heading } = k;
       const constantsList = [
-        ...getConstantList$1(getUnequalmikConstants(kDefault.poseDrive.drive, drive), "Drive"),
-        ...getConstantList$1(getUnequalmikConstants(kDefault.poseDrive.heading, heading), "Heading")
+        ...getConstantList(getUnequalmikConstants(kDefault.poseDrive.drive, drive), "Drive"),
+        ...getConstantList(getUnequalmikConstants(kDefault.poseDrive.heading, heading), "Heading")
       ];
       const formattedConstants = constantsList.map((c) => `        ${c}`).join(",\n");
       pathString += constantsList.length === 0 ? `
@@ -18351,20 +18351,20 @@ const keyToRevMecanumConstant = (key, value, constantType) => {
         return `.drive_k.d = ${roundOff(value, 3)}`;
       case "starti":
         return `.drive_k.starti = ${roundOff(value, 2)}`;
-      case "maxSpeed":
-        return `.max_speed = ${roundOff(value, 1)}`;
-      case "min_voltage":
-        return `.min_speed = ${roundOff(value, 1)}`;
-      case "center_max_speed":
-        return `.center_max_speed = ${roundOff(value, 1)}`;
       case "settle_error":
         return `.drive_settle.settle_error = ${roundOff(value, 2)}_in`;
       case "settle_time":
         return `.drive_settle.settle_time = ${roundOff(value, 0)}_ms`;
-      case "timeout":
-        return `.timeout = ${roundOff(value, 0)}_ms`;
+      case "maxSpeed":
+        return `.max_speed = ${roundOff(value, 1)}`;
+      case "min_voltage":
+        return `.min_speed = ${roundOff(value, 1)}`;
       case "exit_error":
         return `.exit_error = ${roundOff(value, 2)}_in`;
+      case "center_max_speed":
+        return `.center_max_speed = ${roundOff(value, 1)}`;
+      case "timeout":
+        return `.timeout = ${roundOff(value, 0)}_ms`;
     }
   } else if (constantType === "TurnInDrive") {
     switch (key) {
@@ -18376,12 +18376,12 @@ const keyToRevMecanumConstant = (key, value, constantType) => {
         return `.turn_k.d = ${roundOff(value, 3)}`;
       case "starti":
         return `.turn_k.starti = ${roundOff(value, 2)}`;
-      case "maxSpeed":
-        return `.turn_max_speed = ${roundOff(value, 1)}`;
       case "settle_error":
         return `.turn_settle.settle_error = ${roundOff(value, 2)}_deg`;
       case "settle_time":
         return `.turn_settle.settle_time = ${roundOff(value, 0)}_ms`;
+      case "maxSpeed":
+        return `.turn_max_speed = ${roundOff(value, 1)}`;
     }
   } else if (constantType === "Turn") {
     switch (key) {
@@ -18393,31 +18393,77 @@ const keyToRevMecanumConstant = (key, value, constantType) => {
         return `.turn_k.d = ${roundOff(value, 3)}`;
       case "starti":
         return `.turn_k.starti = ${roundOff(value, 2)}`;
-      case "maxSpeed":
-        return `.max_speed = ${roundOff(value, 1)}`;
-      case "min_voltage":
-        return `.min_speed = ${roundOff(value, 1)}`;
       case "settle_error":
         return `.turn_settle.settle_error = ${roundOff(value, 2)}_deg`;
       case "settle_time":
         return `.turn_settle.settle_time = ${roundOff(value, 0)}_ms`;
-      case "timeout":
-        return `.timeout = ${roundOff(value, 0)}_ms`;
+      case "min_voltage":
+        return `.min_speed = ${roundOff(value, 1)}`;
+      case "maxSpeed":
+        return `.max_speed = ${roundOff(value, 1)}`;
       case "exit_error":
         return `.exit_error = ${roundOff(value, 2)}_deg`;
+      case "timeout":
+        return `.timeout = ${roundOff(value, 0)}_ms`;
     }
   }
   return "";
 };
-const getConstantList = (constants, constantType) => {
-  const constantsList = [];
-  for (const k of Object.keys(constants)) {
-    const value = constants[k];
-    if (value === void 0) continue;
-    const c = keyToRevMecanumConstant(k, value, constantType);
-    if (c !== "") constantsList.push(c);
+const TURN_KEY_ORDER = [
+  "kp",
+  "ki",
+  "kd",
+  "starti",
+  "settle_error",
+  "settle_time",
+  "min_voltage",
+  "maxSpeed",
+  "exit_error",
+  "timeout"
+];
+const getTurnConstantList = (constants) => {
+  const list = [];
+  for (const k of TURN_KEY_ORDER) {
+    const v = constants[k];
+    if (v === void 0) continue;
+    const c = keyToRevMecanumConstant(k, v, "Turn");
+    if (c !== "") list.push(c);
   }
-  return constantsList;
+  return list;
+};
+const getDriveConstantList = (driveConstants, turnConstants) => {
+  const list = [];
+  const addDrive = (k) => {
+    const v = driveConstants[k];
+    if (v === void 0) return;
+    const c = keyToRevMecanumConstant(k, v, "Drive");
+    if (c !== "") list.push(c);
+  };
+  const addTurn = (k) => {
+    const v = turnConstants[k];
+    if (v === void 0) return;
+    const c = keyToRevMecanumConstant(k, v, "TurnInDrive");
+    if (c !== "") list.push(c);
+  };
+  addDrive("kp");
+  addDrive("ki");
+  addDrive("kd");
+  addDrive("starti");
+  addTurn("kp");
+  addTurn("ki");
+  addTurn("kd");
+  addTurn("starti");
+  addDrive("settle_error");
+  addDrive("settle_time");
+  addTurn("settle_error");
+  addTurn("settle_time");
+  addDrive("maxSpeed");
+  addDrive("min_voltage");
+  addDrive("exit_error");
+  addTurn("maxSpeed");
+  addDrive("center_max_speed");
+  addDrive("timeout");
+  return list;
 };
 function RevMecanumToString(path, selected = false) {
   let pathString = "";
@@ -18436,62 +18482,46 @@ function RevMecanumToString(path, selected = false) {
     const y = roundOff(control.pose.y, 2);
     const angle = roundOff(control.pose.angle, 2);
     if (idx === 0) {
-      pathString += `    odom->set_position({${x}_in, ${y}_in, ${angle}_deg});`;
+      pathString += `  odom->set_position({${x}_in, ${y}_in, ${angle}_deg});`;
       continue;
     }
     if (kind === "angleTurn") {
       const { turn } = k;
-      const constantsList = getConstantList(getUnequalRevMecanumConstants(kDefault.angleTurn.turn, turn), "Turn");
-      const formattedConstants = constantsList.map((c) => `        ${c}`).join(",\n");
+      const constantsList = getTurnConstantList(getUnequalRevMecanumConstants(kDefault.angleTurn.turn, turn));
       pathString += constantsList.length === 0 ? `
-    turn(${angle}_deg);` : constantsList.length === 1 ? `
-    turn(${angle}_deg, { ${constantsList[0]} });` : `
-    turn(${angle}_deg, {
-${formattedConstants}
-    });`;
+  turn(${angle}_deg);` : `
+  turn(${angle}_deg, Turn{ ${constantsList.join(", ")} });`;
     }
     if (kind === "pointTurn") {
       const { turn } = k;
-      const constantsList = getConstantList(getUnequalRevMecanumConstants(kDefault.pointTurn.turn, turn), "Turn");
+      const constantsList = getTurnConstantList(getUnequalRevMecanumConstants(kDefault.pointTurn.turn, turn));
       if (Number(angle) !== 0) constantsList.unshift(`.offset = ${angle}_deg`);
       const pos = findPointToFace(path, idx);
       const turnX = roundOff(pos.x, 2);
       const turnY = roundOff(pos.y, 2);
-      const formattedConstants = constantsList.map((c) => `        ${c}`).join(",\n");
       pathString += constantsList.length === 0 ? `
-    turn(${turnX}_in, ${turnY}_in);` : constantsList.length === 1 ? `
-    turn(${turnX}_in, ${turnY}_in, { ${constantsList[0]} });` : `
-    turn(${turnX}_in, ${turnY}_in, {
-${formattedConstants}
-    });`;
+  turn(${turnX}_in, ${turnY}_in);` : `
+  turn(${turnX}_in, ${turnY}_in, Turn{ ${constantsList.join(", ")} });`;
     }
     if (kind === "pointDrive") {
       const { drive, turn } = k;
-      const constantsList = [
-        ...getConstantList(getUnequalRevMecanumConstants(kDefault.pointDrive.drive, drive), "Drive"),
-        ...getConstantList(getUnequalRevMecanumConstants(kDefault.pointDrive.turn, turn), "TurnInDrive")
-      ];
-      const formattedConstants = constantsList.map((c) => `        ${c}`).join(",\n");
+      const constantsList = getDriveConstantList(
+        getUnequalRevMecanumConstants(kDefault.pointDrive.drive, drive),
+        getUnequalRevMecanumConstants(kDefault.pointDrive.turn, turn)
+      );
       pathString += constantsList.length === 0 ? `
-    drive(${x}_in, ${y}_in);` : constantsList.length === 1 ? `
-    drive(${x}_in, ${y}_in, { ${constantsList[0]} });` : `
-    drive(${x}_in, ${y}_in, {
-${formattedConstants}
-    });`;
+  drive(${x}_in, ${y}_in);` : `
+  drive(${x}_in, ${y}_in, Drive{ ${constantsList.join(", ")} });`;
     }
     if (kind === "poseDrive") {
       const { drive, turn } = k;
-      const constantsList = [
-        ...getConstantList(getUnequalRevMecanumConstants(kDefault.poseDrive.drive, drive), "Drive"),
-        ...getConstantList(getUnequalRevMecanumConstants(kDefault.poseDrive.turn, turn), "TurnInDrive")
-      ];
-      const formattedConstants = constantsList.map((c) => `        ${c}`).join(",\n");
+      const constantsList = getDriveConstantList(
+        getUnequalRevMecanumConstants(kDefault.poseDrive.drive, drive),
+        getUnequalRevMecanumConstants(kDefault.poseDrive.turn, turn)
+      );
       pathString += constantsList.length === 0 ? `
-    drive(${x}_in, ${y}_in, ${angle}_deg);` : constantsList.length === 1 ? `
-    drive(${x}_in, ${y}_in, ${angle}_deg, { ${constantsList[0]} });` : `
-    drive(${x}_in, ${y}_in, ${angle}_deg, {
-${formattedConstants}
-    });`;
+  drive(${x}_in, ${y}_in, ${angle}_deg);` : `
+  drive(${x}_in, ${y}_in, ${angle}_deg, Drive{ ${constantsList.join(", ")} });`;
     }
   }
   if (selected) pathString = pathString.startsWith("\n") ? pathString.slice(1) : pathString;
@@ -22558,4 +22588,4 @@ function App() {
 clientExports.createRoot(document.getElementById("root")).render(
   /* @__PURE__ */ jsxRuntimeExports.jsx(reactExports.StrictMode, { children: /* @__PURE__ */ jsxRuntimeExports.jsx(App, {}) })
 );
-//# sourceMappingURL=index-DWMBTTlw.js.map
+//# sourceMappingURL=index-xXmiT7GA.js.map
