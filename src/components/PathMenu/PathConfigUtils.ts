@@ -1,5 +1,29 @@
 import type { Path } from "../../core/Types/Path";
 import { AddToUndoHistory } from "../../core/Undo/UndoHistory";
+import type { Segment } from "../../core/Types/Segment";
+
+export const setupDragTransfer = (e: { dataTransfer: DataTransfer }, segmentId: string) => {
+  e.dataTransfer.setData('text/plain', segmentId);
+  e.dataTransfer.effectAllowed = 'move';
+  const emptyImg = new Image();
+  emptyImg.src = 'data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7';
+  e.dataTransfer.setDragImage(emptyImg, 0, 0);
+};
+
+export const buildDraggingIds = (segments: Segment[], segmentId: string): string[] => {
+  const segment = segments.find(s => s.id === segmentId);
+  if (segment?.selected) {
+    const selectedIds = segments.filter((s, idx) => s.selected && idx > 0).map(s => s.id);
+    return selectedIds.length > 0 ? selectedIds : [segmentId];
+  }
+  return [segmentId];
+};
+
+export const MOTION_KIND_SET = new Set([
+  "pointDrive", "poseDrive",
+  "angleTurn", "pointTurn",
+  "pointSwing", "angleSwing",
+]);
 
 function getGroupInsertMeta(
   segments: any[],
@@ -49,6 +73,9 @@ export const moveSegment = (
 
     // Prevent moving the start segment (index 0)
     if (fromIdx === 0) return prev;
+
+    // Prevent moving locked segments
+    if (draggedSeg.locked) return prev;
 
     // Prevent groups from being moved to position 0
     if (draggedSeg.kind === "group" && toIndex === 0) return prev;
@@ -151,6 +178,9 @@ export const moveMultipleSegments = (
 
     // Prevent moving if any segment is the start segment
     if (fromIndices.some(idx => idx === 0)) return prev;
+
+    // Prevent moving if any segment is locked
+    if (fromIndices.some(idx => original[idx].locked)) return prev;
 
     // Sort indices to maintain relative order
     const sortedIndices = [...fromIndices].sort((a, b) => a - b);

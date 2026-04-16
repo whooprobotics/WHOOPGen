@@ -2,7 +2,7 @@ import { useEffect, useRef, useState } from "react";
 import play from "../assets/play.svg";
 import pause from "../assets/pause.svg";
 import { Robot, robotConstantsStore } from "../core/Robot";
-import { computedPathStore, precomputePath, type PathSim } from "../core/ComputePathSim";
+import { activeSimSegmentStore, computedPathStore, pathTelemetry, precomputePath, SIM_CONSTANTS, type PathSim } from "../core/ComputePathSim";
 import { usePose } from "../hooks/usePose";
 import { clamp } from "../core/Util";
 import { useRobotVisibility } from "../hooks/useRobotVisibility";
@@ -10,7 +10,7 @@ import Checkbox from "./Util/Checkbox";
 import Slider from "./Util/Slider";
 import { usePath } from "../hooks/usePath";
 import { PathSimMacros } from "../macros/PathSimMacros";
-import { convertPathToSim } from "../Conversion/Conversion";
+import { convertPathToSim } from "../simulation/Conversion";
 import { useFormat } from "../hooks/useFormat";
 import { useRobotPose } from "../hooks/useRobotPose";
 import { useSettings } from "../hooks/useSettings";
@@ -20,7 +20,7 @@ import { useSimulateGroup } from "../hooks/useSimulateGroup";
 // This fucking file is the biggest piece of shit i find a new bug every day
 
 function createRobot(): Robot {
-    const { width, height, speed, accel, lateralFriction } = robotConstantsStore.getState();
+    const { width, height, speed, lateralTau, angularTau, isOmni, cogOffsetX, cogOffsetY, expansionFront, expansionLeft, expansionRight, expansionRear } = robotConstantsStore.getState();
 
     return new Robot(
         0, // Start x
@@ -29,10 +29,15 @@ function createRobot(): Robot {
         width, // Width (inches)
         height, // Height (inches)
         speed, // Speed (ft/s)
-        width,  // Track Width (inches)
-        accel, // Max Accel (ft/s^2)
-        accel, // Max Decel (ft/s^2)
-        lateralFriction // Lateral Friction (higher = less drift)
+        cogOffsetX, // CoG lateral offset (inches)
+        cogOffsetY, // CoG longitudinal offset (inches)
+        expansionFront,
+        expansionLeft,
+        expansionRight,
+        expansionRear,
+        isOmni, // Lateral Friction (higher = less drift)
+        lateralTau,
+        angularTau,
     );
 }
 
@@ -83,6 +88,8 @@ export default function PathSimulator() {
             trajectory: rebasedTrajectory,
             endTrajectory: culledEnds,
             segmentTrajectorys: sim.segmentTrajectorys,
+            segmentCumulativeDists: sim.segmentCumulativeDists,
+            timeOffset,
         };
     }
 
@@ -103,23 +110,24 @@ export default function PathSimulator() {
         const pathSim = cullSimulatedPath(fullSim);
         computedPathStore.setState(pathSim);
 
-        setRobotPose(computedPath.endTrajectory);
-        
+        setRobotPose(pathSim.endTrajectory);
+
         if (!robotVisible) {
             setPlaying(false);
             return;
         };
 
-        if (!computedPath.trajectory.length || computedPath.totalTime <= 0) return;
+        if (!pathSim.trajectory.length || pathSim.totalTime <= 0) return;
 
-        const clampedTime = clamp(time, 0, computedPath.totalTime);
+        const clampedTime = clamp(time, 0, pathSim.totalTime);
         if (clampedTime !== time) setTime(clampedTime);
-        
-        if (robotVisible) forceSnapTime(computedPath, clampedTime);
 
-        setValue((clampedTime / computedPath.totalTime) * 100);
+        if (robotVisible) forceSnapTime(pathSim, clampedTime);
+
+        skip.current = true;
+        setValue((clampedTime / pathSim.totalTime) * 100);
         
-    }, [changes.length, path, robotk, robotVisible]);
+    }, [changes.length, robotk, robotVisible, simulatedGroups]);
 
     
     useEffect(() => {
@@ -136,6 +144,38 @@ export default function PathSimulator() {
     useEffect(() => {
         skip.current = true;
     }, [path])
+
+    useEffect(() => {
+        const segs = computedPath.segmentTrajectorys;
+        const cumDists = computedPath.segmentCumulativeDists;
+        const telemetry = pathTelemetry.getState();
+        if (!telemetry.length) return;
+
+        const dt = SIM_CONSTANTS.dt;
+        const adjustedTime = time + computedPath.timeOffset;
+
+        const updated = telemetry.map((tel, i) => {
+            const seg = segs[i];
+            const cumDist = cumDists[i];
+            if (!seg?.length || !cumDist?.length) return tel;
+
+            const startT = seg[0].t;
+            const endT = seg[seg.length - 1].t;
+
+            if (adjustedTime <= startT) return { ...tel, progressRaw: 0, progressPercent: 0 };
+            if (adjustedTime >= endT) return { ...tel, progressRaw: tel.totalDistance, progressPercent: 100 };
+
+            const idx = Math.min(Math.floor((adjustedTime - startT) / dt), cumDist.length - 1);
+            const progressRaw = cumDist[idx];
+            const progressPercent = tel.totalDistance > 0 ? (progressRaw / tel.totalDistance) * 100 : 0;
+            return { ...tel, progressRaw, progressPercent };
+        });
+
+        pathTelemetry.setState(updated);
+
+        const activeIdx = updated.findIndex(tel => tel.progressPercent > 0 && tel.progressPercent < 100);
+        activeSimSegmentStore.setState(activeIdx);
+    }, [time, computedPath]);
 
     useEffect(() => {
         const handleKeyDown = (evt: KeyboardEvent) => {

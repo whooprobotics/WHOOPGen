@@ -2,9 +2,7 @@ import { useEffect, useRef, useState } from "react";
 import { useFormat, type Format } from "../../hooks/useFormat";
 import { AddToUndoHistory } from "../../core/Undo/UndoHistory";
 import { usePath } from "../../hooks/usePath";
-import { getDefaultConstants, globalDefaultsStore } from "../../core/DefaultConstants";
-import { DEFAULT_COMMANDS } from "../../core/Types/Command";
-import { useCommand } from "../../hooks/useCommands";
+import { getDefaultConstants, globalDefaultsStore } from "../../simulation/DefaultConstants";
 
 type PathFormats = {
     name: string,
@@ -13,16 +11,15 @@ type PathFormats = {
 
 const FORMATS: PathFormats[] = [
     { name: "mikLib v1.2.4", format: "mikLib" },
+    { name: "LemLib v0.5.6", format: "LemLib" },
     { name: "ReveilLib v2.1.0", format: "ReveilLib" },
     { name: "JAR-Template [SOON]", format: "JAR-Template" },
-    { name: "LemLib [SOON]", format: "LemLib" }
 ];
 
 export default function FormatButton() {
     const [isOpen, setOpen] = useState(false);
     const [format, setFormat] = useFormat();
     const [, setPath] = usePath();
-    const [commands, setCommands] = useCommand();
 
     const menuRef = useRef<HTMLDivElement>(null);
     const prevFormatRef = useRef<Format>(format);
@@ -46,7 +43,6 @@ export default function FormatButton() {
                     format: format,
                     defaults: structuredClone(globalDefaultsStore.getState()[format]),
                     path: newPath,
-                    commands: commands
                 });
             }
 
@@ -54,15 +50,6 @@ export default function FormatButton() {
                 ...newPath
             };
         });
-
-        const oldDefaults = DEFAULT_COMMANDS[prevFormatRef.current];
-        const newDefaults = DEFAULT_COMMANDS[format];
-
-        const customCommands = commands.filter(
-            cmd => !oldDefaults.some(def => def.name === cmd.name)
-        );
-
-        setCommands([...newDefaults, ...customCommands]);
 
         prevFormatRef.current = format;
     };
@@ -93,7 +80,7 @@ export default function FormatButton() {
                 <div
                     className="absolute shadow-xs mt-1 shadow-black left-0 top-full w-55 rounded-sm bg-medgray_hover min-h-2"
                 >
-                    <div className="mt-2 pl-2 pr-2 mb-2 gap-1 flex flex-col max-h-40 overflow-y-auto">
+                    <div className="mt-2 pl-2 pr-2 mb-2 gap-1 flex flex-col max-h-40 overflow-y-auto scrollbar-thin">
                         {FORMATS.map((c) => (
                             <>
                                 {c.name !== "" && <button

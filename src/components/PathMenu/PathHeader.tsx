@@ -1,6 +1,8 @@
 import { useState } from "react";
 import eyeOpen from "../../assets/eye-open.svg";
 import eyeClosed from "../../assets/eye-closed.svg";
+import clockClose from "../../assets/clock-close.svg";
+import clockOpen from "../../assets/clock-open.svg";
 import downArrow from "../../assets/down-arrow.svg";
 import { usePathVisibility } from "../../hooks/usePathVisibility";
 import AddSegmentButton from "./AddSegmentButton";
@@ -10,9 +12,11 @@ type PathConfigHeaderProps = {
   name: string
   isOpen: boolean,
   setOpen: React.Dispatch<React.SetStateAction<boolean>>,
+  isTelemetryOpen: boolean,
+  onTelemetryToggle: () => void,
 }
 
-export default function PathConfigHeader({name, isOpen, setOpen} : PathConfigHeaderProps) {
+export default function PathConfigHeader({name, isOpen, setOpen, isTelemetryOpen, onTelemetryToggle} : PathConfigHeaderProps) {
   const [ isEyeOpen, setEyeOpen ] = useState(false);
   const [ , setPathVisibility ] = usePathVisibility();
 
@@ -26,7 +30,7 @@ export default function PathConfigHeader({name, isOpen, setOpen} : PathConfigHea
       return !eye
     });
   }
-  
+
   return (
     <div className="w-full flex flex-row items-center justify-between">
       <span className="block text-[20px]">
@@ -36,24 +40,20 @@ export default function PathConfigHeader({name, isOpen, setOpen} : PathConfigHea
 
           <CopyPathButton />
 
-          <button className="cursor-pointer" 
+          <button className="cursor-pointer"
               onClick={handleEyeOnClick}>
               <img className="w-[20px] h-[22px]"
                   src={isEyeOpen ? eyeClosed : eyeOpen}
           />
           </button>
 
+          <button className="cursor-pointer" onClick={onTelemetryToggle}>
+              <img className="w-[20px] h-[22px]" src={isTelemetryOpen ? clockClose : clockOpen} />
+          </button>
+
           <button onClick={handleOpenOnClick}
           className="hover:bg-medgray_hover px-1 py-1 rounded-sm">
-            {
-            isOpen ? <img className={`w-[15px] h-[15px] rotate-180`}
-              src={downArrow}
-            /> :
-            <img className={`w-[15px] h-[15px] rotate-0`}
-              src={downArrow}
-            />
-
-            }
+            <img className={`w-[15px] h-[15px] transition-transform duration-200 ${isOpen ? "rotate-180" : "rotate-0"}`} src={downArrow} />
           </button>
           
           <AddSegmentButton/>

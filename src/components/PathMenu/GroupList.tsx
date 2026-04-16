@@ -9,10 +9,10 @@ import lockOpen from "../../assets/lock-open.svg";
 import downArrow from "../../assets/down-arrow.svg";
 import { usePath } from "../../hooks/usePath";
 import { AddToUndoHistory } from "../../core/Undo/UndoHistory";
-import { getFormatConstantsConfig, getFormatDirectionConfig, getFormatSpeed } from "../../core/DefaultConstants";
+import { getFormatConstantsConfig, getFormatDirectionConfig, getFormatSpeed, getSegmentName } from "../../simulation/DefaultConstants";
 import { useFormat, type Format } from "../../hooks/useFormat";
 import MotionList from "./MotionList";
-import { moveMultipleSegments } from "./PathConfigUtils";
+import { moveMultipleSegments, setupDragTransfer, buildDraggingIds, MOTION_KIND_SET } from "./PathConfigUtils";
 import { useSimulateGroup } from "../../hooks/useSimulateGroup";
 
 export type GroupDropZone = "above" | "into" | "below" | null;
@@ -21,6 +21,7 @@ type GroupListProps = {
     name: string,
     segmentId: string,
     isOpenGlobal: boolean,
+    isTelemetryOpenGlobal?: boolean,
     draggable?: boolean,
     onDragStart?: (e: React.DragEvent<HTMLButtonElement>) => void,
     onDragEnd?: (e: React.DragEvent<HTMLButtonElement>) => void,
@@ -35,6 +36,7 @@ export default function GroupList({
     name,
     segmentId,
     isOpenGlobal,
+    isTelemetryOpenGlobal,
     draggable = false,
     onDragStart,
     onDragEnd,
@@ -56,18 +58,8 @@ export default function GroupList({
     const setGlobalDraggingIds = setDraggingIds ?? (() => {});
     const [ localOverIndex, setLocalOverIndex ] = useState<number | null>(null);
 
-    // Helper to start dragging - includes all selected segments if the dragged item is selected
     const startChildDragging = (childId: string) => {
-        const child = path.segments.find(s => s.id === childId);
-        if (child?.selected) {
-            // Get all selected segments (excluding start segment at index 0)
-            const selectedIds = path.segments
-                .filter((s, idx) => s.selected && idx > 0)
-                .map(s => s.id);
-            setGlobalDraggingIds(selectedIds.length > 0 ? selectedIds : [childId]);
-        } else {
-            setGlobalDraggingIds([childId]);
-        }
+        setGlobalDraggingIds(buildDraggingIds(path.segments, childId));
     };
     
     const groupKey = segment.groupId ?? segment.id;
@@ -118,18 +110,17 @@ export default function GroupList({
     };
 
     const handleOnClick = (evt: React.PointerEvent<HTMLButtonElement>) => {
-        setPath(prev => {
-            const selectedState = segment.selected;
-            const next = {
+        if (segment.selected) {
+            setOpen(prev => !prev);
+        } else {
+            setPath(prev => ({
                 ...prev,
-                segments: prev.segments.map(s => (s.groupId === groupKey || s.id === segmentId 
-                    ? { ...s, selected: !selectedState } 
-                    : { ...s, selected: false } 
+                segments: prev.segments.map(s => (s.groupId === groupKey || s.id === segmentId
+                    ? { ...s, selected: true }
+                    : { ...s, selected: false }
                 )),
-            };
-            
-            return next;
-        });
+            }));
+        }
         evt.preventDefault();
         evt.stopPropagation();
     }
@@ -156,7 +147,19 @@ export default function GroupList({
     };
 
     const handleLockOnClick = (evt: React.MouseEvent<HTMLButtonElement>) => {
-        toggleSegment(s => ({ ...s, locked: !segment.locked }));
+        const newLocked = !segment.locked;
+        setPath(prev => {
+            const next = {
+                ...prev,
+                segments: prev.segments.map(s =>
+                    (s.id === segmentId || s.groupId === groupKey)
+                        ? { ...s, locked: newLocked }
+                        : s
+                ),
+            };
+            AddToUndoHistory({ path: next });
+            return next;
+        });
         evt.stopPropagation();
     };
 
@@ -202,19 +205,7 @@ export default function GroupList({
         return "into";
     };
 
-    const handleHeaderDragOver = (e: React.DragEvent<HTMLButtonElement>) => {
-        e.preventDefault();
-        e.stopPropagation();
-
-        if (draggingIds.includes(segmentId)) return;
-
-        const zone = getDropZone(e);
-        if (onHeaderDropZoneChange) {
-            onHeaderDropZoneChange(zone);
-        }
-    };
-
-    const handleHeaderDragEnter = (e: React.DragEvent<HTMLButtonElement>) => {
+    const handleHeaderDragActive = (e: React.DragEvent<HTMLButtonElement>) => {
         e.preventDefault();
         e.stopPropagation();
 
@@ -360,16 +351,9 @@ export default function GroupList({
             
             <button
                 ref={headerRef}
-                draggable={draggable}
+                draggable={draggable && !segment.locked}
                 onDragStart={(e) => {
-                    if (e.dataTransfer) {
-                        e.dataTransfer.setData('text/plain', segmentId);
-                        e.dataTransfer.effectAllowed = 'move';
-                        // Hide the ghost image
-                        const emptyImg = new Image();
-                        emptyImg.src = 'data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7';
-                        e.dataTransfer.setDragImage(emptyImg, 0, 0);
-                    }
+                    setupDragTransfer(e, segmentId);
                     if (onDragStart) onDragStart(e);
                 }}
                 onDragEnd={(e) => { 
@@ -377,8 +361,8 @@ export default function GroupList({
                     setLocalOverIndex(null);
                     if (onHeaderDropZoneChange) onHeaderDropZoneChange(null);
                 }}
-                onDragOver={handleHeaderDragOver}
-                onDragEnter={handleHeaderDragEnter}
+                onDragOver={handleHeaderDragActive}
+                onDragEnter={handleHeaderDragActive}
                 onDrop={handleHeaderDrop}
                 onDragLeave={handleHeaderDragLeave}
                 onClick={(evt: React.PointerEvent<HTMLButtonElement>) => {
@@ -389,6 +373,7 @@ export default function GroupList({
                 onMouseLeave={handleGroupOnHoverEnd}
                 className={
                     `${isHoveringInto ? "bg-medlightgray brightness-125" : segment.selected ? "bg-medlightgray" : "bg-medgray"}
+                    ${segment.locked ? "opacity-70" : ""}
                     flex flex-row justify-start items-center
                     w-[450px] h-[35px] gap-[12px]
                     hover:brightness-95
@@ -428,11 +413,8 @@ export default function GroupList({
                     }, 0);
                 }}
                 onClick={(e) => {
-                    if (isEditing) {
-                        e.stopPropagation();
-                    } else {
-                        e.preventDefault();
-                    }
+                    e.stopPropagation();
+                    if (!isEditing) e.preventDefault();
                 }}
                 onBlur={() => {
                     setIsEditing(false);
@@ -546,46 +528,16 @@ export default function GroupList({
                                     <div className="absolute -top-1 left-2 w-[390px] h-[1px] bg-white rounded-full pointer-events-none z-10" />
                                 )}
 
-                                {(c.kind === "pointDrive" || c.kind === "poseDrive") && (
+                                {MOTION_KIND_SET.has(c.kind) && (
                                     <MotionList
-                                        name="Drive"
+                                        name={getSegmentName(format, c.kind)}
                                         speedScale={speedScale}
                                         field={constantsFields}
                                         directionField={directionFields}
                                         segmentId={c.id}
+                                        index={globalIdx}
                                         isOpenGlobal={isOpenGlobal}
-                                        draggable={true}
-                                        onDragStart={() => startChildDragging(c.id)}
-                                        onDragEnd={() => { setGlobalDraggingIds([]); setLocalOverIndex(null); }}
-                                        draggingIds={draggingIds}
-                                        shrink={true}
-                                    />
-                                )}
-
-                                {(c.kind === "angleTurn" || c.kind === "pointTurn") && (
-                                    <MotionList
-                                        name="Turn"
-                                        speedScale={speedScale}
-                                        field={constantsFields}
-                                        directionField={directionFields}
-                                        segmentId={c.id}
-                                        isOpenGlobal={isOpenGlobal}
-                                        draggable={true}
-                                        onDragStart={() => startChildDragging(c.id)}
-                                        onDragEnd={() => { setGlobalDraggingIds([]); setLocalOverIndex(null); }}
-                                        draggingIds={draggingIds}
-                                        shrink={true}
-                                    />
-                                )}
-
-                                {(c.kind === "pointSwing" || c.kind === "angleSwing") && (
-                                    <MotionList
-                                        name="Swing"
-                                        speedScale={speedScale}
-                                        field={constantsFields}
-                                        directionField={directionFields}
-                                        segmentId={c.id}
-                                        isOpenGlobal={isOpenGlobal}
+                                        isTelemetryOpenGlobal={isTelemetryOpenGlobal}
                                         draggable={true}
                                         onDragStart={() => startChildDragging(c.id)}
                                         onDragEnd={() => { setGlobalDraggingIds([]); setLocalOverIndex(null); }}

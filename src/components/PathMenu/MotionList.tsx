@@ -2,19 +2,20 @@
 import { useEffect, useRef, useState } from "react";
 import eyeOpen from "../../assets/eye-open.svg";
 import eyeClosed from "../../assets/eye-closed.svg";
-import lockClose from "../../assets/lock-close.svg";
-import lockOpen from "../../assets/lock-open.svg";
+import clockClose from "../../assets/clock-close.svg";
+import clockOpen from "../../assets/clock-open.svg";
 import downArrow from "../../assets/down-arrow.svg";
 import Slider from "../Util/Slider";
 import { usePath } from "../../hooks/usePath";
-import CommandList from "./CommandList";
-import { createCommand, type Command } from "../../core/Types/Command";
 import type { ConstantField } from "./ConstantRow";
 import ConstantsList from "./ConstantsList";
 import CycleImageButton, { type CycleImageButtonProps } from "../Util/CycleButton";
 import { AddToUndoHistory } from "../../core/Undo/UndoHistory";
-import { globalDefaultsStore } from "../../core/DefaultConstants";
+import { setupDragTransfer } from "./PathConfigUtils";
+import { globalDefaultsStore } from "../../simulation/DefaultConstants";
 import { useFormat } from "../../hooks/useFormat";
+import { activeSimSegmentStore, pathTelemetry } from "../../core/ComputePathSim";
+import { roundNum } from "../../core/Util";
 
 
 export type ConstantListField = {
@@ -24,6 +25,7 @@ export type ConstantListField = {
     defaults: Partial<any>;
     onChange: (partial: Partial<any>) => void;
     setDefault: (partial: Partial<any>) => void;
+    onApply: (partial: Partial<any>) => void;
 }
 
 type MotionListProps = {
@@ -32,7 +34,9 @@ type MotionListProps = {
     field: ConstantListField[] | undefined,
     directionField: CycleImageButtonProps[] | undefined,
     segmentId: string,
+    index: number,
     isOpenGlobal: boolean,
+    isTelemetryOpenGlobal?: boolean,
     start?: boolean,
     draggable?: boolean,
     onDragStart?: (e: React.DragEvent<HTMLButtonElement>) => void,
@@ -48,7 +52,9 @@ export default function MotionList({
     field,
     directionField,
     segmentId,
+    index,
     isOpenGlobal,
+    isTelemetryOpenGlobal,
     start = false,
     draggable = false,
     onDragStart,
@@ -61,11 +67,11 @@ export default function MotionList({
 
     const segment = path.segments.find(s => s.id === segmentId)!;
     const selected = path.segments.find((c) => c.id === segmentId)?.selected;
+    const activeSimSegment = activeSimSegmentStore.useStore();
 
     const [ isEyeOpen, setEyeOpen ] = useState(true);
-    const [ isLocked, setLocked ] = useState(false);
+    const [ isTelemetryOpen, setTelemetryOpen ] = useState(false);
     const [ isOpen, setOpen ] = useState(false);
-    const [ command, setCommand ] = useState<Command>(createCommand(''));
     const [ format ] = useFormat();
 
     const pathRef = useRef(path);
@@ -191,15 +197,8 @@ export default function MotionList({
     }, [isOpenGlobal])
 
     useEffect(() => {
-        setPath(prev => ({
-            ...prev, 
-            segments: prev.segments.map(
-                segment => segment.id === segmentId
-                ? {...segment, command: command } 
-                : {...segment}
-            )
-        }))        
-    }, [command, segmentId, setPath])
+        if (isTelemetryOpenGlobal !== undefined) setTelemetryOpen(isTelemetryOpenGlobal);
+    }, [isTelemetryOpenGlobal])
 
     const toggleSegment = (patch: (s: any) => any) => {
         setPath(prev => {
@@ -218,17 +217,9 @@ export default function MotionList({
         toggleSegment(s => ({ ...s, visible: !s.visible }));
     };
 
-    const handleLockOnClick = () => {
-        toggleSegment(s => ({ ...s, locked: !s.locked }));
-    };
-
     useEffect(() => {
         setEyeOpen(segment.visible);
     }, [segment.visible])
-
-    useEffect(() => {
-        setLocked(segment.locked);
-    }, [segment.locked])
 
     const getValuesFromKeys = (
         keys: Array<string>,
@@ -251,19 +242,20 @@ export default function MotionList({
         }
     }, [path])
 
+    const groupsBefore = path.segments.slice(0, index).filter(s => s.kind === "group").length;
+    const telemetrySlice = pathTelemetry.getState()?.[index - groupsBefore];
+
     return (
-        <div className={`flex flex-col gap-2 mt-[1px]`}>
+        <button
+            className={`flex flex-col gap-2 mt-[1px] ${segment.locked ? "opacity-50 pointer-events-none" : ""}`}
+            onClick={() => {
+                if (selected) setOpen(!isOpen)
+            }}
+        >
             <button
-            draggable={draggable}
+            draggable={draggable && !segment.locked}
             onDragStart={(e) => {
-                if (e.dataTransfer) {
-                    e.dataTransfer.setData('text/plain', segmentId);
-                    e.dataTransfer.effectAllowed = 'move';
-                    // Hide the ghost image
-                    const emptyImg = new Image();
-                    emptyImg.src = 'data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7';
-                    e.dataTransfer.setDragImage(emptyImg, 0, 0);
-                }
+                setupDragTransfer(e, segmentId);
                 if (onDragStart) onDragStart(e);
             }}
             onDragEnd={(e) => { if (onDragEnd) onDragEnd(e); }}
@@ -273,7 +265,7 @@ export default function MotionList({
             onMouseLeave={EndHover}
             style={{ width: `${!shrink ? 450 : 400}px` }}
             className={`${selected ? "bg-medlightgray" : ""}
-                flex flex-row justify-start items-center
+                relative flex flex-row justify-start items-center
                 h-[35px] gap-[12px]
                 bg-medgray
                 hover:brightness-92
@@ -284,64 +276,58 @@ export default function MotionList({
                 ${draggingIds.includes(segmentId) ? "opacity-10" : ""}
             `}
             >
+            <div className={`absolute left-0 top-[20%] h-[60%] w-[3px] rounded-full bg-lightgray transition-opacity duration-150 ${activeSimSegment === index - groupsBefore ? "opacity-100" : "opacity-0"}`} />
             <button
                 className="cursor-pointer shrink-0"
-                onClick={() => setOpen(!isOpen)}
+                onClick={(e) => { e.stopPropagation(); setOpen(!isOpen); }}
+
             >
-                {!isOpen ? (
-                <img className="w-[15px] h-[15px] rotate-270" src={downArrow} />
-                ) : (
-                <img className="w-[15px] h-[15px]" src={downArrow} />
-                )}
+                <img className={`w-[15px] h-[15px] transition-transform duration-200 ${isOpen ? "" : "-rotate-90"}`} src={downArrow} />
             </button>
 
-            <button className="cursor-pointer shrink-0" onClick={handleEyeOnClick}>
+            <button className="cursor-pointer shrink-0" onClick={(e) => { e.stopPropagation(); handleEyeOnClick(); }}>
                 <img className="w-[20px] h-[20px]" src={isEyeOpen ? eyeOpen : eyeClosed} />
             </button>
 
-            <button className="cursor-pointer shrink-0" onClick={handleLockOnClick}>
-                <img className="w-[20px] h-[20px]" src={isLocked ? lockClose : lockOpen} />
+            <button className="cursor-pointer shrink-0" onClick={(e) => { e.stopPropagation(); setTelemetryOpen(!isTelemetryOpen); }}>
+                <img className="w-[20px] h-[20px]" src={isTelemetryOpen ? clockClose : clockOpen} />
             </button>
 
-            <span className="w-[50px] items-center shrink-0 text-left truncate">{name}</span>
-            
-            {!start && field !== undefined ? (
-                <Slider
-                    sliderWidth={!shrink ? 210 : 160}
-                    sliderHeight={5}
-                    knobHeight={16}
-                    knobWidth={16}
-                    value={(field[0]?.values?.["maxSpeed"] ?? 0) / speedScale * 100}
-                    
-                    setValue={(v: number) => field[0]?.onChange({ maxSpeed: (v / 100) * speedScale })}
-                    
-                    OnChangeEnd={(sliderValue: number) => {
-                        const currentPath = pathRef.current;
-                        const realValue = (sliderValue / 100) * speedScale;
+            <span className="shrink-0 text-left truncate max-w-[130px]">{name}</span>
 
-                        AddToUndoHistory({
-                            path: {
-                            ...currentPath,
-                            segments: currentPath.segments.map((s) => 
-                                s.id === segmentId 
-                                ? { ...s, constants: { ...s.constants, maxSpeed: realValue } } 
-                                : s
-                            ),
-                            }
-                        });
-                    }}
-                />
-            ) : (
-                <div className="w-[230px]" />
+            {!start && field !== undefined && (
+                <div onClick={(e) => e.stopPropagation()} className="flex-1 min-w-0 flex items-center gap-2">
+                    <Slider
+                        sliderHeight={5}
+                        knobHeight={16}
+                        knobWidth={16}
+                        value={(field[0]?.values?.["maxSpeed"] ?? 0) / speedScale * 100}
+
+                        setValue={(v: number) => field[0]?.onChange({ maxSpeed: (v / 100) * speedScale })}
+
+                        OnChangeEnd={(sliderValue: number) => {
+                            const currentPath = pathRef.current;
+                            const realValue = (sliderValue / 100) * speedScale;
+
+                            AddToUndoHistory({
+                                path: {
+                                ...currentPath,
+                                segments: currentPath.segments.map((s) =>
+                                    s.id === segmentId
+                                    ? { ...s, constants: { ...s.constants, maxSpeed: realValue } }
+                                    : s
+                                ),
+                                }
+                            });
+                        }}
+                    />
+                    <span className="shrink-0 text-left tabular-nums pl-1">
+                        {(field[0]?.values?.["maxSpeed"] ?? 0).toFixed(speedScale > 9.9 ? (speedScale > 99.9 ? 0 : 1) : 2)}
+                    </span>
+                </div>
             )}
 
-
-            {!start && (
-                <span className="w-6 shrink-0 text-left tabular-nums pl-1">
-                {field !== undefined && (field[0]?.values?.["maxSpeed"] ?? 0).toFixed(speedScale > 9.9 ? (speedScale > 99.9 ? 0 : 1) : 2)}
-                </span>
-            )}
-            {directionField !== undefined && directionField.length !== 0 && <div className="w-max flex flex-row items-center justify-end gap-2.5 pl-[12px]">
+            {directionField !== undefined && directionField.length !== 0 && <div onClick={(e) => e.stopPropagation()} className="ml-auto flex flex-row items-center gap-2.5">
                 {directionField.map((f, i) => (
                     <CycleImageButton
                         key={i}
@@ -356,17 +342,26 @@ export default function MotionList({
 
             </div>}
             </button>
+
                 <div
-                className={`relative flex flex-col ml-9 gap-2 transition-all ${
-                    isOpen ? "block" : "hidden"
+                onClick={(e) => e.stopPropagation()}
+                className={`relative flex flex-col ml-9 gap-2 ${
+                    (!isTelemetryOpen || telemetrySlice === undefined) && !isOpen ? "hidden" : ""
                 }`}
                 >
-                    
+
                 { /* Vertical Line */ }
                 <div className="absolute left-[-16px] top-0 h-full w-[4px] rounded-full bg-medlightgray" />
 
-                <CommandList command={command} setCommand={setCommand} />
-                {field !== undefined && field.map((f) => {
+                {isTelemetryOpen && telemetrySlice !== undefined && (
+                    <div className="flex pl-1.5 gap-2 text-left">
+                        <span>Time: {roundNum(telemetrySlice.totalTime)}<span className="text-[8px] text-lightgray align-super leading-none"> s</span></span>
+                        <span>Distance: {roundNum(telemetrySlice.totalDistance)}<span className="text-[8px] text-lightgray align-super leading-none"> {telemetrySlice.units}</span></span>
+                        <span>Traveled: {roundNum(telemetrySlice.progressRaw)}<span className="text-[8px] text-lightgray align-super leading-none"> {telemetrySlice.units}</span>  {roundNum(telemetrySlice.progressPercent)}<span className="text-[10px] text-lightgray align-super leading-none"> %</span></span>
+                    </div>
+                )}
+
+                {isOpen && field !== undefined && field.map((f) => {
                     const fieldKeys = f.fields.map((m) => m.key);
                     const relevantValues = getValuesFromKeys(fieldKeys, f.values);
                     const relevantDefaults = getValuesFromKeys(fieldKeys, f.defaults);
@@ -377,7 +372,7 @@ export default function MotionList({
                         header={f.header}
                         fields={f.fields}
                         values={relevantValues}
-                        isOpenGlobal={isOpenGlobal}
+                        isOpenGlobal={false}
                         onChange={f.onChange}
                         onReset={() => {
                             AddToUndoHistory({path: path})
@@ -389,11 +384,12 @@ export default function MotionList({
                                 defaults: structuredClone(globalDefaultsStore.getState()[format]) as any,
                             });
                         }}
+                        onApply={f.onApply}
                         defaults={relevantDefaults}
                     />
                     );
                 })}
                 </div>
-        </div>
+        </button>
     );
 }

@@ -3,7 +3,7 @@ import { robotConstantsStore } from "../../core/Robot";
 import type { Coordinate } from "../../core/Types/Coordinate";
 import homeButton from "../../assets/home.svg";
 import { type Segment } from "../../core/Types/Segment";
-import { FIELD_IMG_DIMENSIONS, FIELD_REAL_DIMENSIONS, toInch, type Rectangle } from "../../core/Util";
+import { FIELD_IMG_DIMENSIONS, FIELD_REAL_DIMENSIONS, toInch, toRGBA, type Rectangle } from "../../core/Util";
 import { usePath } from "../../hooks/usePath";
 import { usePathVisibility } from "../../hooks/usePathVisibility";
 import { usePose } from "../../hooks/usePose";
@@ -16,7 +16,6 @@ import { getPressedPositionInch, pointerToSvg } from "./FieldUtils";
 import RobotLayer from "./RobotLayer";
 import PathLayer from "./PathLayer";
 import ControlsLayer from "./ControlsLayer";
-import CommandLayer from "./CommandLayer";
 import { getFieldSrcFromKey, useField } from "../../hooks/useField";
 import { AddToUndoHistory } from "../../core/Undo/UndoHistory";
 import { useFileFormat } from "../../hooks/useFileFormat";
@@ -25,12 +24,37 @@ import { useClipboard } from "../../hooks/useClipboard";
 import { useSettings } from "../../hooks/useSettings";
 
 export default function Field() {
+  const primary = toRGBA("#a02007", 0.5);
+  const secondary = toRGBA("#1560BD", 0.75);
+
+  const colors = {
+    node: {
+      fill: primary,
+      fillSelected: "rgba(180, 50, 11, .75)",
+      stroke: secondary,
+    },
+    indicator: {
+      stroke: "#451717",
+      strokeSelected: "rgba(160, 50, 11, .9)",
+      strokeWithPos: secondary,
+    },
+    numberLabel: "#a0a0a06c",
+    path: {
+      stroke: secondary,
+      strokeHovered: "rgba(180, 50, 11, 1)",
+    },
+  };
+
   const [ img, setImg ] = useState<Rectangle>( { x: 0, y: 0, w: 575, h: 575 })
   const [ fieldKey ] = useField();
 
   const svgRef = useRef<SVGSVGElement | null>(null);
+  const pathRef = useRef<Path | null>(null);
+  const headingHistoryTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const moveHistoryTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   const [path, setPath] = usePath();
+  pathRef.current = path;
   const [pose] = usePose();
   const [robotPose] = useRobotPose();
   const robot = useSyncExternalStore(robotConstantsStore.subscribe, robotConstantsStore.getState);
@@ -76,6 +100,12 @@ export default function Field() {
       if (evt.ctrlKey && evt.key.toLowerCase() === "r") return;
       unselectPath(evt, setPath);
       moveControl(evt, setPath);
+      if (["ArrowUp", "ArrowDown", "ArrowLeft", "ArrowRight"].includes(evt.key)) {
+        if (moveHistoryTimerRef.current) clearTimeout(moveHistoryTimerRef.current);
+        moveHistoryTimerRef.current = setTimeout(() => {
+          if (pathRef.current) AddToUndoHistory({ path: pathRef.current });
+        }, 400);
+      }
       cut(evt, path, setClipboard, setPath);
       copy(evt, path, setClipboard);
       paste(evt, setPath, clipboard);
@@ -83,7 +113,7 @@ export default function Field() {
       selectPath(evt, setPath);
       selectInversePath(evt, setPath);
       undo(evt, setFileFormat);
-      
+
       fieldZoomKeyboard(evt, setImg);
       toggleRobotVisibility(evt, setRobotVisibility);
     };
@@ -91,7 +121,12 @@ export default function Field() {
     const handleWheelDown = (evt: WheelEvent) => {
       const target = evt.target as HTMLElement | null;
       if (target?.isContentEditable || target?.tagName === "INPUT") return;
-      moveHeading(evt, setPath);
+      if (moveHeading(evt, path, setPath)) {
+        if (headingHistoryTimerRef.current) clearTimeout(headingHistoryTimerRef.current);
+        headingHistoryTimerRef.current = setTimeout(() => {
+          if (pathRef.current) AddToUndoHistory({ path: pathRef.current });
+        }, 400);
+      }
     };
 
     document.addEventListener("keydown", handleKeyDown);
@@ -335,7 +370,7 @@ export default function Field() {
       >
         <image href={getFieldSrcFromKey(fieldKey)} x={img.x} y={img.y} width={img.w} height={img.h} />
         
-        <PathLayer path={path} img={img} visible={pathVisible} precise={settings.precisePath} />
+        <PathLayer path={path} img={img} visible={pathVisible} precise={settings.precisePath} colors={colors} />
 
         <RobotLayer
           img={img}
@@ -344,16 +379,14 @@ export default function Field() {
           robotConstants={robot}
           visible={robotVisible}
           path={path}
-        />
-
-        <CommandLayer path={path} img={img} visible={pathVisible} />
-
+      />
         {!pathVisible && (
           <ControlsLayer
             path={path}
             img={img}
             radius={radius}
             format={format}
+            colors={colors}
             onPointerDown={handleControlPointerDown}
           />
         )}

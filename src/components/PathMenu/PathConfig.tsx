@@ -3,15 +3,16 @@ import { usePath } from "../../hooks/usePath";
 import MotionList from "./MotionList";
 import PathConfigHeader from "./PathHeader";
 import { useFormat } from "../../hooks/useFormat";
-import { getFormatConstantsConfig, getFormatDirectionConfig, getFormatPathName, getFormatSpeed, globalDefaultsStore } from "../../core/DefaultConstants";
+import { getFormatConstantsConfig, getFormatDirectionConfig, getFormatPathName, getFormatSpeed, getSegmentName, globalDefaultsStore } from "../../simulation/DefaultConstants";
 import GroupList, { type GroupDropZone } from "./GroupList";
-import { moveMultipleSegments } from "./PathConfigUtils";
+import { moveMultipleSegments, buildDraggingIds, MOTION_KIND_SET } from "./PathConfigUtils";
 
 export default function PathConfig() {
   const [ path, setPath ] = usePath();
   const [ draggingIds, setDraggingIds ] = useState<string[]>([]);
   const [ overIndex, setOverIndex ] = useState<number | null>(null);
   const [ isOpen, setOpen ] = useState(false);
+  const [ isTelemetryOpen, setTelemetryOpen ] = useState(false);
   const [ format,  ] = useFormat();
 
   // Track which group's header drop zone is active, and what zone
@@ -35,18 +36,8 @@ export default function PathConfig() {
     }
   }, [draggingIds]);
 
-  // Helper to start dragging - includes all selected segments if the dragged item is selected
   const startDragging = (segmentId: string) => {
-    const segment = path.segments.find(s => s.id === segmentId);
-    if (segment?.selected) {
-      // Get all selected segments (excluding start segment at index 0)
-      const selectedIds = path.segments
-        .filter((s, idx) => s.selected && idx > 0)
-        .map(s => s.id);
-      setDraggingIds(selectedIds.length > 0 ? selectedIds : [segmentId]);
-    } else {
-      setDraggingIds([segmentId]);
-    }
+    setDraggingIds(buildDraggingIds(path.segments, segmentId));
   };
 
   const stopDragging = () => {
@@ -70,10 +61,10 @@ export default function PathConfig() {
 
   return (
     <div className="bg-medgray w-[500px] h-[650px] rounded-lg p-[15px] flex flex-col">
-      <PathConfigHeader name={name} isOpen={isOpen} setOpen={setOpen} />
+      <PathConfigHeader name={name} isOpen={isOpen} setOpen={setOpen} isTelemetryOpen={isTelemetryOpen} onTelemetryToggle={() => setTelemetryOpen(p => !p)} />
 
       <div
-        className="mt-[10px] flex-1 min-h-2 overflow-y-auto
+        className="mt-[10px] flex-1 min-h-2 overflow-y-auto scrollbar-thin
         flex-col items-center overflow-x-hidden space-y-2 relative"
         onDrop={(e) => {
           // Container-level drop handler - uses current state to determine drop position
@@ -144,6 +135,7 @@ export default function PathConfig() {
                 name={c.constants as string}
                 segmentId={c.id}
                 isOpenGlobal={isOpen}
+                isTelemetryOpenGlobal={isTelemetryOpen}
                 draggable={true}
                 onDragStart={() => startDragging(c.id)}
                 onDragEnd={stopDragging}
@@ -155,49 +147,16 @@ export default function PathConfig() {
               />
             )}
 
-            {/* DRIVE */}
-            {idx > 0 && ( (c.kind === "pointDrive" || c.kind === "poseDrive") && c.groupId == undefined ) && (
+            {idx > 0 && MOTION_KIND_SET.has(c.kind) && c.groupId == undefined && (
               <MotionList
-                name="Drive"
+                name={getSegmentName(format, c.kind)}
                 speedScale={speedScale}
                 field={constantsFields}
                 directionField={directionFields}
                 segmentId={c.id}
+                index={idx}
                 isOpenGlobal={isOpen}
-                draggable={true}
-                onDragStart={() => startDragging(c.id)}
-                onDragEnd={stopDragging}
-                onDragEnter={() => setOverIndex(idx)}
-                draggingIds={draggingIds}
-              />
-            )}
-
-            {/* TURN */}
-            {idx > 0 && ( (c.kind === "angleTurn" || c.kind === "pointTurn") && c.groupId == undefined ) && (
-              <MotionList
-                name="Turn"
-                speedScale={speedScale}
-                field={constantsFields}
-                directionField={directionFields}
-                segmentId={c.id}
-                isOpenGlobal={isOpen}
-                draggable={true}
-                onDragStart={() => startDragging(c.id)}
-                onDragEnd={stopDragging}
-                onDragEnter={() => setOverIndex(idx)}
-                draggingIds={draggingIds}
-              />
-            )}
-
-            {/* SWING */}
-            {idx > 0 && ( (c.kind === "pointSwing" || c.kind === "angleSwing") && c.groupId == undefined ) && (
-              <MotionList
-                name="Swing"
-                speedScale={speedScale}
-                field={constantsFields}
-                directionField={directionFields}
-                segmentId={c.id}
-                isOpenGlobal={isOpen}
+                isTelemetryOpenGlobal={isTelemetryOpen}
                 draggable={true}
                 onDragStart={() => startDragging(c.id)}
                 onDragEnd={stopDragging}
@@ -214,6 +173,7 @@ export default function PathConfig() {
                 field={[]}
                 directionField={[]}
                 segmentId={c.id}
+                index={idx}
                 isOpenGlobal={isOpen}
                 start={true}
                 draggable={false}

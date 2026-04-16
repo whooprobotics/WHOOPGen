@@ -4,13 +4,27 @@ import FileRenamePopup from "./FileRenamePopup";
 import { useGetFileFormat } from "../../hooks/useGetFileFormat";
 import { useFormat } from "../../hooks/useFormat";
 import { useFileFormat, type FileFormat } from "../../hooks/useFileFormat";
-import { INITIAL_DEFAULTS } from "../../core/DefaultConstants";
+import { INITIAL_DEFAULTS } from "../../simulation/DefaultConstants";
 import { defaultRobotConstants } from "../../core/Robot";
 import { useField } from "../../hooks/useField";
 import { AddToUndoHistory } from "../../core/Undo/UndoHistory";
-import { DEFAULT_COMMANDS } from "../../core/Types/Command";
 
 const SAVED_SNAPSHOT_KEY = "savedSnapshot";
+const FILE_VERSION = "mikGen v1.0.0";
+
+function serializeFile(fileFormat: FileFormat): string {
+    return FILE_VERSION + "\n" + JSON.stringify(fileFormat);
+}
+
+function deserializeFile(content: string): FileFormat {
+    const newline = content.indexOf("\n");
+    const firstLine = newline === -1 ? content : content.slice(0, newline);
+    if (firstLine.trim() !== FILE_VERSION) {
+        alert("mikGen has been updated, and you are using an old format. Please contact me on discord @ethanmik so I can fix your file");
+        throw new Error("Unsupported file version");
+    }
+    return JSON.parse(content.slice(newline + 1)) as FileFormat;
+}
 
 function getSaveableSnapshot(fileFormat: FileFormat): string {
     const stripped = {
@@ -24,7 +38,6 @@ function getSaveableSnapshot(fileFormat: FileFormat): string {
                 locked: segment.locked,
                 visible: segment.visible,
                 pose: segment.pose,
-                command: segment.command,
                 format: segment.format,
                 kind: segment.kind,
                 constants: segment.constants,
@@ -113,7 +126,6 @@ export default function FileButton() {
             defaults: INITIAL_DEFAULTS[format],
             path: { segments: [], name: "" },
             robot: defaultRobotConstants,
-            commands: DEFAULT_COMMANDS[format]
         };
         setFileFormat(newFileFormat);
         AddToUndoHistory(structuredClone(newFileFormat));
@@ -163,7 +175,7 @@ export default function FileButton() {
             const content = await file.text();
             
             const fileName = handle.name.replace(/\.[^/.]+$/, "");
-            const parsed = JSON.parse(content) as FileFormat;
+            const parsed = deserializeFile(content);
 
             const newFileFormat = {
                 ...parsed,
@@ -192,7 +204,7 @@ export default function FileButton() {
             const reader = new FileReader();
             reader.onload = (e) => {
                 const content = e.target?.result as string;
-                const parsed = JSON.parse(content) as FileFormat;
+                const parsed = deserializeFile(content);
 
                 const newFileFormat = {
                     ...parsed,
@@ -224,7 +236,7 @@ export default function FileButton() {
         try {
             if (fileHandleRef.current) {
                 const writable = await fileHandleRef.current.createWritable();
-                await writable.write(JSON.stringify(fileText));
+                await writable.write(serializeFile(fileText));
                 await writable.close();
                 const snapshot = getSaveableSnapshot(fileText);
                 savedSnapshotRef.current = snapshot;
@@ -279,7 +291,7 @@ export default function FileButton() {
             }));
 
             const writable = await handle.createWritable();
-            await writable.write(JSON.stringify(fileText));
+            await writable.write(serializeFile(fileText));
             await writable.close();
 
             const snapshot = getSaveableSnapshot(fileText);
@@ -304,7 +316,7 @@ export default function FileButton() {
     };
 
     const handleDownload = () => {
-        downloadText(JSON.stringify(fileText), `${getFileName()}.txt`)
+        downloadText(serializeFile(fileText), `${getFileName()}.txt`)
         setOpen(false);
         const snapshot = getSaveableSnapshot(fileText);
         savedSnapshotRef.current = snapshot;
@@ -318,7 +330,7 @@ export default function FileButton() {
         const name = await requestFileName();
         if (name === null) return;
 
-        downloadText(JSON.stringify(fileText), `${getFileName(name)}.txt`);
+        downloadText(serializeFile(fileText), `${getFileName(name)}.txt`);
         const snapshot = getSaveableSnapshot(fileText);
         savedSnapshotRef.current = snapshot;
         localStorage.setItem(SAVED_SNAPSHOT_KEY, snapshot);

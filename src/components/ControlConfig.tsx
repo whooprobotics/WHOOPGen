@@ -1,7 +1,7 @@
 import { useEffect, useRef } from "react";
 import flipHorizontal from "../assets/flip-horizontal.svg";
 import flipVertical from "../assets/flip-vertical.svg";
-import { AddToUndoHistory } from "../core/Undo/UndoHistory";
+import { AddToUndoHistory, undoHistory } from "../core/Undo/UndoHistory";
 import { normalizeDeg } from "../core/Util";
 import { useFormat } from "../hooks/useFormat";
 import { usePath } from "../hooks/usePath";
@@ -18,7 +18,16 @@ function MirrorControl({
     src,
     mirrorDirection
 }: MirrorControlProps) {
-    const [ , setPath ] = usePath();
+    const [ path, setPath ] = usePath();
+
+    const undoRef = useRef(false); 
+
+    useEffect(() => {
+        if (undoRef.current) {
+            AddToUndoHistory( { path: path});
+            undoRef.current = false;
+        }
+    }, [path])
 
     const mirrorX = () => {
         setPath(prev => ({
@@ -32,6 +41,10 @@ function MirrorControl({
                 } : c
             )
         }));
+        if (path.segments.filter((m) => m.selected).length > 0) {
+            undoRef.current = true;
+        }
+
     }
 
     const mirrorY = () => {
@@ -46,6 +59,9 @@ function MirrorControl({
                 } : c
             )
         }));        
+        if (path.segments.filter((m) => m.selected).length > 0) {
+            undoRef.current = true;
+        }   
     }
 
     const handleOnClick = () => {
@@ -196,8 +212,8 @@ export default function ControlConfig() {
                             width={80}
                             height={40}
                             fontSize={18}
-                            setValue={format === "ReveilLib" ? updateYValue : updateXValue }
-                            value={format === "ReveilLib" ? getYValue() : getXValue() }
+                            setValue={format === "ReveilLib" || format === "RevMecanum" ? updateYValue : updateXValue }
+                            value={format === "ReveilLib" || format === "RevMecanum" ? getYValue() : getXValue() }
                             stepSize={1}
                             roundTo={2}
                             bounds={[-999, 999]}
@@ -213,8 +229,8 @@ export default function ControlConfig() {
                             fontSize={18}
                             stepSize={1}
                             roundTo={2}
-                            setValue={format === "ReveilLib" ? updateXValue : updateYValue } 
-                            value={format === "ReveilLib" ? getXValue() : getYValue() } 
+                            setValue={format === "ReveilLib" || format === "RevMecanum" ? updateXValue : updateYValue } 
+                            value={format === "ReveilLib" || format === "RevMecanum" ? getXValue() : getYValue() } 
                             bounds={[-999, 999]}
                             units="in"
                             addToHistory={() => {undoRef.current = true}}
