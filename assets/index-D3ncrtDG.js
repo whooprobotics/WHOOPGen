@@ -18489,8 +18489,8 @@ function RevMecanumToString(path, selected = false) {
       const { turn } = k;
       const constantsList = getTurnConstantList(getUnequalRevMecanumConstants(kDefault.angleTurn.turn, turn));
       pathString += constantsList.length === 0 ? `
-  turn(${angle}_deg);` : `
-  turn(${angle}_deg, Turn{ ${constantsList.join(", ")} });`;
+  turnTo(${angle}_deg);` : `
+  turnTo(${angle}_deg, Turn{ ${constantsList.join(", ")} });`;
     }
     if (kind === "pointTurn") {
       const { turn } = k;
@@ -18500,8 +18500,8 @@ function RevMecanumToString(path, selected = false) {
       const turnX = roundOff(pos.x, 2);
       const turnY = roundOff(pos.y, 2);
       pathString += constantsList.length === 0 ? `
-  turn(${turnX}_in, ${turnY}_in);` : `
-  turn(${turnX}_in, ${turnY}_in, Turn{ ${constantsList.join(", ")} });`;
+  turnTo(${turnX}_in, ${turnY}_in);` : `
+  turnTo(${turnX}_in, ${turnY}_in, Turn{ ${constantsList.join(", ")} });`;
     }
     if (kind === "pointDrive") {
       const { drive, turn } = k;
@@ -18510,8 +18510,8 @@ function RevMecanumToString(path, selected = false) {
         getUnequalRevMecanumConstants(kDefault.pointDrive.turn, turn)
       );
       pathString += constantsList.length === 0 ? `
-  drive(${x}_in, ${y}_in);` : `
-  drive(${x}_in, ${y}_in, Drive{ ${constantsList.join(", ")} });`;
+  driveTo(${x}_in, ${y}_in);` : `
+  driveTo(${x}_in, ${y}_in, Drive{ ${constantsList.join(", ")} });`;
     }
     if (kind === "poseDrive") {
       const { drive, turn } = k;
@@ -18520,8 +18520,8 @@ function RevMecanumToString(path, selected = false) {
         getUnequalRevMecanumConstants(kDefault.poseDrive.turn, turn)
       );
       pathString += constantsList.length === 0 ? `
-  drive(${x}_in, ${y}_in, ${angle}_deg);` : `
-  drive(${x}_in, ${y}_in, ${angle}_deg, Drive{ ${constantsList.join(", ")} });`;
+  driveTo(${x}_in, ${y}_in, ${angle}_deg);` : `
+  driveTo(${x}_in, ${y}_in, ${angle}_deg, Drive{ ${constantsList.join(", ")} });`;
     }
   }
   if (selected) pathString = pathString.startsWith("\n") ? pathString.slice(1) : pathString;
@@ -22588,4 +22588,4 @@ function App() {
 clientExports.createRoot(document.getElementById("root")).render(
   /* @__PURE__ */ jsxRuntimeExports.jsx(reactExports.StrictMode, { children: /* @__PURE__ */ jsxRuntimeExports.jsx(App, {}) })
 );
-//# sourceMappingURL=index-3poqFUjF.js.map
+//# sourceMappingURL=index-D3ncrtDG.js.map
