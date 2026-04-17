@@ -142,8 +142,8 @@ export function RevMecanumToString(path: Path, selected: boolean = false) {
             const constantsList = getTurnConstantList(getUnequalRevMecanumConstants(kDefault.angleTurn.turn, turn));
 
             pathString += constantsList.length === 0
-            ? `\n  turn(${angle}_deg);`
-            : `\n  turn(${angle}_deg, Turn{ ${constantsList.join(", ")} });`
+            ? `\n  turnTo(${angle}_deg);`
+            : `\n  turnTo(${angle}_deg, Turn{ ${constantsList.join(", ")} });`
         }
 
         if (kind === "pointTurn") {
@@ -157,8 +157,8 @@ export function RevMecanumToString(path: Path, selected: boolean = false) {
             const turnY = roundOff(pos.y, 2);
 
             pathString += constantsList.length === 0
-            ? `\n  turn(${turnX}_in, ${turnY}_in);`
-            : `\n  turn(${turnX}_in, ${turnY}_in, Turn{ ${constantsList.join(", ")} });`
+            ? `\n  turnTo(${turnX}_in, ${turnY}_in);`
+            : `\n  turnTo(${turnX}_in, ${turnY}_in, Turn{ ${constantsList.join(", ")} });`
         }
 
         if (kind === "pointDrive") {
@@ -169,8 +169,8 @@ export function RevMecanumToString(path: Path, selected: boolean = false) {
             );
 
             pathString += constantsList.length === 0
-            ? `\n  drive(${x}_in, ${y}_in);`
-            : `\n  drive(${x}_in, ${y}_in, Drive{ ${constantsList.join(", ")} });`
+            ? `\n  driveTo(${x}_in, ${y}_in);`
+            : `\n  driveTo(${x}_in, ${y}_in, Drive{ ${constantsList.join(", ")} });`
         }
 
         if (kind === "poseDrive") {
@@ -181,8 +181,8 @@ export function RevMecanumToString(path: Path, selected: boolean = false) {
             );
 
             pathString += constantsList.length === 0
-            ? `\n  drive(${x}_in, ${y}_in, ${angle}_deg);`
-            : `\n  drive(${x}_in, ${y}_in, ${angle}_deg, Drive{ ${constantsList.join(", ")} });`
+            ? `\n  driveTo(${x}_in, ${y}_in, ${angle}_deg);`
+            : `\n  driveTo(${x}_in, ${y}_in, ${angle}_deg, Drive{ ${constantsList.join(", ")} });`
         }
     }
 
