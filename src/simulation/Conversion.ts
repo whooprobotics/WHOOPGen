@@ -70,6 +70,15 @@ function renderPoint(
 /** The kinds that face a coordinate, and so read their target and offset off turnPose. */
 const isPointBased = (kind: SegmentKind): boolean => kind === "pointTurn" || kind === "pointSwing";
 
+const OPTIONAL_ANGLE_TERM = /,\s*[^,{}()]*\$\{angle\}[^,{}()]*/;
+
+const isHeadingOptional = (kind: SegmentKind): boolean =>
+    kind === "distanceDrive" || kind === "strafeDrive" || kind === "bezierCurve";
+
+function templateForHeading(template: string, kind: SegmentKind, angle: number | null): string {
+    return angle === null && isHeadingOptional(kind) ? template.replace(OPTIONAL_ANGLE_TERM, '') : template;
+}
+
 /**
  * Decides which pasted point turns keep the coordinate their code named. A turn whose target is
  * already what the path derives stays unlocked and goes on tracking; one that names anything else
@@ -123,7 +132,7 @@ export function convertPathToString<F extends Format, Segs extends Partial<Recor
         const mergedK: Record<string, unknown> = Object.assign({}, ...k);
         const kBuilderStr = formatDef.kBuilder ? formatDef.kBuilder(resolvedDef.defaults ?? formatDef.constants, k, facing, kind) : "";
 
-        let line = resolvedDef.toStringTemplate
+        let line = templateForHeading(resolvedDef.toStringTemplate, kind, facing.angle)
             .replace(/\$\{x\}/g, x)
             .replace(/\$\{y\}/g, y)
             .replace(/\$\{angle\}/g, angle)
@@ -264,6 +273,10 @@ export function templateToRegex(template: string, anchored = true): { regex: Reg
             groups.push('points');
             return '__POINTS__';
         }
+        if (name === 'kBuilder') {
+            groups.push('kBuilder');
+            return '__KBUILDER_CHAIN__';
+        }
         groups.push(name);
         return COORD_PLACEHOLDERS.has(name) ? '__COORD__' : '__FIELD__';
     });
@@ -279,6 +292,7 @@ export function templateToRegex(template: string, anchored = true): { regex: Reg
     // backwards from the end of the chunk finds the real terminator far faster than forwards.
     // Chunks are grown smallest-first, so this cannot swallow a following segment.
     t = t.replace(/__POINTS__/g, '([\\s\\S]+)');
+    t = t.replace(/__KBUILDER_CHAIN__/g, '((?:\\.\\w+\\([^()]*\\))*)');
     t = t.replace(/__FIELD__/g, '([^,)]+?)');
 
     // Unanchored is for matching one entry inside a larger block, where the surrounding text is
@@ -313,8 +327,15 @@ function parseSegmentLine<F extends Format>(
     format: F
 ): { seg: Segment; points?: Coordinate[] } | null {
     if (!segDef.toStringTemplate) return null;
-    const { regex, groups } = templateToRegex(segDef.toStringTemplate);
-    const match = line.match(regex);
+    let { regex, groups } = templateToRegex(segDef.toStringTemplate);
+    let match = line.match(regex);
+
+    if (!match) {
+        const headless = templateForHeading(segDef.toStringTemplate, kind, null);
+        if (headless === segDef.toStringTemplate) return null;
+        ({ regex, groups } = templateToRegex(headless));
+        match = line.match(regex);
+    }
     if (!match) return null;
 
     const captured: Record<string, string> = {};
