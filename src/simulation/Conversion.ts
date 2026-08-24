@@ -70,20 +70,11 @@ function renderPoint(
 /** The kinds that face a coordinate, and so read their target and offset off turnPose. */
 const isPointBased = (kind: SegmentKind): boolean => kind === "pointTurn" || kind === "pointSwing";
 
-/** A `, …${angle}…` argument, for templates where the heading is an optional trailing parameter. */
 const OPTIONAL_ANGLE_TERM = /,\s*[^,{}()]*\$\{angle\}[^,{}()]*/;
 
-/** The kinds a library also has an overload without a heading for. */
 const isHeadingOptional = (kind: SegmentKind): boolean =>
     kind === "distanceDrive" || kind === "strafeDrive" || kind === "bezierCurve";
 
-/**
- * The template a segment with no heading renders through, dropping the whole `${angle}` term
- * rather than leaving a hole behind, the same rule renderPoint applies inside a point block.
- *
- * Gated on the kind, not on the heading alone: a poseDrive stripped of its angle is a pointDrive
- * line, so an ungated version lets whichever of the two the format lists first claim both.
- */
 function templateForHeading(template: string, kind: SegmentKind, angle: number | null): string {
     return angle === null && isHeadingOptional(kind) ? template.replace(OPTIONAL_ANGLE_TERM, '') : template;
 }
@@ -282,8 +273,6 @@ export function templateToRegex(template: string, anchored = true): { regex: Reg
             groups.push('points');
             return '__POINTS__';
         }
-        // A kBuilder that reached here is the no-comma form: a chain of .parameter(value) calls
-        // appended to the motion rather than another argument inside it
         if (name === 'kBuilder') {
             groups.push('kBuilder');
             return '__KBUILDER_CHAIN__';
@@ -303,7 +292,6 @@ export function templateToRegex(template: string, anchored = true): { regex: Reg
     // backwards from the end of the chunk finds the real terminator far faster than forwards.
     // Chunks are grown smallest-first, so this cannot swallow a following segment.
     t = t.replace(/__POINTS__/g, '([\\s\\S]+)');
-    // Matches empty, so a segment that overrides nothing round-trips through the same template
     t = t.replace(/__KBUILDER_CHAIN__/g, '((?:\\.\\w+\\([^()]*\\))*)');
     t = t.replace(/__FIELD__/g, '([^,)]+?)');
 
@@ -342,8 +330,6 @@ function parseSegmentLine<F extends Format>(
     let { regex, groups } = templateToRegex(segDef.toStringTemplate);
     let match = line.match(regex);
 
-    // Codegen drops the whole heading argument on a kind that left its heading unset, so the
-    // template without it is the other shape this same kind can be written in
     if (!match) {
         const headless = templateForHeading(segDef.toStringTemplate, kind, null);
         if (headless === segDef.toStringTemplate) return null;
