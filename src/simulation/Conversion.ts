@@ -277,11 +277,8 @@ export function templateToRegex(template: string, anchored = true): { regex: Reg
             groups.push('points');
             return '__POINTS__';
         }
-<<<<<<< HEAD
-=======
         // A kBuilder that reached here is the no-comma form: a chain of .parameter(value) calls
         // appended to the motion rather than another argument inside it
->>>>>>> ace261d (Updated Docs, Added Keybind to poseDrive2)
         if (name === 'kBuilder') {
             groups.push('kBuilder');
             return '__KBUILDER_CHAIN__';
@@ -301,10 +298,7 @@ export function templateToRegex(template: string, anchored = true): { regex: Reg
     // backwards from the end of the chunk finds the real terminator far faster than forwards.
     // Chunks are grown smallest-first, so this cannot swallow a following segment.
     t = t.replace(/__POINTS__/g, '([\\s\\S]+)');
-<<<<<<< HEAD
-=======
     // Matches empty, so a segment that overrides nothing round-trips through the same template
->>>>>>> ace261d (Updated Docs, Added Keybind to poseDrive2)
     t = t.replace(/__KBUILDER_CHAIN__/g, '((?:\\.\\w+\\([^()]*\\))*)');
     t = t.replace(/__FIELD__/g, '([^,)]+?)');
 
@@ -343,15 +337,10 @@ function parseSegmentLine<F extends Format>(
     let { regex, groups } = templateToRegex(segDef.toStringTemplate);
     let match = line.match(regex);
 
-<<<<<<< HEAD
-    if (!match) {
-        const headless = templateForHeading(segDef.toStringTemplate, kind, null);
-=======
     // Codegen drops the whole heading argument on a kind that left its heading unset, so the
     // template without it is the other shape this same kind can be written in
     if (!match) {
         const headless = templateForHeading(segDef.toStringTemplate, null);
->>>>>>> ace261d (Updated Docs, Added Keybind to poseDrive2)
         if (headless === segDef.toStringTemplate) return null;
         ({ regex, groups } = templateToRegex(headless));
         match = line.match(regex);
