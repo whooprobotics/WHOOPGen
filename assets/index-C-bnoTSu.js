@@ -16184,8 +16184,9 @@ function renderPoint(pointTemplate, point, angle2, mergedK, k) {
 }
 const isPointBased = (kind) => kind === "pointTurn" || kind === "pointSwing";
 const OPTIONAL_ANGLE_TERM = /,\s*[^,{}()]*\$\{angle\}[^,{}()]*/;
-function templateForHeading(template, angle2) {
-  return angle2 === null ? template.replace(OPTIONAL_ANGLE_TERM, "") : template;
+const isHeadingOptional = (kind) => kind === "distanceDrive" || kind === "strafeDrive" || kind === "bezierCurve";
+function templateForHeading(template, kind, angle2) {
+  return angle2 === null && isHeadingOptional(kind) ? template.replace(OPTIONAL_ANGLE_TERM, "") : template;
 }
 function applyTurnLocks(path, from, to) {
   const segments = [...path.segments];
@@ -16221,7 +16222,7 @@ function convertPathToString(formatDef, path, selected = false) {
     if (!resolvedDef.toStringTemplate) continue;
     const mergedK = Object.assign({}, ...k);
     const kBuilderStr = formatDef.kBuilder ? formatDef.kBuilder(resolvedDef.defaults ?? formatDef.constants, k, facing, kind) : "";
-    let line = templateForHeading(resolvedDef.toStringTemplate, facing.angle).replace(/\$\{x\}/g, x).replace(/\$\{y\}/g, y).replace(/\$\{angle\}/g, angle2).replace(/\$\{distance\}/g, distance).replace(/\$\{time\}/g, time);
+    let line = templateForHeading(resolvedDef.toStringTemplate, kind, facing.angle).replace(/\$\{x\}/g, x).replace(/\$\{y\}/g, y).replace(/\$\{angle\}/g, angle2).replace(/\$\{distance\}/g, distance).replace(/\$\{time\}/g, time);
     let bezier = null;
     if (kind === "bezierCurve") {
       bezier = resolveBezier(path, idx);
@@ -16348,7 +16349,7 @@ function parseSegmentLine(line, kind, segDef, formatDef, format) {
   let { regex, groups } = templateToRegex(segDef.toStringTemplate);
   let match = line.match(regex);
   if (!match) {
-    const headless = templateForHeading(segDef.toStringTemplate, null);
+    const headless = templateForHeading(segDef.toStringTemplate, kind, null);
     if (headless === segDef.toStringTemplate) return null;
     ({ regex, groups } = templateToRegex(headless));
     match = line.match(regex);
@@ -25707,8 +25708,8 @@ const FORMATS = [
   { name: "mikLib v2.3.0", format: "mikLib" },
   { name: "LemLib v0.5.6", format: "LemLib" },
   { name: "JAR-Template", format: "JAR-Template" },
-  { name: "EZ-Template v3.2.2", format: "EZ-Template" },
-  { name: "ReveilLib v4.0", format: "ReveilLib" }
+  { name: "EZ-Template v3.2.2", format: "EZ-Template" }
+  // { name: "ReveilLib v4.0", format: "ReveilLib" },
 ];
 function FormatButton() {
   const [format] = useFormat();
@@ -27615,4 +27616,4 @@ document.addEventListener("auxclick", blockMiddleClick, { capture: true });
 clientExports.createRoot(document.getElementById("root")).render(
   /* @__PURE__ */ jsxRuntimeExports.jsx(reactExports.StrictMode, { children: /* @__PURE__ */ jsxRuntimeExports.jsx(App, {}) })
 );
-//# sourceMappingURL=index-Domf5HR7.js.map
+//# sourceMappingURL=index-C-bnoTSu.js.map
